@@ -6,7 +6,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import {
   ChevronLeft, ChevronDown, ChevronRight, Play, Power, PowerOff, Code, BarChart3, 
   Clock, Tag, Trash2, Edit, Settings, Eye, Activity, Layers, Heart, User, Skull,
-  Download, Calendar
+  Download, Calendar, Video
 } from 'lucide-react';
 
 function formatTime(seconds: any) {
@@ -30,6 +30,8 @@ export default function GameDetailPage() {
   const [newGameFile, setNewGameFile] = useState(null);
   const [newMetadataFile, setNewMetadataFile] = useState(null);
   const [fileUploading, setFileUploading] = useState(false);
+  const [videos, setVideos] = useState<any[]>([]);
+  const [videosLoading, setVideosLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -140,6 +142,19 @@ export default function GameDetailPage() {
     }
   };
 
+  const loadVideos = async () => {
+    if (videos.length > 0) return; // already loaded
+    setVideosLoading(true);
+    try {
+      const res = await gamesAPI.listVideos(gameId);
+      setVideos(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setVideosLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -155,6 +170,7 @@ export default function GameDetailPage() {
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'source', label: 'Source Code', icon: Code },
     { id: 'sessions', label: 'Sessions', icon: Activity },
+    { id: 'videos', label: 'Videos', icon: Video },
   ];
 
   return (
@@ -232,6 +248,7 @@ export default function GameDetailPage() {
             onClick={() => {
               setActiveTab(tab.id);
               if (tab.id === 'source') loadSource();
+              if (tab.id === 'videos') loadVideos();
             }}
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab.id
@@ -609,6 +626,68 @@ export default function GameDetailPage() {
             });
           }}
         />
+      )}
+
+      {activeTab === 'videos' && (
+        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+          <h2 className="text-lg font-semibold text-white mb-4">Gameplay Recordings</h2>
+          {videosLoading ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+            </div>
+          ) : videos.length > 0 ? (
+            <div className="space-y-3">
+              {videos.map((v: any) => (
+                <div key={v.filename} className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg">
+                  {/* Play preview */}
+                  <div className="w-48 h-28 bg-black rounded-lg overflow-hidden shrink-0">
+                    <video
+                      src={`/api/games/${gameId}/videos/${v.filename}`}
+                      className="w-full h-full object-contain"
+                      preload="metadata"
+                      controls
+                    />
+                  </div>
+                  {/* Info */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white truncate">{v.filename}</p>
+                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-400">
+                      <span>Player: <span className="text-gray-300">{v.player}</span></span>
+                      <span>Size: <span className="text-gray-300">{(v.size / (1024 * 1024)).toFixed(1)} MB</span></span>
+                      <span>{new Date(v.created_at).toLocaleString()}</span>
+                    </div>
+                  </div>
+                  {/* Actions */}
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href={`/api/games/${gameId}/videos/${v.filename}`}
+                      download={v.filename}
+                      className="p-2 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-blue-400 transition-colors"
+                      title="Download"
+                    >
+                      <Download size={16} />
+                    </a>
+                    <button
+                      onClick={async () => {
+                        if (!confirm(`Delete "${v.filename}"?`)) return;
+                        try {
+                          await gamesAPI.deleteVideo(gameId, v.filename);
+                          setVideos(prev => prev.filter(x => x.filename !== v.filename));
+                        } catch (err) { console.error(err); }
+                      }}
+                      className="p-2 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-red-400 transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-400 text-sm">No recordings yet. Players can record gameplay from the play page.</p>
+          )}
+        </div>
       )}
     </div>
   );

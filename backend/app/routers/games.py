@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 import os
 import uuid
+import shutil
+from datetime import datetime
 
 from app.auth import get_admin_user, get_current_user
 from app.config import settings
@@ -563,3 +566,112 @@ def sync_local_games(
 
     db.commit()
     return {"synced": len(added), "games": added}
+
+
+# ──── Video Recording Endpoints ────
+
+@router.post("/public/{game_id}/video")
+async def upload_game_video(
+    game_id: str,
+    video: UploadFile = File(...),
+    player_name: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    """Public: upload a gameplay recording for a live game."""
+    game = db.query(Game).filter(Game.game_id == game_id, Game.is_active == True).first()
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found or inactive")
+
+    recordings_dir = os.path.join(game.local_dir, "recordings")
+    os.makedirs(recordings_dir, exist_ok=True)
+
+    timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    safe_name = "".join(c for c in (player_name or "anonymous") if c.isalnum() or c in "_-")[:20]
+    filename = f"{safe_name}_{timestamp}.webm"
+    filepath = os.path.join(recordings_dir, filename)
+
+    with open(filepath, "wb") as f:
+        contents = await video.read()
+        f.write(contents)
+
+    size = os.path.getsize(filepath)
+    return {"filename": filename, "size": size, "game_id": game_id}
+
+
+@router.get("/{game_id}/videos")
+def list_game_videos(
+    game_id: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_admin_user),
+):
+    """Admin: list all recorded videos for a game."""
+    game = db.query(Game).filter(Game.game_id == game_id).first()
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    recordings_dir = os.path.join(game.local_dir, "recordings")
+    if not os.path.exists(recordings_dir):
+        return []
+
+    videos = []
+    for filename in sorted(os.listdir(recordings_dir), reverse=True):
+        if not filename.endswith(".webm"):
+            continue
+        filepath = os.path.join(recordings_dir, filename)
+        stat = os.stat(filepath)
+        # Parse player name and timestamp from filename: player_YYYYMMDD_HHMMSS.webm
+        parts = filename.rsplit("_", 2)
+        player = parts[0] if len(parts) >= 3 else "unknown"
+        videos.append({
+            "filename": filename,
+            "player": player,
+            "size": stat.st_size,
+            "created_at": datetime.utcfromtimestamp(stat.st_mtime).isoformat(),
+            "url": f"/api/games/{game_id}/videos/{filename}",
+        })
+
+    return videos
+
+
+@router.get("/{game_id}/videos/{filename}")
+def serve_game_video(
+    game_id: str,
+    filename: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_admin_user),
+):
+    """Admin: serve a specific video file."""
+    game = db.query(Game).filter(Game.game_id == game_id).first()
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    # Sanitize filename to prevent path traversal
+    safe_filename = os.path.basename(filename)
+    filepath = os.path.join(game.local_dir, "recordings", safe_filename)
+
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    return FileResponse(filepath, media_type="video/webm", filename=safe_filename)
+
+
+@router.delete("/{game_id}/videos/{filename}")
+def delete_game_video(
+    game_id: str,
+    filename: str,
+    db: Session = Depends(get_db),
+    admin: User = Depends(get_admin_user),
+):
+    """Admin: delete a specific video."""
+    game = db.query(Game).filter(Game.game_id == game_id).first()
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    safe_filename = os.path.basename(filename)
+    filepath = os.path.join(game.local_dir, "recordings", safe_filename)
+
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="Video not found")
+
+    os.remove(filepath)
+    return {"detail": f"Video '{safe_filename}' deleted"}

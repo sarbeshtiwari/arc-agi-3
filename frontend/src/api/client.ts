@@ -70,6 +70,14 @@ export const gamesAPI = {
   clearSessions: (gameId) => client.delete(`/games/${gameId}/sessions`),
   getSource: (gameId) => client.get(`/games/${gameId}/source`),
   syncLocal: () => client.post('/games/sync-local'),
+  // Videos
+  uploadVideo: (gameId, formData) =>
+    client.post(`/games/public/${gameId}/video`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
+  listVideos: (gameId) => client.get(`/games/${gameId}/videos`),
+  getVideoUrl: (gameId, filename) => `/api/games/${gameId}/videos/${filename}`,
+  deleteVideo: (gameId, filename) => client.delete(`/games/${gameId}/videos/${filename}`),
 };
 
 // ──── Player ────

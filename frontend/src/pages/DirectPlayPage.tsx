@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { playerAPI } from '../api/client';
 import GameCanvas from '../components/GameCanvas';
+import VideoRecorder from '../components/VideoRecorder';
 import {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
   RotateCcw, Undo, Zap, Trophy, Square, X as XIcon,
@@ -39,6 +40,7 @@ export default function DirectPlayPage() {
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
   const lastActionTime = useRef(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const ACTION_THROTTLE_MS = 50;
 
   const [resetAnim, setResetAnim] = useState(false);
@@ -245,6 +247,13 @@ export default function DirectPlayPage() {
                 value={formatTime(isGameOver ? serverTotalTime : elapsed)}
                 color={isWin ? 'green' : isGameOver ? 'red' : 'white'}
               />
+              <VideoRecorder
+                gameId={gameId}
+                isPlaying={isPlaying}
+                isEphemeral={true}
+                playerName={playerName || undefined}
+                isGameOver={isGameOver}
+              />
               <button
                 onClick={async () => { await endGame(); navigate('/'); }}
                 className="ml-2 flex items-center gap-1 px-2.5 py-1 text-[11px] text-red-400 hover:bg-red-500/10 border border-red-500/20 rounded-md transition-colors"
@@ -276,6 +285,7 @@ export default function DirectPlayPage() {
                     resetAnim ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
                   } ${canvasShake ? 'animate-shake' : ''}`}>
                     <GameCanvas
+                      ref={canvasRef}
                       grid={frame?.grid || []}
                       width={frame?.width || 8}
                       height={frame?.height || 8}

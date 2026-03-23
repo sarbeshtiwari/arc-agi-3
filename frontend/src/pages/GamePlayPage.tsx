@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { gamesAPI, playerAPI } from '../api/client';
 import GameCanvas from '../components/GameCanvas';
+import VideoRecorder from '../components/VideoRecorder';
 import {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
   RotateCcw, Undo, Zap, Trophy, Square, Play,
@@ -38,6 +39,7 @@ export default function GamePlayPage() {
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
   const lastActionTime = useRef(0);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const ACTION_THROTTLE_MS = 50;
 
   const [resetAnim, setResetAnim] = useState(false);
@@ -191,6 +193,12 @@ export default function GamePlayPage() {
             <StatPill icon={Layers} value={`Lv ${isWin && totalLevels ? totalLevels : (frame?.level ?? 0) + 1}${totalLevels ? ' / ' + totalLevels : ''}`} color="blue" />
             <StatPill icon={Target} value={frame?.total_actions || 0} color="green" />
             <StatPill icon={Clock} value={formatTime(isGameOver ? serverTotalTime : elapsed)} color={isWin ? 'green' : isGameOver ? 'red' : 'white'} />
+            <VideoRecorder
+              gameId={gameId}
+              isPlaying={isPlaying}
+              isEphemeral={false}
+              isGameOver={isGameOver}
+            />
             <button
               onClick={async () => { await endGame(); navigate(`/admin/games/${gameId}`); }}
               className="flex items-center gap-1 px-2.5 py-1 text-[11px] text-red-400 hover:bg-red-500/10 border border-red-500/20 rounded-md transition-colors"
@@ -231,6 +239,7 @@ export default function GamePlayPage() {
                 resetAnim ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
               } ${canvasShake ? 'animate-shake' : ''}`}>
                 <GameCanvas
+                  ref={canvasRef}
                   grid={frame?.grid || []}
                   width={frame?.width || 8}
                   height={frame?.height || 8}

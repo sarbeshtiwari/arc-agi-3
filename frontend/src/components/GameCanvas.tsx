@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 
 // ARC-AGI-3 color palette (0-15)
 // Source: app.py -> _PALETTE_HEX
@@ -21,21 +21,23 @@ const COLORS = [
   '#A356D6', // 15 - Purple
 ];
 
-export default function GameCanvas({ 
+const GameCanvas = forwardRef(function GameCanvas({ 
   grid, 
   width, 
   height, 
   onCellClick, 
-  cellSize = 0,  // 0 = auto-fit
+  cellSize = 0,
   showGrid = false,
   maxCanvasWidth = 640,
   maxCanvasHeight = 640,
   interactive = true,
-}) {
-  const canvasRef = useRef(null);
-  const containerRef = useRef(null);
+}: any, ref: any) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Calculate cell size to fit within max dimensions
+  // Expose the canvas element to parent via ref
+  useImperativeHandle(ref, () => canvasRef.current);
+
   const computedCellSize = cellSize > 0
     ? cellSize
     : Math.max(4, Math.min(
@@ -51,28 +53,24 @@ export default function GameCanvas({
     if (!canvas || !grid) return;
 
     const ctx = canvas.getContext('2d');
+    if (!ctx) return;
     const cs = computedCellSize;
 
-    // Clear
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // Draw cells
     for (let y = 0; y < (height || 0); y++) {
       for (let x = 0; x < (width || 0); x++) {
         const value = grid[y]?.[x] ?? 0;
         const color = COLORS[value] || COLORS[0];
-        
         ctx.fillStyle = color;
         ctx.fillRect(x * cs, y * cs, cs, cs);
       }
     }
 
-    // Draw grid lines (skip for large grids where lines become visual noise)
     if (showGrid && cs > 8) {
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.lineWidth = 1;
-
       for (let x = 0; x <= (width || 0); x++) {
         ctx.beginPath();
         ctx.moveTo(x * cs + 0.5, 0);
@@ -92,22 +90,17 @@ export default function GameCanvas({
     drawGrid();
   }, [drawGrid]);
 
-  const handleClick = useCallback((e) => {
+  const handleClick = useCallback((e: any) => {
     if (!interactive || !onCellClick) return;
-    
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
-    
     const pixelX = (e.clientX - rect.left) * scaleX;
     const pixelY = (e.clientY - rect.top) * scaleY;
-    
     const cellX = Math.floor(pixelX / computedCellSize);
     const cellY = Math.floor(pixelY / computedCellSize);
-    
     if (cellX >= 0 && cellX < (width || 0) && cellY >= 0 && cellY < (height || 0)) {
       onCellClick(cellX, cellY);
     }
@@ -131,4 +124,6 @@ export default function GameCanvas({
       />
     </div>
   );
-}
+});
+
+export default GameCanvas;
