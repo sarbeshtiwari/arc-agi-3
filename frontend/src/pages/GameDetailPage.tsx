@@ -9,7 +9,7 @@ import {
   Download, Calendar
 } from 'lucide-react';
 
-function formatTime(seconds) {
+function formatTime(seconds: any) {
   if (!seconds || seconds < 0) return '0:00';
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
@@ -26,7 +26,7 @@ export default function GameDetailPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState({ name: '', description: '', tags: '' });
+  const [editForm, setEditForm] = useState<any>({ name: '', description: '', tags: '' });
   const [newGameFile, setNewGameFile] = useState(null);
   const [newMetadataFile, setNewMetadataFile] = useState(null);
   const [fileUploading, setFileUploading] = useState(false);
@@ -614,7 +614,7 @@ export default function GameDetailPage() {
   );
 }
 
-function StatItem({ label, value }) {
+function StatItem({ label, value }: any) {
   return (
     <div className="flex justify-between items-center py-2 border-b border-gray-800 last:border-0">
       <span className="text-sm text-gray-400">{label}</span>
@@ -623,7 +623,7 @@ function StatItem({ label, value }) {
   );
 }
 
-function MiniStat({ label, value }) {
+function MiniStat({ label, value }: any) {
   return (
     <div className="bg-gray-800/50 rounded-lg p-3 text-center">
       <p className="text-lg font-bold text-white">{value}</p>
@@ -632,7 +632,7 @@ function MiniStat({ label, value }) {
   );
 }
 
-function SessionsList({ sessions, formatTime, gameId, onClear }) {
+function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
   const [expandedId, setExpandedId] = useState(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
@@ -646,7 +646,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }) {
   const handleExport = async () => {
     setExporting(true);
     try {
-      const params = { filter: exportFilter };
+      const params: any = { filter: exportFilter };
       if (exportFilter === 'date') params.date = exportDate;
       if (exportFilter === 'range') { params.date_from = exportDateFrom; params.date_to = exportDateTo; }
       const res = await analyticsAPI.exportExcel(gameId, params);

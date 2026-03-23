@@ -73,7 +73,7 @@ export default function UsersPage() {
 
   const handleToggleAdmin = async (userId, isAdmin) => {
     try {
-      const updates = { is_admin: !isAdmin };
+      const updates: any = { is_admin: !isAdmin };
       if (!isAdmin) {
         // Promoting to admin: give all pages
         updates.allowed_pages = ALL_PAGES.map(p => p.id);

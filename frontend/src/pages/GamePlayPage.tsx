@@ -402,7 +402,7 @@ export default function GamePlayPage() {
   );
 }
 
-function StatPill({ icon: Icon, value, color = 'white' }) {
+function StatPill({ icon: Icon, value, color = 'white' }: any) {
   const colors = { blue: 'text-blue-400', green: 'text-green-400', red: 'text-red-400', white: 'text-white' };
   return (
     <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/60 rounded-md border border-gray-700/50">
@@ -412,7 +412,7 @@ function StatPill({ icon: Icon, value, color = 'white' }) {
   );
 }
 
-function DPadButton({ icon: Icon, action, active, available, disabled, onClick, kbd }) {
+function DPadButton({ icon: Icon, action, active, available, disabled, onClick, kbd }: any) {
   const enabled = available.includes(action) && !disabled;
   return (
     <button onClick={onClick} disabled={!enabled} title={kbd}
@@ -426,7 +426,7 @@ function DPadButton({ icon: Icon, action, active, available, disabled, onClick, 
   );
 }
 
-function ActionBtn({ icon: Icon, label, action, active, available, disabled, onClick, kbd, spinning }) {
+function ActionBtn({ icon: Icon, label, action, active, available, disabled, onClick, kbd, spinning }: any) {
   const enabled = available.includes(action) && !disabled;
   return (
     <button onClick={onClick} disabled={!enabled} title={`${label} (${kbd})`}
@@ -441,7 +441,7 @@ function ActionBtn({ icon: Icon, label, action, active, available, disabled, onC
   );
 }
 
-function KbdRow({ keys, desc }) {
+function KbdRow({ keys, desc }: any) {
   return (
     <div className="flex items-center justify-between">
       <div className="flex gap-1">

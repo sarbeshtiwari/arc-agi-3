@@ -9,7 +9,7 @@ import {
   Video, FolderOpen, ChevronDown, ChevronRight, Play, Gamepad2
 } from 'lucide-react';
 
-function StatusBadge({ status }) {
+function StatusBadge({ status }: any) {
   const map = {
     pending:  { bg: 'bg-yellow-500/20', text: 'text-yellow-400', Icon: Clock },
     approved: { bg: 'bg-green-500/20',  text: 'text-green-400',  Icon: CheckCircle },
@@ -24,7 +24,7 @@ function StatusBadge({ status }) {
   );
 }
 
-function SourceModal({ source, onClose }) {
+function SourceModal({ source, onClose }: any) {
   if (!source) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
@@ -63,7 +63,7 @@ export default function RequestedGamesPage() {
   const [sourceData, setSourceData] = useState(null);
   const [sourceLoading, setSourceLoading] = useState(null);
   const [actionLoading, setActionLoading] = useState({});
-  const [confirmModal, setConfirmModal] = useState({ open: false });
+  const [confirmModal, setConfirmModal] = useState<any>({ open: false });
   const [playLoading, setPlayLoading] = useState(null);
 
   const openConfirm = (opts) => setConfirmModal({ open: true, ...opts });

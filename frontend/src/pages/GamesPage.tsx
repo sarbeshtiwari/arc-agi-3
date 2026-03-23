@@ -25,7 +25,7 @@ export default function GamesPage() {
   const handleExportAll = async () => {
     setExporting(true);
     try {
-      const params = { filter: exportFilter };
+      const params: any = { filter: exportFilter };
       if (exportFilter === 'date') params.date = exportDate;
       if (exportFilter === 'range') { params.date_from = exportDateFrom; params.date_to = exportDateTo; }
       const res = await analyticsAPI.exportAllExcel(params);
