@@ -1,0 +1,7 @@
+
+# Environment
+.env
+backend/.env
+backend/venv/
+frontend/node_modules/
+frontend/dist/

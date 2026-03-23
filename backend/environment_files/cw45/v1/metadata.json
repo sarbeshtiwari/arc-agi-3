@@ -1,0 +1,33 @@
+{
+  "game_id": "cw45",
+  "local_dir": "environment_files/cw45/v1",
+  "default_fps": 10,
+  "tags": [
+    "linked-list",
+    "binary-tree",
+    "knight-move",
+    "L-shape",
+    "chain-traversal",
+    "puzzle",
+    "spatial-reasoning",
+    "DSA",
+    "increasing-difficulty",
+    "life-system",
+    "colour-coded",
+    "no-numbers",
+    "no-letters",
+    "decoy-nodes",
+    "trap-cells",
+    "ghost-nodes",
+    "wall-maze",
+    "junction-branching",
+    "space-selection",
+    "visual-themes"
+  ],
+  "baseline_actions": [
+    60,
+    144,
+    260,
+    328
+  ]
+}
