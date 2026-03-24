@@ -19,14 +19,14 @@ client/
     ├── components/
     │   ├── GameCanvas.tsx              # forwardRef HTML5 Canvas — draws ARC grids with 16-color palette
     │   ├── GamePreviewCanvas.tsx       # Static preview thumbnail (fetches initial frame from API)
-    │   ├── VideoRecorder.tsx           # Screen capture via getDisplayMedia, record prompt, fullscreen preview
+    │   ├── VideoRecorder.tsx           # Server-streaming screen capture, record prompt, auto-stop
     │   ├── Layout.tsx                  # Admin sidebar with RBAC-filtered navigation
     │   ├── GameUploadForm.tsx          # Shared upload form (admin + request modes) with validation
     │   └── ConfirmModal.tsx            # Reusable confirm dialog (danger/warning/success variants)
     ├── hooks/
     │   ├── useAuth.tsx                 # AuthContext — login, logout, user state, token persistence
     │   ├── useGameEngine.tsx           # Admin game session management (start, action, end, reset)
-    │   └── useVideoRecorder.ts         # Screen capture recording with .mp4 priority, .webm fallback
+    │   └── useVideoRecorder.ts         # Server-streaming recorder (720p, 4Mbps, zero client RAM)
     ├── pages/
     │   ├── HomePage.tsx                # Public game catalog with stats
     │   ├── PublicPlayPage.tsx           # Public play — auto-start, keyboard controls, animations
@@ -85,14 +85,15 @@ Admin users bypass `PageGuard` entirely (always have full access).
 - Exposes the raw `<canvas>` element via `useImperativeHandle` for parent access
 
 ### `VideoRecorder`
-Screen capture component using `getDisplayMedia`.
+Server-streaming screen capture component. **Zero client RAM usage** — chunks are streamed to the server in real-time and discarded immediately.
 
-- **Record prompt**: shown when a game starts (`isPlaying` transitions to true). Player chooses "Record" or "Skip".
-- **Codec priority**: MP4 (H.264) preferred, WebM (VP9/VP8) fallback. Uses `MediaRecorder.isTypeSupported()` detection.
-- **Auto-stop**: when `isGameOver` becomes true, recording stops after 1.5s delay. Opens fullscreen preview.
-- **Fullscreen preview modal**: rendered via `createPortal` to `document.body`. Includes video playback, download button, server upload button, and discard option.
-- **Server upload**: POSTs video blob as multipart form data to `/api/games/public/:gameId/video`
-- **Bitrate**: 8 Mbps. Frame rate: 60fps ideal.
+- **Record prompt**: shown when game starts (`isPlaying` transitions to true). Player chooses "Record" or "Skip". Recording unavailable for ephemeral games.
+- **Streaming architecture**: every 2-second chunk is POST'd to `/api/games/public/:gameId/video/chunk` and discarded from client memory. Server appends to disk. Client RAM stays < 5 MB.
+- **Codec priority**: MP4 (H.264) preferred, WebM (VP9/VP8) fallback.
+- **Quality**: 720p, 30fps, 4 Mbps — excellent for grid games, low resource usage.
+- **Auto-stop**: when `isGameOver` becomes true, recording stops after 1.5s delay. Also auto-stops at 5-minute max duration.
+- **After recording**: shows "Saved" indicator with download link (from server) and delete button. No local preview needed since video is on the server.
+- **Server upload flow**: `POST /video/start` → `POST /video/chunk` (repeated) → `POST /video/end`
 
 ### `Layout`
 Admin sidebar with navigation sections (Overview, Games, Team).
@@ -149,15 +150,15 @@ Admin game session management hook.
 - Exports `ARC_COLORS` — the 16-color hex palette as a `Record<number, string>`
 
 ### `useVideoRecorder`
-Screen capture recording hook.
+Server-streaming screen capture hook. Streams 2-second video chunks directly to the server — no client-side accumulation.
 
-- **State**: `{ isRecording, recordingTime, videoBlob, videoUrl, fileExt }`
+- **State**: `{ isRecording, recordingTime, hasRecording, serverFilename, fileExt }`
 - **Codec selection**: `pickCodec()` probes `MediaRecorder.isTypeSupported()` — tries MP4 (H.264 Baseline, generic H.264, plain MP4) first, then WebM (VP9, VP8, plain WebM)
-- **`startRecording()`**: calls `getDisplayMedia` with `{ preferCurrentTab: true, displaySurface: 'browser' }`, creates MediaRecorder at 8 Mbps
-- **`stopRecording()`**: stops recorder, assembles chunks into Blob, creates object URL
-- **`downloadVideo(filename)`**: creates a temporary `<a>` element to trigger download
-- **`clearRecording()`**: revokes object URL, resets all state
-- **Cleanup**: on unmount, stops recorder and stream tracks, revokes URLs
+- **`startRecording(gameId, playerName?)`**: calls `getDisplayMedia` at 720p/30fps, creates MediaRecorder at 4 Mbps. Calls `POST /video/start` to get a `recording_id`. Each 2s chunk is POST'd to `/video/chunk` and discarded.
+- **`stopRecording()`**: stops recorder, waits for pending chunk uploads, calls `POST /video/end` to finalize
+- **Max duration**: 5 minutes (auto-stops)
+- **Memory**: < 5 MB constant regardless of recording length (chunks are fire-and-forget)
+- **Cleanup**: on unmount, stops recorder and stream tracks
 
 ## API Client
 

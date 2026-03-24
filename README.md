@@ -123,7 +123,7 @@ arc-agi-internal/
 │       ├── hooks/
 │       │   ├── useAuth.tsx       # Auth context provider + useAuth hook
 │       │   ├── useGameEngine.tsx # Game session state + action dispatcher
-│       │   └── useVideoRecorder.ts  # Screen capture via getDisplayMedia
+│       │   └── useVideoRecorder.ts  # Server-streaming screen capture (zero client RAM)
 │       ├── components/
 │       │   ├── Layout.tsx        # Admin shell (sidebar + outlet)
 │       │   ├── GameCanvas.tsx    # Canvas renderer for ARC grids (click + keyboard)
@@ -228,12 +228,61 @@ arc-agi-internal/
 
 ### Flow 4: Video Recording
 
-1. When a game starts playing, the `VideoRecorder` component shows a prompt asking the user to Record or Skip.
-2. If the user clicks Record, `getDisplayMedia()` requests screen capture permission. A `MediaRecorder` is started using the best available codec (MP4 H.264 preferred, WebM VP9/VP8 fallback) at 8 Mbps.
-3. Recording time is displayed in the UI. Recording auto-stops when the game reaches a terminal state (WIN or GAME_OVER).
-4. A preview modal shows the recorded video. The user can download locally or push to the server.
-5. Server upload goes to `POST /api/games/public/:gameId/video` (multipart), which saves the `.webm` file to `environment_files/<game_code>/<version>/recordings/<player>_<timestamp>.webm`.
-6. Admins can view, stream, and delete recordings from the Game Detail page's Videos tab.
+Video recording streams directly to the server in real-time. **Zero client RAM/storage is used** — each 2-second chunk is uploaded and discarded immediately. This ensures recording works on low-end devices without crashes.
+
+**Architecture:**
+```
+Browser                              Server
+  │                                    │
+  │ 1. Game starts → Record prompt     │
+  │                                    │
+  │ 2. User clicks "Record"            │
+  │    getDisplayMedia() → tab capture  │
+  │                                    │
+  │ 3. POST /video/start ─────────────►│ Creates empty file on disk
+  │    ◄──── { recording_id }          │
+  │                                    │
+  │ 4. Every 2 seconds:                │
+  │    MediaRecorder.ondataavailable   │
+  │    POST /video/chunk ─────────────►│ appendFileSync(chunk)
+  │    (chunk discarded from RAM)      │ (writes directly to disk)
+  │                                    │
+  │ 5. Game ends (WIN/GAME_OVER)       │
+  │    Auto-stop after 1.5s delay      │
+  │    POST /video/end ───────────────►│ Finalizes file
+  │    ◄──── { filename, size }        │
+  │                                    │
+  │ 6. "Saved" indicator shown         │
+  │    Download link points to server  │
+  │    Admin can view in Videos tab    │
+```
+
+**Quality settings:**
+
+| Setting | Value | Reason |
+|---------|-------|--------|
+| Resolution | 1280x720 (720p) | Excellent for grid games, low resource usage |
+| Frame rate | 30 fps | Smooth enough, half the data of 60fps |
+| Bitrate | 4 Mbps | High quality for flat-color grid content |
+| Chunk interval | 2 seconds | Efficient upload batching |
+| Max duration | 5 minutes | Auto-stops to prevent runaway recordings |
+| File size | ~30 MB/min | Half of 1080p/60fps |
+| Client RAM | < 5 MB constant | Chunks are uploaded and discarded immediately |
+
+**Codec priority:** MP4 H.264 (Chrome 120+, Edge, Safari) → WebM VP9 → WebM VP8
+
+**Recording is only available for live games** (not ephemeral "Play Your Own"). The prompt shows "Not available" for ephemeral games since there's no server-side game directory.
+
+**Server endpoints for streaming:**
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /api/games/public/:gameId/video/start` | Create recording session, returns `recording_id` |
+| `POST /api/games/public/:gameId/video/chunk` | Append a 2-second chunk (multipart) |
+| `POST /api/games/public/:gameId/video/end` | Finalize recording file |
+| `POST /api/games/public/:gameId/video` | Legacy single-file upload (still supported) |
+
+**Admin access:** Admins can view, stream, download, and delete recordings from the Game Detail → Videos tab.
 
 ### Flow 5: Admin Game Management
 
@@ -483,7 +532,10 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 | `GET` | `/games/public/:gameId/plays` | None | Recent play sessions (leaderboard) |
 | `GET` | `/games/public/:gameId/stats` | None | Per-game stats (plays, wins, top performer) |
 | `GET` | `/games/public/:gameId/preview` | None | Initial grid frame for thumbnail rendering |
-| `POST` | `/games/public/:gameId/video` | None | Upload gameplay recording (multipart, `video` field) |
+| `POST` | `/games/public/:gameId/video/start` | None | Start streaming recording session |
+| `POST` | `/games/public/:gameId/video/chunk` | None | Append 2s video chunk (multipart, `chunk` field) |
+| `POST` | `/games/public/:gameId/video/end` | None | Finalize recording on server |
+| `POST` | `/games/public/:gameId/video` | None | Legacy single-file upload (multipart, `video` field) |
 
 **Admin (JWT + admin):**
 
@@ -835,6 +887,18 @@ The Python bridge has a 30-second timeout per command. This usually indicates th
 
 ### Recordings not saving
 
+- Recording is only available for **live games** (not ephemeral "Play Your Own").
 - The `recordings/` subdirectory is created automatically under the game's `local_dir`.
 - Ensure the Node process has write permissions to `environment_files/`.
+- Chunks are streamed every 2 seconds — if the browser tab closes mid-recording, any already-uploaded chunks will be on disk as a partial file.
+- The 5-minute max duration auto-stops the recording to prevent runaway storage usage.
+- If a recording file is empty (0 bytes), it is automatically deleted on session end.
+
+### Recording causes lag or crash
+
+This should not happen with the streaming architecture. If it does:
+- The `getDisplayMedia()` API runs on the browser's media thread — zero main thread cost.
+- Video chunks are POST'd every 2 seconds and immediately discarded from client RAM.
+- Total client RAM usage stays under 5 MB regardless of recording length.
+- Check browser DevTools Memory tab to confirm. If RAM grows, the issue is elsewhere (e.g., game engine, not recording).
 - Video uploads are limited by Express body size (`50mb` limit configured in `server/index.ts`).

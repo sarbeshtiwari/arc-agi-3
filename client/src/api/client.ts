@@ -71,6 +71,20 @@ export const gamesAPI = {
   getSource: (gameId) => client.get(`/games/${gameId}/source`),
   syncLocal: () => client.post('/games/sync-local'),
   // Videos
+  // Video recording - streaming
+  videoStart: (gameId, playerName = '', ext = 'webm') =>
+    client.post(`/games/public/${gameId}/video/start`, { player_name: playerName, ext }),
+  videoChunk: (gameId, recordingId, chunk) => {
+    const fd = new FormData();
+    fd.append('recording_id', recordingId);
+    fd.append('chunk', chunk);
+    return client.post(`/games/public/${gameId}/video/chunk`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  },
+  videoEnd: (gameId, recordingId) =>
+    client.post(`/games/public/${gameId}/video/end`, { recording_id: recordingId }),
+  // Video recording - legacy single upload (for download-then-upload)
   uploadVideo: (gameId, formData) =>
     client.post(`/games/public/${gameId}/video`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

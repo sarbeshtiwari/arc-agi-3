@@ -1,31 +1,24 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { gamesAPI } from '../api/client';
 
 interface RecorderState {
   isRecording: boolean;
   recordingTime: number;
-  videoBlob: Blob | null;
-  videoUrl: string | null;
+  hasRecording: boolean;
+  serverFilename: string | null;
   fileExt: string;
 }
 
-const BITRATE = 8_000_000;
+// ── Quality: 720p / 30fps / 4Mbps — good quality, low RAM ──
+const BITRATE = 4_000_000;
+const MAX_DURATION_SEC = 300; // 5 min auto-stop
 
 function pickCodec(): { mimeType: string; ext: string } {
-  // Prefer MP4 (H.264) - supported in Chrome 120+, Edge, Safari
-  const mp4 = [
-    'video/mp4;codecs=avc1.42E01E',    // H.264 Baseline
-    'video/mp4;codecs=avc1',
-    'video/mp4',
-  ];
+  const mp4 = ['video/mp4;codecs=avc1.42E01E', 'video/mp4;codecs=avc1', 'video/mp4'];
   for (const c of mp4) {
     if (MediaRecorder.isTypeSupported(c)) return { mimeType: c, ext: 'mp4' };
   }
-  // Fallback to WebM
-  const webm = [
-    'video/webm;codecs=vp9',
-    'video/webm;codecs=vp8',
-    'video/webm',
-  ];
+  const webm = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
   for (const c of webm) {
     if (MediaRecorder.isTypeSupported(c)) return { mimeType: c, ext: 'webm' };
   }
@@ -36,128 +29,131 @@ export function useVideoRecorder() {
   const [state, setState] = useState<RecorderState>({
     isRecording: false,
     recordingTime: 0,
-    videoBlob: null,
-    videoUrl: null,
+    hasRecording: false,
+    serverFilename: null,
     fileExt: 'mp4',
   });
 
   const recorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef<number>(0);
-  const codecRef = useRef<{ mimeType: string; ext: string }>({ mimeType: '', ext: 'mp4' });
+  const gameIdRef = useRef<string>('');
+  const recordingIdRef = useRef<string>('');
+  const chunkQueueRef = useRef<Promise<any>>(Promise.resolve());
 
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (recorderRef.current && recorderRef.current.state !== 'inactive') {
-        recorderRef.current.stop();
-      }
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop());
-      }
-      if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
+      if (recorderRef.current && recorderRef.current.state !== 'inactive') recorderRef.current.stop();
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     };
   }, []);
 
-  const startRecording = useCallback(async (): Promise<boolean> => {
+  const startRecording = useCallback(async (gameId: string, playerName?: string): Promise<boolean> => {
     let stream: MediaStream;
     try {
       stream = await navigator.mediaDevices.getDisplayMedia({
-        video: {
-          displaySurface: 'browser',
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-          frameRate: { ideal: 60, max: 60 },
-        } as any,
+        video: { displaySurface: 'browser', width: { ideal: 1280 }, height: { ideal: 720 }, frameRate: { ideal: 30, max: 30 } } as any,
         audio: false,
         preferCurrentTab: true,
       } as any);
     } catch {
-      return false; // User cancelled
+      return false;
     }
 
     streamRef.current = stream;
-    chunksRef.current = [];
-    if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
-
+    gameIdRef.current = gameId;
     const codec = pickCodec();
-    codecRef.current = codec;
 
-    const recorder = new MediaRecorder(stream, {
-      mimeType: codec.mimeType,
-      videoBitsPerSecond: BITRATE,
-    });
+    // Start server-side recording session
+    try {
+      const res = await gamesAPI.videoStart(gameId, playerName || '', codec.ext);
+      recordingIdRef.current = res.data.recording_id;
+    } catch {
+      recordingIdRef.current = '';
+      stream.getTracks().forEach(t => t.stop());
+      streamRef.current = null;
+      return false;
+    }
 
+    const recorder = new MediaRecorder(stream, { mimeType: codec.mimeType, videoBitsPerSecond: BITRATE });
+
+    // Stream each chunk to server immediately — zero RAM accumulation
     recorder.ondataavailable = (e) => {
-      if (e.data.size > 0) chunksRef.current.push(e.data);
+      if (e.data.size > 0 && recordingIdRef.current) {
+        const blob = e.data;
+        chunkQueueRef.current = chunkQueueRef.current.then(async () => {
+          try {
+            await gamesAPI.videoChunk(gameIdRef.current, recordingIdRef.current, blob);
+          } catch (err) {
+            console.error('[Recorder] Chunk upload failed:', err);
+          }
+        });
+      }
     };
 
-    recorder.onstop = () => {
+    recorder.onstop = async () => {
       if (timerRef.current) clearInterval(timerRef.current);
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach(t => t.stop());
-        streamRef.current = null;
+      if (streamRef.current) { streamRef.current.getTracks().forEach(t => t.stop()); streamRef.current = null; }
+
+      // Wait for all pending chunks to upload
+      await chunkQueueRef.current;
+
+      // Finalize on server
+      if (recordingIdRef.current) {
+        try {
+          const res = await gamesAPI.videoEnd(gameIdRef.current, recordingIdRef.current);
+          setState(prev => ({
+            ...prev, isRecording: false,
+            hasRecording: !res.data.deleted,
+            serverFilename: res.data.deleted ? null : res.data.filename,
+          }));
+        } catch {
+          setState(prev => ({ ...prev, isRecording: false, hasRecording: false }));
+        }
+      } else {
+        setState(prev => ({ ...prev, isRecording: false }));
       }
-      const blob = new Blob(chunksRef.current, { type: codec.mimeType });
-      const url = URL.createObjectURL(blob);
-      setState(prev => ({
-        ...prev, isRecording: false, videoBlob: blob, videoUrl: url, fileExt: codec.ext,
-      }));
     };
 
     stream.getVideoTracks()[0].addEventListener('ended', () => {
-      if (recorderRef.current && recorderRef.current.state !== 'inactive') {
-        recorderRef.current.stop();
-      }
+      if (recorderRef.current && recorderRef.current.state !== 'inactive') recorderRef.current.stop();
     });
 
-    recorder.start(1000);
+    recorder.start(2000); // 2-second chunks
     recorderRef.current = recorder;
 
     startTimeRef.current = Date.now();
     timerRef.current = setInterval(() => {
-      setState(prev => ({ ...prev, recordingTime: (Date.now() - startTimeRef.current) / 1000 }));
+      const elapsed = (Date.now() - startTimeRef.current) / 1000;
+      setState(prev => ({ ...prev, recordingTime: elapsed }));
+      if (elapsed >= MAX_DURATION_SEC) {
+        if (recorderRef.current && recorderRef.current.state !== 'inactive') recorderRef.current.stop();
+      }
     }, 200);
 
-    setState({ isRecording: true, recordingTime: 0, videoBlob: null, videoUrl: null, fileExt: codec.ext });
+    setState({ isRecording: true, recordingTime: 0, hasRecording: false, serverFilename: null, fileExt: codec.ext });
     return true;
-  }, [state.videoUrl]);
-
-  const stopRecording = useCallback(() => {
-    if (recorderRef.current && recorderRef.current.state !== 'inactive') {
-      recorderRef.current.stop();
-    }
   }, []);
 
-  const downloadVideo = useCallback((filename: string = 'gameplay') => {
-    if (!state.videoBlob) return;
-    const ext = state.fileExt;
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(state.videoBlob);
-    a.download = `${filename}_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.${ext}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
-  }, [state.videoBlob, state.fileExt]);
+  const stopRecording = useCallback(() => {
+    if (recorderRef.current && recorderRef.current.state !== 'inactive') recorderRef.current.stop();
+  }, []);
 
   const clearRecording = useCallback(() => {
-    if (state.videoUrl) URL.revokeObjectURL(state.videoUrl);
-    chunksRef.current = [];
-    setState({ isRecording: false, recordingTime: 0, videoBlob: null, videoUrl: null, fileExt: 'mp4' });
-  }, [state.videoUrl]);
+    recordingIdRef.current = '';
+    setState({ isRecording: false, recordingTime: 0, hasRecording: false, serverFilename: null, fileExt: 'mp4' });
+  }, []);
 
   return {
     isRecording: state.isRecording,
     recordingTime: state.recordingTime,
-    videoBlob: state.videoBlob,
-    videoUrl: state.videoUrl,
+    hasRecording: state.hasRecording,
+    serverFilename: state.serverFilename,
     fileExt: state.fileExt,
     startRecording,
     stopRecording,
-    downloadVideo,
     clearRecording,
   };
 }

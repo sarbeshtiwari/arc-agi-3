@@ -513,25 +513,103 @@ router.get(
   }),
 );
 
-// ──── 7. POST /public/:gameId/video — Upload gameplay recording ────
+// ──── 7. Video Recording — Streaming chunks to server ────
+
+// 7a. POST /public/:gameId/video/start — Begin a streaming recording session
+router.post(
+  "/public/:gameId/video/start",
+  asyncHandler(async (req, res) => {
+    const { gameId } = req.params;
+    const game = await queryOne(
+      "SELECT * FROM games WHERE game_id = $1 AND is_active = true",
+      [gameId],
+    );
+    if (!game) throw new AppError("Game not found or inactive", 404);
+
+    const playerName = (req.body.player_name || "").trim();
+    const safeName = (playerName || "anonymous").replace(/[^a-zA-Z0-9_-]/g, "").substring(0, 20);
+    const timestamp = new Date().toISOString().replace(/[-:T]/g, "").substring(0, 15).replace(/(\d{8})(\d{6})/, "$1_$2");
+    const ext = req.body.ext || "webm";
+    const filename = `${safeName}_${timestamp}.${ext}`;
+
+    const recordingsDir = path.join(game.local_dir, "recordings");
+    fs.mkdirSync(recordingsDir, { recursive: true });
+
+    const filepath = path.join(recordingsDir, filename);
+    // Create empty file
+    fs.writeFileSync(filepath, Buffer.alloc(0));
+
+    res.json({ recording_id: filename, filepath: filename, game_id: gameId });
+  }),
+);
+
+// 7b. POST /public/:gameId/video/chunk — Append a chunk to a recording
+router.post(
+  "/public/:gameId/video/chunk",
+  upload.single("chunk"),
+  asyncHandler(async (req, res) => {
+    const { gameId } = req.params;
+    const recordingId = req.body.recording_id;
+    if (!recordingId || !req.file) throw new AppError("recording_id and chunk required", 400);
+
+    const game = await queryOne("SELECT * FROM games WHERE game_id = $1", [gameId]);
+    if (!game) throw new AppError("Game not found", 404);
+
+    const safeFilename = path.basename(recordingId);
+    const filepath = path.join(game.local_dir, "recordings", safeFilename);
+    if (!fs.existsSync(filepath)) throw new AppError("Recording not found", 404);
+
+    // Append chunk to file
+    fs.appendFileSync(filepath, req.file.buffer);
+
+    res.json({ ok: true, size: fs.statSync(filepath).size });
+  }),
+);
+
+// 7c. POST /public/:gameId/video/end — Finalize a recording
+router.post(
+  "/public/:gameId/video/end",
+  asyncHandler(async (req, res) => {
+    const { gameId } = req.params;
+    const recordingId = req.body.recording_id;
+    if (!recordingId) throw new AppError("recording_id required", 400);
+
+    const game = await queryOne("SELECT * FROM games WHERE game_id = $1", [gameId]);
+    if (!game) throw new AppError("Game not found", 404);
+
+    const safeFilename = path.basename(recordingId);
+    const filepath = path.join(game.local_dir, "recordings", safeFilename);
+
+    if (!fs.existsSync(filepath)) throw new AppError("Recording not found", 404);
+
+    const stat = fs.statSync(filepath);
+    // Delete if empty (user cancelled without recording anything)
+    if (stat.size === 0) {
+      fs.unlinkSync(filepath);
+      return res.json({ ok: true, deleted: true });
+    }
+
+    res.json({
+      ok: true,
+      filename: safeFilename,
+      size: stat.size,
+      game_id: gameId,
+    });
+  }),
+);
+
+// 7d. POST /public/:gameId/video — Legacy single-file upload (still supported for download-then-upload flow)
 router.post(
   "/public/:gameId/video",
   upload.single("video"),
   asyncHandler(async (req, res) => {
     const { gameId } = req.params;
-
     const game = await queryOne(
       "SELECT * FROM games WHERE game_id = $1 AND is_active = true",
       [gameId],
     );
-
-    if (!game) {
-      throw new AppError("Game not found or inactive", 404);
-    }
-
-    if (!req.file) {
-      throw new AppError("video file is required", 400);
-    }
+    if (!game) throw new AppError("Game not found or inactive", 404);
+    if (!req.file) throw new AppError("video file is required", 400);
 
     const recordingsDir = path.join(game.local_dir, "recordings");
     fs.mkdirSync(recordingsDir, { recursive: true });
@@ -539,17 +617,13 @@ router.post(
     const playerName = (req.body.player_name || "").trim();
     const timestamp = new Date().toISOString().replace(/[-:T]/g, "").substring(0, 15).replace(/(\d{8})(\d{6})/, "$1_$2");
     const safeName = (playerName || "anonymous").replace(/[^a-zA-Z0-9_-]/g, "").substring(0, 20);
-    const filename = `${safeName}_${timestamp}.webm`;
+    const ext = req.body.ext || "webm";
+    const filename = `${safeName}_${timestamp}.${ext}`;
     const filepath = path.join(recordingsDir, filename);
 
     fs.writeFileSync(filepath, req.file.buffer);
-    const stat = fs.statSync(filepath);
 
-    res.json({
-      filename,
-      size: stat.size,
-      game_id: gameId,
-    });
+    res.json({ filename, size: fs.statSync(filepath).size, game_id: gameId });
   }),
 );
 
