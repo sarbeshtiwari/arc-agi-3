@@ -142,6 +142,16 @@ export async function initDB() {
       CREATE INDEX IF NOT EXISTS idx_sessions_guid ON play_sessions(session_guid);
       CREATE INDEX IF NOT EXISTS idx_requests_status ON game_requests(status);
       CREATE INDEX IF NOT EXISTS idx_temp_guid ON temp_game_sessions(session_guid);
+
+      CREATE TABLE IF NOT EXISTS app_settings (
+        key VARCHAR(100) PRIMARY KEY,
+        value TEXT NOT NULL,
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+
+      -- Default settings
+      INSERT INTO app_settings (key, value) VALUES ('recording_enabled', 'true')
+        ON CONFLICT (key) DO NOTHING;
     `);
     console.log(`[DB] PostgreSQL connected: ${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
   } finally {

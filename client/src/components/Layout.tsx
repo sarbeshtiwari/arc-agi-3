@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import {
   LayoutDashboard, Gamepad2, Upload, Users, LogOut,
-  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer
+  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer, FlaskConical
 } from 'lucide-react';
 
 const navSections = [
@@ -27,6 +27,12 @@ const navSections = [
     label: 'Team',
     items: [
       { path: '/admin/users', label: 'Users', icon: Users, page: 'users' },
+    ],
+  },
+  {
+    label: 'AI',
+    items: [
+      { path: '/admin/eval', label: 'Eval Runner', icon: FlaskConical, page: 'eval' },
     ],
   },
 ];
@@ -177,7 +183,7 @@ export default function Layout() {
 
       {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <div className="max-w-7xl mx-auto p-6">
+        <div className="max-w-8xl mx-auto p-6">
           <Outlet />
         </div>
       </main>

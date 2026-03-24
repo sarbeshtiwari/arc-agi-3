@@ -37,14 +37,32 @@ export default function VideoRecorder({
 
   const [showPrompt, setShowPrompt] = useState(false);
   const [promptDismissed, setPromptDismissed] = useState(false);
+  const [recordingEnabled, setRecordingEnabled] = useState<boolean | null>(null);
   const autoStoppedRef = useRef(false);
 
-  // Show record prompt when game starts
+  // Check if recording is enabled globally
   useEffect(() => {
-    if (isPlaying && !promptDismissed && !isRecording && !hasRecording) {
+    fetch('/api/settings/recording_enabled')
+      .then(r => r.json())
+      .then(data => setRecordingEnabled(data.value === 'true'))
+      .catch(() => setRecordingEnabled(true));
+  }, []);
+
+  // Show record prompt when game starts AND setting is loaded
+  // If recording disabled, skip the prompt and start the timer immediately
+  useEffect(() => {
+    if (!isPlaying || promptDismissed) return;
+    if (recordingEnabled === null) return; // still loading setting
+
+    if (recordingEnabled && !isEphemeral) {
+      // Recording is ON — show the prompt
       setShowPrompt(true);
+    } else {
+      // Recording is OFF or ephemeral — skip prompt, start timer
+      setPromptDismissed(true);
+      onPromptDismissed?.();
     }
-  }, [isPlaying]);
+  }, [isPlaying, recordingEnabled]);
 
   // Auto-stop on game end
   useEffect(() => {
@@ -145,10 +163,10 @@ export default function VideoRecorder({
         document.body
       )}
 
-      {/* ── Inline header buttons ── */}
+      {/* ── Inline header buttons (only when recording is enabled) ── */}
 
       {/* Manual record (after skipping prompt) */}
-      {!isRecording && !hasRecording && promptDismissed && !isEphemeral && (
+      {recordingEnabled && !isRecording && !hasRecording && promptDismissed && !isEphemeral && (
         <button
           onClick={handleManualStart}
           className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-lg text-xs transition-colors"

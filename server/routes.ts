@@ -10,6 +10,8 @@ import playerRouter from "./routes/player.js";
 import analyticsRouter from "./routes/analytics.js";
 import usersRouter from "./routes/users.js";
 import requestsRouter from "./routes/requests.js";
+import evalRouter from "./routes/eval.js";
+import settingsRouter from "./routes/settings.js";
 
 // Import startup helpers
 import { ensureDefaultAdmin } from "./middleware/auth.js";
@@ -33,6 +35,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/analytics", analyticsRouter);
   app.use("/api/users", usersRouter);
   app.use("/api/requests", requestsRouter);
+  app.use("/api/eval", evalRouter);
+  app.use("/api/settings", settingsRouter);
 
   // ──── Error handler (must be last) ────
   app.use(errorHandler);

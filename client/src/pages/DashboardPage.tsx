@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { analyticsAPI } from '../api/client';
 import {
   Gamepad2, Activity, Users, Zap, Trophy, ChevronRight,
-  TrendingUp, Inbox, Skull, BarChart3, Target, Clock
+  TrendingUp, Inbox, Skull, BarChart3, Target, Clock, Video, Settings
 } from 'lucide-react';
 
 function MiniBarChart({ data, color = '#3b82f6', height = 60 }) {
@@ -66,13 +66,41 @@ export default function DashboardPage() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [recordingEnabled, setRecordingEnabled] = useState(true);
+  const [togglingRecording, setTogglingRecording] = useState(false);
 
   useEffect(() => {
     analyticsAPI.dashboard()
       .then((res) => setStats(res.data))
       .catch((err) => setError(err.response?.data?.detail || 'Failed to load dashboard'))
       .finally(() => setLoading(false));
+    // Load recording setting
+    fetch('/api/settings/recording_enabled')
+      .then(r => r.json())
+      .then(data => setRecordingEnabled(data.value === 'true'))
+      .catch(() => {});
   }, []);
+
+  const toggleRecording = async () => {
+    const newVal = !recordingEnabled;
+    setRecordingEnabled(newVal); // optimistic update
+    setTogglingRecording(true);
+    try {
+      const res = await fetch('/api/settings/recording_enabled', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('arc_token')}` },
+        body: JSON.stringify({ value: String(newVal) }),
+      });
+      const data = await res.json();
+      // Confirm from server response
+      setRecordingEnabled(data.value === 'true');
+    } catch {
+      // Revert on failure
+      setRecordingEnabled(!newVal);
+    } finally {
+      setTogglingRecording(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -141,6 +169,38 @@ export default function DashboardPage() {
             }`}>{sub}</p>
           </motion.div>
         ))}
+      </div>
+
+      {/* App Settings */}
+      <div className="mb-6 bg-gray-900 rounded-xl border border-gray-800 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-gray-800 border border-gray-700">
+              <Settings size={16} className="text-gray-400" />
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-white">App Settings</h3>
+              <p className="text-[11px] text-gray-500">Platform-wide toggles</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            {/* Recording toggle */}
+            <div className="flex items-center gap-3">
+              <Video size={14} className={recordingEnabled ? 'text-red-400' : 'text-gray-600'} />
+              <span className="text-xs text-gray-400">Video Recording</span>
+              <button
+                onClick={toggleRecording}
+                disabled={togglingRecording}
+                className={`relative w-11 h-6 rounded-full transition-colors ${recordingEnabled ? 'bg-red-600' : 'bg-gray-700'}`}
+              >
+                <span className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform ${recordingEnabled ? 'translate-x-5' : 'translate-x-0'}`} />
+              </button>
+              <span className={`text-[10px] font-mono ${recordingEnabled ? 'text-red-400' : 'text-gray-600'}`}>
+                {recordingEnabled ? 'ON' : 'OFF'}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Charts row */}
