@@ -1,7 +1,25 @@
+# Dependencies
+node_modules/
 
 # Environment
 .env
-backend/.env
-backend/venv/
-frontend/node_modules/
-frontend/dist/
+
+# Build output
+dist/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+
+# Python auto-detection
+.python-bin
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,21 @@
+{
+  "game_id": "fm01",
+  "default_fps": 5,
+  "baseline_actions": [
+    12,
+    16,
+    20,
+    24,
+    28,
+    32
+  ],
+  "tags": [
+    "mathematics",
+    "fractions",
+    "proportions",
+    "visual_reasoning",
+    "equivalence",
+    "progressive"
+  ],
+  "local_dir": "environment_files/fm01/v1"
+}
