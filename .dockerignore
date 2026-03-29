@@ -1,0 +1,9 @@
+node_modules
+.venv
+.git
+.gitignore
+*.md
+.python-bin
+dist
+.env
+.env.*
