@@ -20,13 +20,33 @@ interface SSEClient {
 class LogService {
   private clients = new Map<string, SSEClient>();
   private cleanupTimer: ReturnType<typeof setInterval> | null = null;
+  private dbAvailable = true;
+  private consecutiveFailures = 0;
+  private readonly MAX_FAILURES = 5;
+  private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 
   private readonly HEARTBEAT_MS = 15_000;
-  private readonly CLEANUP_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
-  private readonly RETENTION_HOURS = 2; // 2 hours
+  private readonly CLEANUP_INTERVAL_MS = 10 * 60 * 1000;
+  private readonly RETENTION_HOURS = 2;
+  private readonly RECONNECT_MS = 30_000;
 
   constructor() {
     this.startCleanupScheduler();
+  }
+
+  private markDbDown(): void {
+    if (this.dbAvailable) {
+      this.dbAvailable = false;
+      console.error("[LogService] DB unavailable — pausing DB writes. Will retry in 30s.");
+    }
+    if (!this.reconnectTimer) {
+      this.reconnectTimer = setTimeout(() => {
+        this.reconnectTimer = null;
+        this.dbAvailable = true;
+        this.consecutiveFailures = 0;
+        console.log("[LogService] Re-enabling DB writes.");
+      }, this.RECONNECT_MS);
+    }
   }
 
   async log(
@@ -44,23 +64,30 @@ class LogService {
       created_at: new Date().toISOString(),
     };
 
-    // Fire-and-forget DB write — don't block the caller
-    pool
-      .query(
-        `INSERT INTO app_logs (id, level, source, message, metadata, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [
-          entry.id,
-          entry.level,
-          entry.source,
-          entry.message,
-          entry.metadata ? JSON.stringify(entry.metadata) : null,
-          entry.created_at,
-        ],
-      )
-      .catch((err) => {
-        console.error("[LogService] DB write failed:", err.message);
-      });
+    if (this.dbAvailable) {
+      pool
+        .query(
+          `INSERT INTO app_logs (id, level, source, message, metadata, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [
+            entry.id,
+            entry.level,
+            entry.source,
+            entry.message,
+            entry.metadata ? JSON.stringify(entry.metadata) : null,
+            entry.created_at,
+          ],
+        )
+        .then(() => {
+          this.consecutiveFailures = 0;
+        })
+        .catch(() => {
+          this.consecutiveFailures++;
+          if (this.consecutiveFailures >= this.MAX_FAILURES) {
+            this.markDbDown();
+          }
+        });
+    }
 
     this.broadcast(entry);
 
@@ -209,6 +236,10 @@ class LogService {
     if (this.cleanupTimer) {
       clearInterval(this.cleanupTimer);
       this.cleanupTimer = null;
+    }
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
     }
     for (const [clientId] of this.clients) {
       this.removeClient(clientId);

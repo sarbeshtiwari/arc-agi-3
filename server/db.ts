@@ -2,11 +2,15 @@ import pg from "pg";
 
 const { Pool } = pg;
 
+const isSSL = process.env.DATABASE_URL?.includes("neon.tech") ||
+  process.env.DATABASE_URL?.includes("sslmode=require");
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   max: 50,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
+  ssl: isSSL ? { rejectUnauthorized: false } : undefined,
 });
 
 pool.on("error", (err) => {
