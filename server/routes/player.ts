@@ -8,6 +8,7 @@ import { authenticateToken } from "../middleware/auth.js";
 import { AppError } from "../middleware/errorHandler.js";
 import pool, { genId, queryOne, queryAll, toJsonb } from "../db.js";
 import { GamePythonBridge, type GameFrame } from "../services/GamePythonBridge.js";
+import logService from "../services/LogService.js";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -91,6 +92,10 @@ function formatFrameResponse(frame: GameFrame, sessionGuid: string, extra?: Reco
     level: frame.level,
     total_actions: frame.total_actions,
     available_actions: frame.available_actions,
+    reward: frame.reward ?? 0,
+    done: frame.done ?? false,
+    text_observation: frame.text_observation ?? "",
+    image_observation_b64: frame.image_observation_b64 ?? null,
     metadata: {
       session_guid: sessionGuid,
       total_time: Math.round(totalTime * 100) / 100,
@@ -99,6 +104,7 @@ function formatFrameResponse(frame: GameFrame, sessionGuid: string, extra?: Reco
       game_id: frame.game_id,
       game_overs: tracker?.totalGameOvers || 0,
       total_resets: tracker?.totalResets || 0,
+      ...(frame.metadata || {}),
       ...(extra || {}),
     },
   };
@@ -237,19 +243,36 @@ router.post(
     const effectiveSeed = seed ?? 0;
     const gamePath = resolveGamePath(game.local_dir, game.game_code);
 
+    logService.debug("game", "Resolving game for public start", {
+      game_id: game.game_id,
+      game_code: game.game_code,
+      local_dir: game.local_dir,
+      resolved_path: gamePath,
+      session_guid: sessionGuid,
+      seed: effectiveSeed,
+      start_level,
+      player_name: player_name || "guest",
+    });
+
     // Create Python bridge and initialise
     const bridge = new GamePythonBridge();
+    logService.debug("game", "Creating GamePythonBridge instance", { session_guid: sessionGuid });
     try {
       await bridge.init(game.game_id, gamePath, effectiveSeed);
 
       // Skip to requested start level
       if (start_level && start_level > 0) {
+        logService.debug("game", `Skipping to start_level ${start_level}`, { session_guid: sessionGuid, start_level });
         for (let i = 0; i < start_level; i++) {
           await bridge.sendAction("noop");
         }
       }
     } catch (e: any) {
       bridge.kill();
+      logService.error("game", `Failed to start game: ${e.message}`, {
+        game_id: game.game_id,
+        player_name: player_name || "guest",
+      });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
 
@@ -284,6 +307,13 @@ router.post(
       levelGameOvers: 0, levelResets: 0,
       totalGameOvers: 0, totalResets: 0,
       prevState: frame.state || 'NOT_FINISHED',
+    });
+
+    logService.info("game", "Session started (public)", {
+      game_id: game.game_id,
+      session_guid: sessionGuid,
+      player_name: player_name || "guest",
+      seed: effectiveSeed,
     });
 
     res.json(formatFrameResponse(frame, sessionGuid));
@@ -365,6 +395,11 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
+      logService.error("game", `Action failed: ${e.message}`, {
+        game_id: bridgeMeta.get(sessionGuid)?.gameId,
+        session_guid: sessionGuid,
+        action,
+      });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }
 
@@ -377,13 +412,19 @@ router.post(
       if (frame.state === "GAME_OVER" && tracker.prevState !== "GAME_OVER") {
         tracker.levelGameOvers++;
         tracker.totalGameOvers++;
+        logService.info("game", "GAME_OVER detected (public)", {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          level: tracker.currentLevel,
+          level_game_overs: tracker.levelGameOvers,
+          total_game_overs: tracker.totalGameOvers,
+        });
       }
       tracker.prevState = frame.state || "NOT_FINISHED";
 
       // Detect level change
       const newLevel = frame.level ?? 0;
       if (newLevel > tracker.currentLevel) {
-        // Level was completed — record stats including lives + resets
         const levelTime = (now - tracker.levelStartTime) / 1000;
         const levelActions = (frame.total_actions || 0) - tracker.levelStartActions;
         tracker.completedLevels.push({
@@ -394,7 +435,17 @@ router.post(
           game_overs: tracker.levelGameOvers,
           resets: tracker.levelResets,
         });
-        // Reset per-level counters for new level
+        logService.info("game", `Level completed: ${tracker.currentLevel} → ${newLevel} (public)`, {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          from_level: tracker.currentLevel,
+          to_level: newLevel,
+          level_actions: levelActions,
+          level_time_s: Math.round(levelTime * 100) / 100,
+          level_game_overs: tracker.levelGameOvers,
+          level_resets: tracker.levelResets,
+          completed_levels_total: tracker.completedLevels.length,
+        });
         tracker.levelStartTime = now;
         tracker.levelStartActions = frame.total_actions || 0;
         tracker.currentLevel = newLevel;
@@ -409,6 +460,19 @@ router.post(
       await updatePlaySessionFromFrame(sessionGuid, frame, meta);
     }
 
+    logService.info("game", `Action: ${action}`, {
+      game_id: bridgeMeta.get(sessionGuid)?.gameId,
+      session_guid: sessionGuid,
+      action,
+      level: frame.level,
+      state: frame.state,
+      total_actions: frame.total_actions,
+      reward: frame.reward,
+      done: frame.done,
+      grid_size: `${frame.height}x${frame.width}`,
+      available_actions: frame.available_actions,
+    });
+
     res.json(formatFrameResponse(frame, sessionGuid));
   }),
 );
@@ -418,6 +482,8 @@ router.post(
   "/public/end/:sessionGuid",
   asyncHandler(async (req, res) => {
     const { sessionGuid } = req.params;
+
+    logService.debug("game", "Ending public session", { session_guid: sessionGuid });
 
     // Update DB if session is unfinished
     const playSession = await queryOne(
@@ -467,6 +533,13 @@ router.post(
     }
     bridgeMeta.delete(sessionGuid);
     sessionTrackers.delete(sessionGuid);
+
+    logService.info("game", "Session ended (public)", {
+      game_id: playSession?.game_id,
+      session_guid: sessionGuid,
+      final_state: playSession?.state,
+      total_plays_updated: !!bridgeMeta.get(sessionGuid),
+    });
 
     res.json({ detail: "Session ended" });
   }),
@@ -518,7 +591,7 @@ router.post(
 
     // Write uploaded files to a temp directory
     const tempBase = fs.mkdtempSync(path.join(os.tmpdir(), "arc_ephemeral_"));
-    const gameDir = path.join(tempBase, gameCode, "v1");
+    const gameDir = path.join(tempBase, gameCode);
     fs.mkdirSync(gameDir, { recursive: true });
 
     const gamePyPath = path.join(gameDir, `${gameCode}.py`);
@@ -537,6 +610,10 @@ router.post(
     } catch (e: any) {
       bridge.kill();
       fs.rmSync(tempBase, { recursive: true, force: true });
+      logService.error("game", `Failed to start game: ${e.message}`, {
+        game_id: gameId,
+        player_name: playerName || "guest",
+      });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
 
@@ -571,6 +648,16 @@ router.post(
       levelGameOvers: 0, levelResets: 0,
       totalGameOvers: 0, totalResets: 0,
       prevState: frame.state || 'NOT_FINISHED',
+    });
+
+    logService.info("game", "Session started (ephemeral)", {
+      game_id: gameId,
+      game_code: gameCode,
+      session_guid: sessionGuid,
+      player_name: playerName || "guest",
+      temp_dir: tempBase,
+      game_py_path: gamePyPath,
+      metadata_keys: Object.keys(metadata),
     });
 
     res.json(formatFrameResponse(frame, sessionGuid, { ephemeral: true }));
@@ -615,6 +702,11 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
+      logService.error("game", `Action failed: ${e.message}`, {
+        game_id: bridgeMeta.get(sessionGuid)?.gameId,
+        session_guid: sessionGuid,
+        action,
+      });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }
 
@@ -627,13 +719,19 @@ router.post(
       if (frame.state === "GAME_OVER" && tracker.prevState !== "GAME_OVER") {
         tracker.levelGameOvers++;
         tracker.totalGameOvers++;
+        logService.info("game", "GAME_OVER detected (ephemeral)", {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          level: tracker.currentLevel,
+          level_game_overs: tracker.levelGameOvers,
+          total_game_overs: tracker.totalGameOvers,
+        });
       }
       tracker.prevState = frame.state || "NOT_FINISHED";
 
       // Detect level change
       const newLevel = frame.level ?? 0;
       if (newLevel > tracker.currentLevel) {
-        // Level was completed — record stats including lives + resets
         const levelTime = (now - tracker.levelStartTime) / 1000;
         const levelActions = (frame.total_actions || 0) - tracker.levelStartActions;
         tracker.completedLevels.push({
@@ -644,7 +742,17 @@ router.post(
           game_overs: tracker.levelGameOvers,
           resets: tracker.levelResets,
         });
-        // Reset per-level counters for new level
+        logService.info("game", `Level completed: ${tracker.currentLevel} → ${newLevel} (ephemeral)`, {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          from_level: tracker.currentLevel,
+          to_level: newLevel,
+          level_actions: levelActions,
+          level_time_s: Math.round(levelTime * 100) / 100,
+          level_game_overs: tracker.levelGameOvers,
+          level_resets: tracker.levelResets,
+          completed_levels_total: tracker.completedLevels.length,
+        });
         tracker.levelStartTime = now;
         tracker.levelStartActions = frame.total_actions || 0;
         tracker.currentLevel = newLevel;
@@ -656,6 +764,18 @@ router.post(
     // Persist to temp_game_sessions
     await updateTempSessionFromFrame(sessionGuid, frame, action);
 
+    logService.info("game", `Action: ${action}`, {
+      game_id: bridgeMeta.get(sessionGuid)?.gameId,
+      session_guid: sessionGuid,
+      action,
+      level: frame.level,
+      state: frame.state,
+      total_actions: frame.total_actions,
+      reward: frame.reward,
+      done: frame.done,
+      grid_size: `${frame.height}x${frame.width}`,
+    });
+
     res.json(formatFrameResponse(frame, sessionGuid, { ephemeral: true }));
   }),
 );
@@ -665,6 +785,8 @@ router.post(
   "/ephemeral/end/:sessionGuid",
   asyncHandler(async (req, res) => {
     const { sessionGuid } = req.params;
+
+    logService.debug("game", "Ending ephemeral session", { session_guid: sessionGuid });
 
     // Finalise temp session in DB
     const tempSession = await queryOne(
@@ -726,6 +848,12 @@ router.post(
     }
     tempDirs.delete(sessionGuid);
 
+    logService.info("game", "Session ended (ephemeral)", {
+      game_id: bridgeMeta.get(sessionGuid)?.gameId || tempSession?.game_id,
+      session_guid: sessionGuid,
+      temp_dir_cleaned: !!tempDir,
+    });
+
     res.json({ detail: "Ephemeral session ended" });
   }),
 );
@@ -762,19 +890,38 @@ router.post(
     const effectiveSeed = seed ?? 0;
     const gamePath = resolveGamePath(game.local_dir, game.game_code);
 
+    logService.debug("game", "Resolving game for auth start", {
+      game_id: game.game_id,
+      game_code: game.game_code,
+      local_dir: game.local_dir,
+      resolved_path: gamePath,
+      session_guid: sessionGuid,
+      seed: effectiveSeed,
+      start_level,
+      user: req.user.username,
+      user_id: userId,
+    });
+
     // Create Python bridge
     const bridge = new GamePythonBridge();
+    logService.debug("game", "Creating GamePythonBridge instance (auth)", { session_guid: sessionGuid });
     try {
       await bridge.init(game.game_id, gamePath, effectiveSeed);
 
       // Skip to requested level
       if (start_level && start_level > 0) {
+        logService.debug("game", `Skipping to start_level ${start_level}`, { session_guid: sessionGuid, start_level });
         for (let i = 0; i < start_level; i++) {
           await bridge.sendAction("noop");
         }
       }
     } catch (e: any) {
       bridge.kill();
+      logService.error("game", `Failed to start game: ${e.message}`, {
+        game_id: game.game_id,
+        user: req.user.username,
+        user_id: userId,
+      });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
 
@@ -809,6 +956,14 @@ router.post(
       levelGameOvers: 0, levelResets: 0,
       totalGameOvers: 0, totalResets: 0,
       prevState: frame.state || 'NOT_FINISHED',
+    });
+
+    logService.info("game", "Session started (auth)", {
+      game_id: game.game_id,
+      session_guid: sessionGuid,
+      user: req.user.username,
+      user_id: userId,
+      seed: effectiveSeed,
     });
 
     res.json(formatFrameResponse(frame, sessionGuid));
@@ -891,6 +1046,12 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
+      logService.error("game", `Action failed: ${e.message}`, {
+        game_id: bridgeMeta.get(sessionGuid)?.gameId,
+        session_guid: sessionGuid,
+        user: req.user.username,
+        action,
+      });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }
 
@@ -903,13 +1064,20 @@ router.post(
       if (frame.state === "GAME_OVER" && tracker.prevState !== "GAME_OVER") {
         tracker.levelGameOvers++;
         tracker.totalGameOvers++;
+        logService.info("game", "GAME_OVER detected (auth)", {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          user: req.user.username,
+          level: tracker.currentLevel,
+          level_game_overs: tracker.levelGameOvers,
+          total_game_overs: tracker.totalGameOvers,
+        });
       }
       tracker.prevState = frame.state || "NOT_FINISHED";
 
       // Detect level change
       const newLevel = frame.level ?? 0;
       if (newLevel > tracker.currentLevel) {
-        // Level was completed — record stats including lives + resets
         const levelTime = (now - tracker.levelStartTime) / 1000;
         const levelActions = (frame.total_actions || 0) - tracker.levelStartActions;
         tracker.completedLevels.push({
@@ -920,7 +1088,18 @@ router.post(
           game_overs: tracker.levelGameOvers,
           resets: tracker.levelResets,
         });
-        // Reset per-level counters for new level
+        logService.info("game", `Level completed: ${tracker.currentLevel} → ${newLevel} (auth)`, {
+          game_id: bridgeMeta.get(sessionGuid)?.gameId,
+          session_guid: sessionGuid,
+          user: req.user.username,
+          from_level: tracker.currentLevel,
+          to_level: newLevel,
+          level_actions: levelActions,
+          level_time_s: Math.round(levelTime * 100) / 100,
+          level_game_overs: tracker.levelGameOvers,
+          level_resets: tracker.levelResets,
+          completed_levels_total: tracker.completedLevels.length,
+        });
         tracker.levelStartTime = now;
         tracker.levelStartActions = frame.total_actions || 0;
         tracker.currentLevel = newLevel;
@@ -935,6 +1114,19 @@ router.post(
       await updatePlaySessionFromFrame(sessionGuid, frame, meta);
     }
 
+    logService.info("game", `Action: ${action}`, {
+      game_id: bridgeMeta.get(sessionGuid)?.gameId,
+      session_guid: sessionGuid,
+      user: req.user.username,
+      action,
+      level: frame.level,
+      state: frame.state,
+      total_actions: frame.total_actions,
+      reward: frame.reward,
+      done: frame.done,
+      grid_size: `${frame.height}x${frame.width}`,
+    });
+
     res.json(formatFrameResponse(frame, sessionGuid));
   }),
 );
@@ -945,6 +1137,8 @@ router.get(
   authenticateToken,
   asyncHandler(async (req, res) => {
     const { sessionGuid } = req.params;
+
+    logService.debug("game", "Frame requested", { session_guid: sessionGuid, user: req.user.username });
 
     const bridge = activeBridges.get(sessionGuid);
     if (!bridge) {
@@ -968,6 +1162,8 @@ router.post(
   authenticateToken,
   asyncHandler(async (req, res) => {
     const { sessionGuid } = req.params;
+
+    logService.debug("game", "Ending auth session", { session_guid: sessionGuid, user: req.user.username });
 
     // Update DB if session is unfinished
     const playSession = await queryOne(
@@ -1017,6 +1213,12 @@ router.post(
     }
     bridgeMeta.delete(sessionGuid);
     sessionTrackers.delete(sessionGuid);
+
+    logService.info("game", "Session ended (auth)", {
+      game_id: playSession?.game_id,
+      session_guid: sessionGuid,
+      user: req.user.username,
+    });
 
     res.json({ detail: "Session ended" });
   }),

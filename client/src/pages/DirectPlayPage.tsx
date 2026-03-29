@@ -188,7 +188,7 @@ export default function DirectPlayPage() {
       const key = e.key.toLowerCase();
       if (key === 'r' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); resetGame(); return; }
       if (isGameOver) return;
-      if ((e.ctrlKey || e.metaKey) && key === 'z') { e.preventDefault(); if (frame?.available_actions?.includes('ACTION7')) sendAction('ACTION7'); return; }
+      if (key === 'z' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); if (frame?.available_actions?.includes('ACTION7')) sendAction('ACTION7'); return; }
       const action = ACTION_KEYS[key];
       if (action) { e.preventDefault(); if (frame?.available_actions?.includes(action)) sendAction(action); }
     };
@@ -432,7 +432,7 @@ export default function DirectPlayPage() {
                   <div className="w-px h-10 bg-gray-800 mx-2" />
 
                   <ActionButton icon={Zap} label="Action" action="ACTION5" active={lastAction === 'ACTION5'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION5')} kbd="Space" />
-                  <ActionButton icon={Undo} label="Undo" action="ACTION7" active={lastAction === 'ACTION7'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION7')} kbd="Ctrl+Z" />
+                  <ActionButton icon={Undo} label="Undo" action="ACTION7" active={lastAction === 'ACTION7'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION7')} kbd="Z" />
                   <ActionButton icon={RotateCcw} label="Reset" action="_reset" available={['_reset']} disabled={false} onClick={resetGame} kbd="R" spinning={resetAnim} />
 
                   <div className="w-px h-10 bg-gray-800 mx-2" />
@@ -491,7 +491,7 @@ export default function DirectPlayPage() {
                     <KbdRow keys="W A S D" desc="Move" />
                     <KbdRow keys="Space" desc="Action" />
                     <KbdRow keys="Click" desc="Coordinate" />
-                    <KbdRow keys="Ctrl+Z" desc="Undo" />
+                    <KbdRow keys="Z" desc="Undo" />
                     <KbdRow keys="R" desc="Reset level" />
                   </div>
                 </div>

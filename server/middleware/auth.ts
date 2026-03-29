@@ -49,7 +49,7 @@ export function authenticateToken(
   const authHeader = req.headers.authorization;
   const token = authHeader?.startsWith("Bearer ")
     ? authHeader.slice(7)
-    : undefined;
+    : (req.query.token as string | undefined);
 
   if (!token) {
     res.status(401).json({ detail: "Could not validate credentials" });

@@ -19,6 +19,9 @@ const ALLOWED_METADATA_KEYS = new Set([
   "baseline_actions",
   "tags",
   "local_dir",
+  "total_levels",
+  "available_actions",
+  "levels",
 ]);
 
 // ──── Validation helpers (inlined from GameManagerService) ────
@@ -92,6 +95,44 @@ function validateMetadata(content: string): any {
     }
   }
 
+  if (metadata.total_levels !== undefined) {
+    if (typeof metadata.total_levels !== "number" || !Number.isInteger(metadata.total_levels) || metadata.total_levels < 1) {
+      throw new AppError("total_levels must be a positive integer", 400);
+    }
+  }
+
+  if (metadata.available_actions !== undefined) {
+    const aa = metadata.available_actions;
+    if (!Array.isArray(aa)) {
+      throw new AppError("available_actions must be an array", 400);
+    }
+    for (let i = 0; i < aa.length; i++) {
+      const action = aa[i];
+      if (typeof action !== "object" || action === null || Array.isArray(action)) {
+        throw new AppError(`available_actions[${i}] must be an object`, 400);
+      }
+      if (typeof action.id !== "number" || typeof action.name !== "string") {
+        throw new AppError(`available_actions[${i}] must have numeric 'id' and string 'name'`, 400);
+      }
+    }
+  }
+
+  if (metadata.levels !== undefined) {
+    const lvls = metadata.levels;
+    if (!Array.isArray(lvls)) {
+      throw new AppError("levels must be an array", 400);
+    }
+    for (let i = 0; i < lvls.length; i++) {
+      const lvl = lvls[i];
+      if (typeof lvl !== "object" || lvl === null || Array.isArray(lvl)) {
+        throw new AppError(`levels[${i}] must be an object`, 400);
+      }
+      if (typeof lvl.level !== "number") {
+        throw new AppError(`levels[${i}] must have numeric 'level'`, 400);
+      }
+    }
+  }
+
   return metadata;
 }
 
@@ -110,7 +151,7 @@ function parseGameId(fullGameId: string): { gameCode: string; version: string } 
 /**
  * Upload game files to disk:
  * - Validates metadata + game file
- * - Writes to ENV_DIR/<game_code>/<version>/
+ * - Writes to ENV_DIR/<game_code>/
  * - Returns result object with paths and parsed metadata
  */
 function uploadGameFiles(gamePyContent: Buffer, metadataContent: Buffer): any {
@@ -118,9 +159,9 @@ function uploadGameFiles(gamePyContent: Buffer, metadataContent: Buffer): any {
   const metadata = validateMetadata(metadataStr);
 
   const fullGameId: string = metadata.game_id;
-  const { gameCode, version } = parseGameId(fullGameId);
+  const { gameCode } = parseGameId(fullGameId);
 
-  const gameDir = path.join(ENV_DIR, gameCode, version);
+  const gameDir = path.join(ENV_DIR, gameCode);
   fs.mkdirSync(gameDir, { recursive: true });
 
   const gamePyPath = path.join(gameDir, `${gameCode}.py`);
@@ -129,14 +170,13 @@ function uploadGameFiles(gamePyContent: Buffer, metadataContent: Buffer): any {
   const gamePyStr = gamePyContent.toString("utf-8");
   fs.writeFileSync(gamePyPath, gamePyStr, "utf-8");
 
-  // Update local_dir in metadata and write
-  metadata.local_dir = path.join("environment_files", gameCode, version);
+  metadata.local_dir = path.join("environment_files", gameCode);
   fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2), "utf-8");
 
   return {
     game_id: fullGameId,
     game_code: gameCode,
-    version,
+    version: "v1",
     local_dir: gameDir,
     game_file_path: gamePyPath,
     metadata_file_path: metadataPath,
@@ -145,26 +185,18 @@ function uploadGameFiles(gamePyContent: Buffer, metadataContent: Buffer): any {
 }
 
 /** Delete game files from disk. */
-function deleteGameFiles(gameCode: string, version: string): boolean {
-  const gameDir = path.join(ENV_DIR, gameCode, version);
+function deleteGameFiles(gameCode: string): boolean {
+  const gameDir = path.join(ENV_DIR, gameCode);
   if (fs.existsSync(gameDir)) {
     fs.rmSync(gameDir, { recursive: true, force: true });
-    // Remove parent directory if empty
-    const parent = path.join(ENV_DIR, gameCode);
-    if (fs.existsSync(parent)) {
-      try {
-        const entries = fs.readdirSync(parent);
-        if (entries.length === 0) fs.rmdirSync(parent);
-      } catch { /* ignore */ }
-    }
     return true;
   }
   return false;
 }
 
 /** Read game source file from disk. */
-function getGameFileContent(gameCode: string, version: string): string | null {
-  const gamePyPath = path.join(ENV_DIR, gameCode, version, `${gameCode}.py`);
+function getGameFileContent(gameCode: string): string | null {
+  const gamePyPath = path.join(ENV_DIR, gameCode, `${gameCode}.py`);
   if (fs.existsSync(gamePyPath)) {
     return fs.readFileSync(gamePyPath, "utf-8");
   }
@@ -172,8 +204,8 @@ function getGameFileContent(gameCode: string, version: string): string | null {
 }
 
 /** Read metadata.json from disk. */
-function getMetadataContent(gameCode: string, version: string): any | null {
-  const metadataPath = path.join(ENV_DIR, gameCode, version, "metadata.json");
+function getMetadataContent(gameCode: string): any | null {
+  const metadataPath = path.join(ENV_DIR, gameCode, "metadata.json");
   if (fs.existsSync(metadataPath)) {
     try {
       return JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
@@ -193,23 +225,18 @@ function listLocalGames(): any[] {
     const gameCodePath = path.join(ENV_DIR, gameCodeDir);
     if (!fs.statSync(gameCodePath).isDirectory()) continue;
 
-    for (const versionDir of fs.readdirSync(gameCodePath).sort()) {
-      const versionPath = path.join(gameCodePath, versionDir);
-      if (!fs.statSync(versionPath).isDirectory()) continue;
-
-      const metadataPath = path.join(versionPath, "metadata.json");
-      if (fs.existsSync(metadataPath)) {
-        try {
-          const metadata = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
-          games.push({
-            game_code: gameCodeDir,
-            version: versionDir,
-            game_id: metadata.game_id || `${gameCodeDir}-${versionDir}`,
-            metadata,
-            local_dir: versionPath,
-          });
-        } catch { /* skip broken metadata */ }
-      }
+    const metadataPath = path.join(gameCodePath, "metadata.json");
+    if (fs.existsSync(metadataPath)) {
+      try {
+        const metadata = JSON.parse(fs.readFileSync(metadataPath, "utf-8"));
+        games.push({
+          game_code: gameCodeDir,
+          version: "v1",
+          game_id: metadata.game_id || gameCodeDir,
+          metadata,
+          local_dir: gameCodePath,
+        });
+      } catch { /* skip broken metadata */ }
     }
   }
 
@@ -962,7 +989,7 @@ router.delete(
     }
 
     // Delete files from disk
-    deleteGameFiles(game.game_code, game.version);
+    deleteGameFiles(game.game_code);
 
     // Delete sessions and analytics
     await pool.query("DELETE FROM play_sessions WHERE game_id = $1", [game.id]);
@@ -1028,8 +1055,8 @@ router.get(
       throw new AppError("Game not found", 404);
     }
 
-    const sourceCode = getGameFileContent(game.game_code, game.version);
-    const metadata = getMetadataContent(game.game_code, game.version);
+    const sourceCode = getGameFileContent(game.game_code);
+    const metadata = getMetadataContent(game.game_code);
 
     res.json({
       game_id: game.game_id,

@@ -19,6 +19,7 @@ import UsersPage from './pages/UsersPage';
 import RequestedGamesPage from './pages/RequestedGamesPage';
 import TempGamesPage from './pages/TempGamesPage';
 import EvalPage from './pages/EvalPage';
+import LogsPage from './pages/LogsPage';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -82,6 +83,7 @@ function AppRoutes() {
         <Route path="temp-games" element={<PageGuard page="games"><TempGamesPage /></PageGuard>} />
         <Route path="users" element={<PageGuard page="users"><UsersPage /></PageGuard>} />
         <Route path="eval" element={<PageGuard page="eval"><EvalPage /></PageGuard>} />
+        <Route path="logs" element={<PageGuard page="logs"><LogsPage /></PageGuard>} />
       </Route>
 
       {/* Fallback */}

@@ -153,7 +153,7 @@ export default function GamePlayPage() {
       const key = e.key.toLowerCase();
       if (key === 'r' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); resetGame(); return; }
       if (isGameOver) return;
-      if ((e.ctrlKey || e.metaKey) && key === 'z') { e.preventDefault(); if (frame?.available_actions?.includes('ACTION7')) sendAction('ACTION7'); return; }
+      if (key === 'z' && !e.ctrlKey && !e.metaKey) { e.preventDefault(); if (frame?.available_actions?.includes('ACTION7')) sendAction('ACTION7'); return; }
       const action = ACTION_KEYS[key];
       if (action) { e.preventDefault(); if (frame?.available_actions?.includes(action)) sendAction(action); }
     };
@@ -325,7 +325,7 @@ export default function GamePlayPage() {
               <DPadButton icon={ArrowRight} action="ACTION4" active={lastAction === 'ACTION4'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION4')} kbd="D" />
               <div className="w-px h-10 bg-gray-800 mx-2" />
               <ActionBtn icon={Zap} label="Action" action="ACTION5" active={lastAction === 'ACTION5'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION5')} kbd="Space" />
-              <ActionBtn icon={Undo} label="Undo" action="ACTION7" active={lastAction === 'ACTION7'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION7')} kbd="Ctrl+Z" />
+              <ActionBtn icon={Undo} label="Undo" action="ACTION7" active={lastAction === 'ACTION7'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION7')} kbd="Z" />
               <ActionBtn icon={RotateCcw} label="Reset" action="_reset" available={['_reset']} disabled={false} onClick={resetGame} kbd="R" spinning={resetAnim} />
               <div className="w-px h-10 bg-gray-800 mx-2" />
               <div className="flex items-center gap-1.5 px-3 h-11 bg-gray-800/60 rounded-xl border border-gray-700/50">

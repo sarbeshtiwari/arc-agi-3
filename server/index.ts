@@ -17,14 +17,22 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
 app.set("trust proxy", 1);
 
-// Request logger (simple)
+import { logService } from "./services/LogService.js";
+
 app.use((req, res, next) => {
   const start = Date.now();
   res.on("finish", () => {
+    if (!req.path.startsWith("/api")) return;
     const ms = Date.now() - start;
-    if (req.path.startsWith("/api")) {
-      console.log(`${req.method} ${req.path} ${res.statusCode} ${ms}ms`);
-    }
+    const level = res.statusCode >= 500 ? "error" : res.statusCode >= 400 ? "warn" : "info";
+    logService.log(level, "http", `${req.method} ${req.path} ${res.statusCode} ${ms}ms`, {
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      duration_ms: ms,
+      ip: req.ip,
+      user_agent: req.get("user-agent"),
+    });
   });
   next();
 });

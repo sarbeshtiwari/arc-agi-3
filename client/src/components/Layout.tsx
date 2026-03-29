@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import {
   LayoutDashboard, Gamepad2, Upload, Users, LogOut,
-  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer, FlaskConical
+  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer, FlaskConical, ScrollText
 } from 'lucide-react';
 
 const navSections = [
@@ -33,6 +33,12 @@ const navSections = [
     label: 'AI',
     items: [
       { path: '/admin/eval', label: 'Eval Runner', icon: FlaskConical, page: 'eval' },
+    ],
+  },
+  {
+    label: 'System',
+    items: [
+      { path: '/admin/logs', label: 'Logs', icon: ScrollText, page: 'logs' },
     ],
   },
 ];

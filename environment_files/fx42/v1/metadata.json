@@ -1,0 +1,161 @@
+{
+  "game_id": "fx42",
+  "total_levels": 5,
+  "default_fps": 15,
+  "baseline_actions": [
+    10,
+    20,
+    30,
+    30,
+    30
+  ],
+  "tags": [
+    "puzzle",
+    "grid",
+    "color",
+    "logic"
+  ],
+  "local_dir": "environment_files/fx42/v1",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level with a new puzzle"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left one cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right one cell"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Apply the color transformation rule at the current cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        3,
+        3
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "orthogonal_toggle",
+        "color_cycle_2"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        3,
+        3
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "diagonal_toggle",
+        "color_cycle_3"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "orthogonal_toggle",
+        "color_cycle_2"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "orthogonal_toggle",
+        "diagonal_toggle",
+        "color_cycle_3"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        5,
+        5
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "all_neighbors_toggle",
+        "color_cycle_3"
+      ]
+    }
+  ]
+}

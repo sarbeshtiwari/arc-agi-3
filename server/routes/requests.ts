@@ -551,18 +551,14 @@ router.post(
 
     const fullGameId = metadata.game_id || row.game_id;
     let gameCode: string;
-    let version: string;
     if (fullGameId.includes("-")) {
       const lastDash = fullGameId.lastIndexOf("-");
       gameCode = fullGameId.substring(0, lastDash);
-      version = fullGameId.substring(lastDash + 1) || "v1";
     } else {
       gameCode = fullGameId;
-      version = "v1";
     }
 
-    // Write files to environment_files/<game_code>/<version>/
-    const gameDir = path.join(ENVIRONMENT_FILES_DIR, gameCode, version);
+    const gameDir = path.join(ENVIRONMENT_FILES_DIR, gameCode);
     fs.mkdirSync(gameDir, { recursive: true });
 
     const gamePyPath = path.join(gameDir, `${gameCode}.py`);
@@ -571,8 +567,7 @@ router.post(
     const gamePyStr = gamePyBytes.toString("utf-8");
     fs.writeFileSync(gamePyPath, gamePyStr, "utf-8");
 
-    // Update metadata local_dir and write
-    metadata.local_dir = path.join("environment_files", gameCode, version);
+    metadata.local_dir = path.join("environment_files", gameCode);
     fs.writeFileSync(metadataFilePath, JSON.stringify(metadata, null, 2), "utf-8");
 
     // Create game record in DB
@@ -602,7 +597,7 @@ router.post(
       row.game_owner_name || null,
       row.game_drive_link || null,
       row.game_video_link || null,
-      version,
+      "v1",
       gameCode,
       metadata.default_fps ?? 5,
       toJsonb(metadata.baseline_actions ?? null),

@@ -1,5 +1,5 @@
 """
-Python bridge for ARCEngine game execution.
+Python bridge for PuzzleEnvironment game execution.
 Reads NDJSON commands from stdin, executes game actions, writes NDJSON responses to stdout.
 Designed to be spawned as a long-lived subprocess by the Node.js server.
 
@@ -9,7 +9,7 @@ Protocol:
 
 Commands:
   {"command": "init", "game_id": "...", "game_path": "...", "seed": 42}
-  {"command": "action", "action": "ACTION1", "x": 0, "y": 0}
+  {"command": "action", "action": "up"}
   {"command": "reset"}
   {"command": "quit"}
 
@@ -21,131 +21,167 @@ Responses:
 
 import sys
 import json
+import base64
 import importlib.util
 import traceback
+import time
 from pathlib import Path
 
-# Add ARCEngine to path — expected at external/ARCEngine relative to project root
 ARCENGINE_PATH = Path(__file__).resolve().parent.parent.parent / "external" / "ARCEngine"
 sys.path.insert(0, str(ARCENGINE_PATH))
 
-try:
-    from arcengine import ARCBaseGame, ActionInput, GameAction
-except ImportError as e:
-    print(json.dumps({
-        "type": "error",
-        "code": "ARCENGINE_NOT_FOUND",
-        "message": f"Failed to import ARCEngine: {e}"
-    }), flush=True)
-    sys.exit(1)
+
+def _log(level: str, msg: str, **extra):
+    payload = {"type": "log", "level": level, "message": msg}
+    if extra:
+        payload["metadata"] = extra
+    print(json.dumps(payload), flush=True)
 
 
 # ---------------------------------------------------------------------------
-# Game loading
+# Game loading — finds PuzzleEnvironment class in the given file
 # ---------------------------------------------------------------------------
 
-def load_game_from_file(file_path: str):
-    """
-    Dynamically load a game class from a Python file.
-    Returns an instance of the first ARCBaseGame subclass found in the module.
-
-    The module is registered in sys.modules so that @dataclass and other
-    decorators that rely on the module lookup work correctly.
-    """
+def load_puzzle_env_class(file_path: str):
     path = Path(file_path)
+    _log("debug", f"Loading game file: {file_path}", file_path=str(path), exists=path.exists())
     if not path.exists():
         raise FileNotFoundError(f"Game file not found: {file_path}")
 
     module_name = f"game_{path.stem}"
+    _log("debug", f"Creating module spec: {module_name}", module_name=module_name)
     spec = importlib.util.spec_from_file_location(module_name, str(path))
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot create module spec from: {file_path}")
 
     module = importlib.util.module_from_spec(spec)
-    # Register in sys.modules BEFORE exec so @dataclass can resolve the module
     sys.modules[module_name] = module
+
+    t0 = time.time()
     spec.loader.exec_module(module)
+    load_time = round(time.time() - t0, 3)
+    _log("debug", f"Module loaded in {load_time}s", module_name=module_name, load_time_s=load_time)
 
-    # Find the game class (first subclass of ARCBaseGame that isn't ARCBaseGame itself)
-    game_class = None
-    for attr_name in dir(module):
-        attr = getattr(module, attr_name)
-        if (isinstance(attr, type)
-                and issubclass(attr, ARCBaseGame)
-                and attr is not ARCBaseGame):
-            game_class = attr
-            break
+    all_attrs = [a for a in dir(module) if not a.startswith("_")]
+    _log("debug", f"Module exports: {all_attrs}", module_name=module_name, exports=all_attrs)
 
-    if game_class is None:
-        raise ValueError(f"No ARCBaseGame subclass found in {file_path}")
+    puzzle_env_class = getattr(module, "PuzzleEnvironment", None)
+    if puzzle_env_class is None:
+        raise ValueError(
+            f"No PuzzleEnvironment class found in {file_path}. "
+            f"All games must export a PuzzleEnvironment class."
+        )
 
-    return game_class
+    bases = [b.__name__ for b in puzzle_env_class.__mro__]
+    _log("info", f"Found PuzzleEnvironment class", class_name=puzzle_env_class.__name__, mro=bases)
+
+    return puzzle_env_class
 
 
 # ---------------------------------------------------------------------------
-# Action mapping
+# Action translation — maps legacy ACTION1..7/RESET names to PuzzleEnvironment action names
 # ---------------------------------------------------------------------------
 
-ACTION_MAP = {
-    "RESET": GameAction.RESET,
-    "ACTION1": GameAction.ACTION1,
-    "ACTION2": GameAction.ACTION2,
-    "ACTION3": GameAction.ACTION3,
-    "ACTION4": GameAction.ACTION4,
-    "ACTION5": GameAction.ACTION5,
-    "ACTION6": GameAction.ACTION6,
-    "ACTION7": GameAction.ACTION7,
+# arcengine GameAction int values: RESET=0, ACTION1=1, ..., ACTION7=7
+_LEGACY_TO_INT = {
+    "RESET": 0,
+    "ACTION1": 1, "ACTION2": 2, "ACTION3": 3, "ACTION4": 4,
+    "ACTION5": 5, "ACTION6": 6, "ACTION7": 7,
 }
 
 
-def parse_action(action_str: str) -> GameAction:
-    """Convert an action string to a GameAction enum value."""
-    result = ACTION_MAP.get(action_str.upper())
-    if result is None:
-        raise ValueError(f"Unknown action: {action_str}")
-    return result
+_INT_TO_LEGACY = {v: k for k, v in _LEGACY_TO_INT.items()}
+
+
+def build_action_translator(env):
+    action_map = getattr(env, "ACTION_MAP", None) or {}
+    _log("debug", f"Building action translator", action_map=action_map)
+    int_to_name = {}
+    name_to_legacy = {}
+    for name, int_val in action_map.items():
+        int_to_name[int_val] = name
+        if int_val in _INT_TO_LEGACY:
+            name_to_legacy[name] = _INT_TO_LEGACY[int_val]
+
+    _log("debug", f"Action mapping built", int_to_name=int_to_name, name_to_legacy=name_to_legacy)
+
+    def translate(legacy_action_str):
+        upper = legacy_action_str.upper()
+        if upper in _LEGACY_TO_INT:
+            int_val = _LEGACY_TO_INT[upper]
+            resolved = int_to_name.get(int_val, legacy_action_str)
+            _log("debug", f"Translated action: {legacy_action_str} -> {resolved}", legacy=legacy_action_str, resolved=resolved, int_val=int_val)
+            return resolved
+        if legacy_action_str in action_map:
+            _log("debug", f"Action passed through: {legacy_action_str}")
+            return legacy_action_str
+        _log("warn", f"Unknown action, passing through: {legacy_action_str}")
+        return legacy_action_str
+
+    def to_legacy_list(puzzle_action_names):
+        return [name_to_legacy.get(n, n) for n in puzzle_action_names]
+
+    return translate, to_legacy_list
 
 
 # ---------------------------------------------------------------------------
-# Frame extraction
+# Frame extraction from PuzzleEnvironment GameState / StepResult
 # ---------------------------------------------------------------------------
 
-def extract_frame(game, frame_data, total_actions: int) -> dict:
-    """
-    Build a frame response dict from ARCEngine FrameData.
-    frame_data.frame is a list of animation frames (each a 2D grid).
-    We take the first frame as the current grid.
-    """
-    frame_list = frame_data.frame
-    # Normalise: ensure we have a plain Python list of lists
-    if isinstance(frame_list, list):
-        frame_list = [
-            f.tolist() if hasattr(f, "tolist") else f
-            for f in frame_list
-        ]
-    elif hasattr(frame_list, "tolist"):
-        frame_list = [frame_list.tolist()]
+def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, reward=0.0, done=False, info=None):
+    grid = _extract_grid(env)
 
-    # Primary grid is the LAST animation frame (contains the current/new level state).
-    # On level clear, arcengine returns multiple frames: [victory_frame, new_level_frame].
-    # We always want the final frame which shows the current game state.
-    grid = frame_list[-1] if frame_list else []
+    state_str = "WIN" if done and info and info.get("reason") == "game_complete" else \
+                "GAME_OVER" if done and info and info.get("reason") == "death" else \
+                "NOT_FINISHED"
 
-    state_val = frame_data.state.value if hasattr(frame_data.state, "value") else str(frame_data.state)
+    metadata = game_state.metadata or {}
+
+    image_b64 = None
+    if game_state.image_observation:
+        image_b64 = base64.b64encode(game_state.image_observation).decode("ascii")
+
+    valid_actions = game_state.valid_actions or []
+    legacy_actions = to_legacy_list(valid_actions)
+
+    _log("debug", "Frame built", 
+         grid_size=f"{len(grid)}x{len(grid[0]) if grid and len(grid) > 0 else 0}",
+         state=state_str, reward=reward, done=done,
+         game_level=metadata.get("level_index", 0),
+         total_actions=total_actions,
+         valid_actions=valid_actions,
+         legacy_actions=legacy_actions,
+         has_image=image_b64 is not None,
+         has_text_obs=bool(game_state.text_observation),
+         info=info)
 
     return {
         "type": "frame",
         "grid": grid,
         "width": len(grid[0]) if grid and len(grid) > 0 else 0,
         "height": len(grid) if grid else 0,
-        "state": state_val,
-        "level": frame_data.levels_completed,
-        "levels_completed": frame_data.levels_completed,
+        "state": state_str,
+        "level": metadata.get("level_index", 0),
+        "levels_completed": metadata.get("level_index", 0),
         "total_actions": total_actions,
-        "max_actions": getattr(game, "max_actions", 100),
-        "available_actions": [f"ACTION{a}" for a in frame_data.available_actions] if frame_data.available_actions else [],
-        "win_levels": frame_data.win_levels,
+        "available_actions": legacy_actions,
+        "reward": reward,
+        "done": done,
+        "text_observation": game_state.text_observation,
+        "image_observation_b64": image_b64,
+        "metadata": metadata,
     }
+
+
+def _extract_grid(env):
+    try:
+        engine = env._engine
+        frame = engine.camera.render(engine.current_level.get_sprites())
+        if hasattr(frame, "tolist"):
+            return frame.tolist()
+        return frame
+    except Exception:
+        return [[0]]
 
 
 # ---------------------------------------------------------------------------
@@ -153,7 +189,6 @@ def extract_frame(game, frame_data, total_actions: int) -> dict:
 # ---------------------------------------------------------------------------
 
 def emit(obj: dict):
-    """Write a JSON object as a single line to stdout and flush."""
     print(json.dumps(obj), flush=True)
 
 
@@ -166,7 +201,10 @@ def emit_error(message: str, code: str = "GAME_ERROR"):
 # ---------------------------------------------------------------------------
 
 def main():
-    game = None
+    _log("info", "game_runner.py started", python_version=sys.version, arcengine_path=str(ARCENGINE_PATH))
+    env = None
+    translate_action = None
+    to_legacy_list = None
     total_actions = 0
 
     for line in sys.stdin:
@@ -181,27 +219,49 @@ def main():
             continue
 
         command = cmd.get("command", "")
+        _log("debug", f"Received command: {command}", raw_command=cmd)
 
         try:
-            # ----------------------------------------------------------
-            # INIT — load a game from file and emit ready + initial frame
-            # ----------------------------------------------------------
             if command == "init":
                 game_id = cmd.get("game_id", "unknown")
                 game_path = cmd.get("game_path")
                 seed = cmd.get("seed")
 
+                _log("info", f"Initializing game", game_id=game_id, game_path=game_path, seed=seed)
+
                 if not game_path:
                     emit_error("game_path is required for init", "MISSING_GAME_PATH")
                     continue
 
-                GameClass = load_game_from_file(game_path)
-                game = GameClass() if seed is None else GameClass(seed=seed)
+                t0 = time.time()
+                PuzzleEnvClass = load_puzzle_env_class(game_path)
+                _log("debug", f"Instantiating PuzzleEnvironment", class_name=PuzzleEnvClass.__name__, seed=seed)
+
+                env = PuzzleEnvClass() if seed is None else PuzzleEnvClass(seed=seed)
+                _log("debug", f"PuzzleEnvironment created", 
+                     has_action_map=hasattr(env, "ACTION_MAP"),
+                     has_engine=hasattr(env, "_engine"),
+                     action_map=getattr(env, "ACTION_MAP", None))
+
+                translate_action, to_legacy_list = build_action_translator(env)
                 total_actions = 0
 
-                # Get initial frame via RESET action
-                initial_frame_data = game.perform_action(ActionInput(id=GameAction.RESET))
-                frame = extract_frame(game, initial_frame_data, total_actions)
+                _log("debug", "Calling env.reset() for initial state")
+                game_state = env.reset()
+                _log("debug", f"Initial reset complete",
+                     valid_actions=game_state.valid_actions,
+                     turn=game_state.turn,
+                     metadata=game_state.metadata)
+
+                frame = build_frame_from_game_state(env, game_state, total_actions, to_legacy_list)
+
+                metadata = game_state.metadata or {}
+                init_time = round(time.time() - t0, 3)
+                _log("info", f"Game initialized in {init_time}s", 
+                     game_id=game_id, init_time_s=init_time,
+                     total_levels=metadata.get("total_levels", 1),
+                     grid_size=f"{frame['height']}x{frame['width']}",
+                     available_actions=frame["available_actions"])
 
                 emit({
                     "type": "ready",
@@ -209,66 +269,84 @@ def main():
                     "frame": frame,
                     "metadata": {
                         "game_id": game_id,
-                        "level_count": len(getattr(game, "_levels", [])),
-                        "win_score": getattr(game, "win_score", 1),
-                        "max_actions": getattr(game, "max_actions", 100),
+                        "level_count": metadata.get("total_levels", 1),
+                        "total_levels": metadata.get("total_levels", 1),
                     },
                 })
 
-            # ----------------------------------------------------------
-            # ACTION — perform a game action and return the new frame
-            # ----------------------------------------------------------
             elif command == "action":
-                if game is None:
+                if env is None:
                     emit_error("No game loaded. Send 'init' first.", "NO_GAME")
                     continue
 
-                action_str = cmd.get("action", "ACTION1")
-                action_id = parse_action(action_str)
-                action_input = ActionInput(id=action_id)
-
-                # ACTION6 supports coordinates (x, y)
-                if action_str.upper() == "ACTION6":
-                    if "x" in cmd and "y" in cmd:
-                        action_input.x = cmd["x"]
-                        action_input.y = cmd["y"]
+                raw_action = cmd.get("action", "")
+                action_str = translate_action(raw_action)
 
                 total_actions += 1
-                frame_data = game.perform_action(action_input)
-                emit(extract_frame(game, frame_data, total_actions))
+                _log("debug", f"Calling env.step('{action_str}')", action_num=total_actions, raw=raw_action, translated=action_str)
 
-            # ----------------------------------------------------------
-            # RESET — reset the game to initial state
-            # ----------------------------------------------------------
+                t0 = time.time()
+                step_result = env.step(action_str)
+                step_time = round(time.time() - t0, 4)
+
+                _log("debug", f"Step completed in {step_time}s",
+                     step_time_s=step_time,
+                     reward=step_result.reward,
+                     done=step_result.done,
+                     info=step_result.info,
+                     new_valid_actions=step_result.state.valid_actions,
+                     turn=step_result.state.turn)
+
+                frame = build_frame_from_game_state(
+                    env,
+                    step_result.state,
+                    total_actions,
+                    to_legacy_list,
+                    reward=step_result.reward,
+                    done=step_result.done,
+                    info=step_result.info,
+                )
+                emit(frame)
+
             elif command == "reset":
-                if game is None:
+                if env is None:
                     emit_error("No game loaded. Send 'init' first.", "NO_GAME")
                     continue
 
+                _log("info", "Resetting environment", total_actions_before_reset=total_actions)
                 total_actions = 0
-                frame_data = game.perform_action(ActionInput(id=GameAction.RESET))
-                emit(extract_frame(game, frame_data, total_actions))
+                game_state = env.reset()
+                _log("debug", "Reset complete",
+                     valid_actions=game_state.valid_actions,
+                     turn=game_state.turn,
+                     metadata=game_state.metadata)
 
-            # ----------------------------------------------------------
-            # QUIT — exit cleanly
-            # ----------------------------------------------------------
+                frame = build_frame_from_game_state(env, game_state, total_actions, to_legacy_list)
+                emit(frame)
+
             elif command == "quit":
+                _log("info", "Quit received, shutting down")
                 emit({"type": "quit", "message": "goodbye"})
                 break
 
             else:
+                _log("warn", f"Unknown command: {command}")
                 emit_error(f"Unknown command: {command}", "UNKNOWN_COMMAND")
 
         except FileNotFoundError as e:
+            _log("error", f"File not found: {e}", traceback=traceback.format_exc())
             emit_error(str(e), "FILE_NOT_FOUND")
         except ImportError as e:
+            _log("error", f"Import error: {e}", traceback=traceback.format_exc())
             emit_error(f"Failed to import game: {e}", "IMPORT_ERROR")
         except ValueError as e:
+            _log("error", f"Value error: {e}", traceback=traceback.format_exc())
             emit_error(str(e), "INVALID_GAME")
         except Exception as e:
+            _log("error", f"Unexpected error: {e}", traceback=traceback.format_exc())
             emit_error(f"Unexpected error: {e}", "UNEXPECTED_ERROR")
-            traceback.print_exc(file=sys.stderr)
 
+    _log("info", "game_runner.py exiting")
     return 0
 
 

@@ -3,11 +3,7 @@ import pg from "pg";
 const { Pool } = pg;
 
 const pool = new Pool({
-  host: process.env.DB_HOST || "localhost",
-  port: parseInt(process.env.DB_PORT || "5432"),
-  database: process.env.DB_NAME || "arc_agi_db",
-  user: process.env.DB_USER || "arcadmin",
-  password: process.env.DB_PASSWORD || "arcadmin",
+  connectionString: process.env.DATABASE_URL,
   max: 50,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
@@ -143,6 +139,19 @@ export async function initDB() {
       CREATE INDEX IF NOT EXISTS idx_requests_status ON game_requests(status);
       CREATE INDEX IF NOT EXISTS idx_temp_guid ON temp_game_sessions(session_guid);
 
+      CREATE TABLE IF NOT EXISTS app_logs (
+        id TEXT PRIMARY KEY,
+        level VARCHAR(10) NOT NULL DEFAULT 'info',
+        source VARCHAR(100) NOT NULL DEFAULT 'app',
+        message TEXT NOT NULL,
+        metadata JSONB,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_app_logs_created ON app_logs(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_app_logs_level ON app_logs(level);
+      CREATE INDEX IF NOT EXISTS idx_app_logs_source ON app_logs(source);
+
       CREATE TABLE IF NOT EXISTS app_settings (
         key VARCHAR(100) PRIMARY KEY,
         value TEXT NOT NULL,
@@ -153,7 +162,7 @@ export async function initDB() {
       INSERT INTO app_settings (key, value) VALUES ('recording_enabled', 'true')
         ON CONFLICT (key) DO NOTHING;
     `);
-    console.log(`[DB] PostgreSQL connected: ${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
+    console.log(`[DB] PostgreSQL connected: ${process.env.DATABASE_URL?.replace(/\/\/.*@/, '//***@')}`);
   } finally {
     client.release();
   }

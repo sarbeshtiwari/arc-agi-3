@@ -174,4 +174,16 @@ export const requestsAPI = {
     client.get(`/requests/${requestId}/files/${fileType}`, { responseType: 'blob' }),
 };
 
+export const logsAPI = {
+  list: (params: { level?: string; source?: string; search?: string; limit?: number; offset?: number; since?: string } = {}) =>
+    client.get('/admin/logs', { params }),
+  sources: () => client.get('/admin/logs/sources'),
+  stats: () => client.get('/admin/logs/stats'),
+  cleanup: () => client.delete('/admin/logs/cleanup'),
+  streamUrl: () => {
+    const token = localStorage.getItem('arc_token');
+    return `${window.location.origin}/api/admin/logs/stream?token=${token}`;
+  },
+};
+
 export default client;

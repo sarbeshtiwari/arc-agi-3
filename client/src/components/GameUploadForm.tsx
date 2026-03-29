@@ -74,7 +74,7 @@ function validateMetadata(content) {
   }
   if (typeof metadata !== 'object' || Array.isArray(metadata)) return ['Must be a JSON object'];
 
-  const allowed = new Set(['game_id', 'default_fps', 'baseline_actions', 'tags', 'local_dir']);
+  const allowed = new Set(['game_id', 'default_fps', 'baseline_actions', 'tags', 'local_dir', 'total_levels', 'available_actions', 'levels']);
   const unknown = Object.keys(metadata).filter(k => !allowed.has(k));
   if (unknown.length > 0) errors.push(`Unknown fields: ${unknown.join(', ')}`);
   if (!metadata.game_id) errors.push('Missing game_id');
@@ -268,7 +268,7 @@ export default function GameUploadForm({
             </div>
             <div className="p-2.5 bg-gray-800/40 rounded-lg text-[10px] text-gray-500">
               <strong className="text-gray-400">game.py</strong> -- No comments (#) or docstrings (""") allowed<br />
-              <strong className="text-gray-400">metadata.json</strong> -- Only: game_id, default_fps, baseline_actions, tags, local_dir
+              <strong className="text-gray-400">metadata.json</strong> -- Only: game_id, default_fps, baseline_actions, tags, local_dir, total_levels, available_actions, levels
             </div>
           </div>
         </div>
