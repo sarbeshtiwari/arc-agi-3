@@ -1,0 +1,180 @@
+{
+  "game_id": "pd01",
+  "total_levels": 5,
+  "default_fps": 10,
+  "baseline_actions": [
+    30,
+    27,
+    21,
+    36,
+    47
+  ],
+  "tags": [
+    "puzzle",
+    "navigation",
+    "spatial-reasoning",
+    "dial",
+    "combination",
+    "progressive"
+  ],
+  "local_dir": "environment_files/pd01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; double-tap resets the full game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move agent up; if adjacent to a dial, rotate it +1"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move agent down; if adjacent to a dial, rotate it -1"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move agent left; if adjacent to a dial, rotate it +3"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move agent right; if adjacent to a dial, rotate it -3"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Check if all dials match targets; auto-advances if correct, costs a move if wrong"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "dials",
+        "agent-navigation",
+        "combination-lock",
+        "lives",
+        "budget"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "dials",
+        "agent-navigation",
+        "combination-lock",
+        "lives",
+        "budget"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "dials",
+        "agent-navigation",
+        "combination-lock",
+        "blockers",
+        "lives",
+        "budget"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "dials",
+        "agent-navigation",
+        "combination-lock",
+        "blockers",
+        "lives",
+        "budget"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "dials",
+        "agent-navigation",
+        "combination-lock",
+        "blockers",
+        "lives",
+        "budget"
+      ]
+    }
+  ]
+}

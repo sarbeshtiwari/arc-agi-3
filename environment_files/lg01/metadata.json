@@ -1,0 +1,166 @@
+{
+  "game_id": "lg01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    25,
+    35,
+    55,
+    55,
+    60
+  ],
+  "tags": [
+    "logic",
+    "puzzle",
+    "doors",
+    "buttons",
+    "sequence"
+  ],
+  "local_dir": "environment_files/lg01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player up one cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player down one cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player left one cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player right one cell"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Interact with button at current position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move; costs one move"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        8,
+        9
+      ],
+      "camera_size": [
+        64,
+        40
+      ],
+      "display_size": [
+        32,
+        36
+      ],
+      "mechanics": [
+        "button",
+        "door",
+        "wall"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        64,
+        44
+      ],
+      "display_size": [
+        40,
+        40
+      ],
+      "mechanics": [
+        "button",
+        "door",
+        "wall"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        12,
+        11
+      ],
+      "camera_size": [
+        64,
+        48
+      ],
+      "display_size": [
+        48,
+        44
+      ],
+      "mechanics": [
+        "button",
+        "door",
+        "wall"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        14,
+        12
+      ],
+      "camera_size": [
+        64,
+        52
+      ],
+      "display_size": [
+        56,
+        48
+      ],
+      "mechanics": [
+        "button",
+        "door",
+        "wall"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        16,
+        13
+      ],
+      "camera_size": [
+        64,
+        56
+      ],
+      "display_size": [
+        64,
+        52
+      ],
+      "mechanics": [
+        "button",
+        "door",
+        "wall"
+      ]
+    }
+  ]
+}

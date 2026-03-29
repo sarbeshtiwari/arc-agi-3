@@ -6,7 +6,7 @@ import VideoRecorder from '../components/VideoRecorder';
 import {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
   RotateCcw, Undo, Zap, Trophy, Square, X as XIcon,
-  ChevronLeft, Skull, Clock, Layers, Home, Target
+  ChevronLeft, Skull, Clock, Layers, Home, Target, AlertTriangle
 } from 'lucide-react';
 
 const ACTION_KEYS = {
@@ -48,6 +48,7 @@ export default function DirectPlayPage() {
   const [canvasShake, setCanvasShake] = useState(false);
   const [lastAction, setLastAction] = useState(null);
   const prevStateRef = useRef(null);
+  const errorTimerRef = useRef(null);
 
   // Level transition
   const prevLevelRef = useRef(null);
@@ -59,6 +60,16 @@ export default function DirectPlayPage() {
   const serverTotalTime = frame?.metadata?.total_time || 0;
   const completedLevels = frame?.metadata?.completed_levels || [];
   const currentLevelStats = frame?.metadata?.current_level_stats;
+
+  const setErrorWithDismiss = useCallback((msg: string | null, timeout = 6000) => {
+    if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+    setError(msg);
+    if (msg && timeout > 0) {
+      errorTimerRef.current = setTimeout(() => setError(null), timeout);
+    }
+  }, []);
+
+  useEffect(() => () => { if (errorTimerRef.current) clearTimeout(errorTimerRef.current); }, []);
 
   // Timer
   const startTimer = useCallback(() => {
@@ -131,7 +142,7 @@ export default function DirectPlayPage() {
       prevStateRef.current = res.data.state;
       // Timer starts when record prompt is dismissed
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to start game');
+      setErrorWithDismiss(err.response?.data?.detail || 'Failed to start game', 0);
     } finally { setLoading(false); }
   }
 
@@ -149,14 +160,13 @@ export default function DirectPlayPage() {
     } catch (err) {
       const detail = err.response?.data?.detail || '';
       if (err.response?.status === 404 || detail.includes('No game instance')) {
-        // Server lost the session -- auto-recover
         setSessionGuid(null);
         setFrame(null);
         prevStateRef.current = null;
         setTimeout(() => doStart(), 200);
         return;
       }
-      setError(detail || 'Action failed');
+      setErrorWithDismiss(detail || `Action '${action}' failed`);
     }
   }, [sessionGuid]);
 
@@ -177,7 +187,7 @@ export default function DirectPlayPage() {
       setFrame(res.data); setGameOverAnim(false);
       prevStateRef.current = res.data.state;
       startTimer();
-    } catch (err) { setError(err.response?.data?.detail || 'Reset failed'); }
+    } catch (err) { setErrorWithDismiss(err.response?.data?.detail || 'Reset failed'); }
   }, [sessionGuid, startTimer]);
 
 
@@ -414,12 +424,6 @@ export default function DirectPlayPage() {
                   )}
                 </div>
 
-                {error && (
-                  <div className="mt-3 bg-red-500/10 border border-red-500/30 rounded-lg p-2.5">
-                    <p className="text-xs text-red-400">{error}</p>
-                  </div>
-                )}
-
                 {/* ── Inline Controls ── */}
                 <div className="mt-4 flex items-center justify-center gap-2">
                   <DPadButton icon={ArrowLeft} action="ACTION3" active={lastAction === 'ACTION3'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION3')} kbd="A" />
@@ -445,6 +449,29 @@ export default function DirectPlayPage() {
                     </span>
                   </div>
                 </div>
+
+                {error && (
+                  <div className="mt-3 bg-red-950/60 border border-red-500/40 rounded-lg px-3 py-2.5 flex items-start gap-2">
+                    <XIcon size={14} className="text-red-400 shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-red-400">Error</p>
+                      <p className="text-[11px] text-red-300/80 mt-0.5 break-words font-mono">{error}</p>
+                    </div>
+                    <button onClick={() => setError(null)} className="text-red-400/60 hover:text-red-400 shrink-0">
+                      <XIcon size={12} />
+                    </button>
+                  </div>
+                )}
+
+                {frame?.action_map_inferred && (
+                  <div className="mt-3 bg-amber-950/60 border border-amber-500/40 rounded-lg px-3 py-2.5 flex items-start gap-2">
+                    <AlertTriangle size={14} className="text-amber-400 shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-medium text-amber-400">Action Map Inferred</p>
+                      <p className="text-[11px] text-amber-300/80 mt-0.5">This game does not define an ACTION_MAP. Controls were auto-mapped and may not match the intended layout.</p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* ── Right Panel ── */}

@@ -1,0 +1,237 @@
+{
+  "game_id": "bx02",
+  "total_levels": 7,
+  "default_fps": 5,
+  "baseline_actions": [
+    15,
+    25,
+    35,
+    40,
+    50,
+    65,
+    85
+  ],
+  "tags": [
+    "puzzle",
+    "sokoban",
+    "logic",
+    "box-pushing",
+    "danger"
+  ],
+  "local_dir": "environment_files/bx02",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; consecutive reset without moves restarts from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player right"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Click at screen coordinates; moves player toward the clicked cell",
+      "data_schema": {
+        "x": "int (0-63)",
+        "y": "int (0-63)"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move; costs one action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        18,
+        18
+      ],
+      "camera_size": [
+        18,
+        18
+      ],
+      "display_size": [
+        18,
+        18
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        18,
+        18
+      ],
+      "camera_size": [
+        18,
+        18
+      ],
+      "display_size": [
+        18,
+        18
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy",
+        "coin"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        20,
+        20
+      ],
+      "camera_size": [
+        20,
+        20
+      ],
+      "display_size": [
+        20,
+        20
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy",
+        "coin"
+      ]
+    },
+    {
+      "level": 6,
+      "grid_size": [
+        22,
+        22
+      ],
+      "camera_size": [
+        22,
+        22
+      ],
+      "display_size": [
+        22,
+        22
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy",
+        "coin"
+      ]
+    },
+    {
+      "level": 7,
+      "grid_size": [
+        24,
+        24
+      ],
+      "camera_size": [
+        24,
+        24
+      ],
+      "display_size": [
+        24,
+        24
+      ],
+      "mechanics": [
+        "wall",
+        "box",
+        "goal",
+        "danger",
+        "teleport",
+        "decoy",
+        "coin"
+      ]
+    }
+  ]
+}

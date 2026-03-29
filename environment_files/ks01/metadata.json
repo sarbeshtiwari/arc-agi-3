@@ -1,0 +1,187 @@
+{
+  "game_id": "ks01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    24,
+    40,
+    32,
+    44,
+    52
+  ],
+  "tags": [
+    "puzzle",
+    "logic",
+    "knapsack",
+    "optimization",
+    "selection",
+    "discrete",
+    "lives",
+    "move_limit"
+  ],
+  "local_dir": "environment_files/ks01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; a second consecutive press (without other actions) restarts the full game from level 1. After game over, first reset restores lives and restarts the level; second consecutive reset does a full restart."
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one item (-1 along the item list); consumes one move"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one item (+1 along the item list); consumes one move"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle whether the current item is included in the knapsack subset; consumes one move"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move; always consumes one move from the move budget (same as other actions)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "knapsack",
+        "subset_selection",
+        "capacity_5",
+        "target_7",
+        "max_moves_32",
+        "lives",
+        "cursor",
+        "four_items",
+        "seeded_random_item_cursor"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "knapsack",
+        "subset_selection",
+        "capacity_6",
+        "target_10",
+        "max_moves_48",
+        "lives",
+        "cursor",
+        "five_items",
+        "seeded_random_item_cursor"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "knapsack",
+        "subset_selection",
+        "capacity_7",
+        "target_9",
+        "max_moves_32",
+        "lives",
+        "cursor",
+        "five_items",
+        "seeded_random_item_cursor"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "knapsack",
+        "subset_selection",
+        "capacity_8",
+        "target_13",
+        "max_moves_48",
+        "lives",
+        "cursor",
+        "six_items",
+        "seeded_random_item_cursor"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "knapsack",
+        "subset_selection",
+        "capacity_10",
+        "target_15",
+        "max_moves_48",
+        "lives",
+        "cursor",
+        "six_items",
+        "seeded_random_item_cursor"
+      ]
+    }
+  ]
+}

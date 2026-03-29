@@ -1,0 +1,189 @@
+{
+  "game_id": "sl77",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    19,
+    21,
+    16,
+    16,
+    43
+  ],
+  "tags": [
+    "puzzle",
+    "grid",
+    "shadow",
+    "mirror",
+    "logic"
+  ],
+  "local_dir": "environment_files/sl77",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level with a new variant"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player up one cell (shadow mirrors the movement)"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player down one cell (shadow mirrors the movement)"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player left one cell (shadow mirrors the movement)"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player right one cell (shadow mirrors the movement)"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Skip a turn without moving (costs one move)"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, reverting to previous state (available once per move)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        14
+      ],
+      "camera_size": [
+        16,
+        14
+      ],
+      "display_size": [
+        16,
+        14
+      ],
+      "mechanics": [
+        "mirrored_shadow",
+        "pressure_plates",
+        "doors",
+        "crystals",
+        "ghosts",
+        "spikes",
+        "mine_gates"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        14
+      ],
+      "camera_size": [
+        16,
+        14
+      ],
+      "display_size": [
+        16,
+        14
+      ],
+      "mechanics": [
+        "mirrored_shadow",
+        "pressure_plates",
+        "doors",
+        "crystals",
+        "ghosts",
+        "spikes",
+        "mine_gates"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        14
+      ],
+      "camera_size": [
+        16,
+        14
+      ],
+      "display_size": [
+        16,
+        14
+      ],
+      "mechanics": [
+        "mirrored_shadow",
+        "pressure_plates",
+        "doors",
+        "crystals",
+        "ghosts",
+        "spikes",
+        "mine_gates"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        14
+      ],
+      "camera_size": [
+        16,
+        14
+      ],
+      "display_size": [
+        16,
+        14
+      ],
+      "mechanics": [
+        "mirrored_shadow",
+        "pressure_plates",
+        "doors",
+        "crystals",
+        "ghosts",
+        "spikes",
+        "mine_gates",
+        "rotated_controls"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        16,
+        14
+      ],
+      "camera_size": [
+        16,
+        14
+      ],
+      "display_size": [
+        16,
+        14
+      ],
+      "mechanics": [
+        "mirrored_shadow",
+        "pressure_plates",
+        "doors",
+        "crystals",
+        "ghosts",
+        "spikes",
+        "mine_gates",
+        "two_phase_exit",
+        "keys"
+      ]
+    }
+  ]
+}

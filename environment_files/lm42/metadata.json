@@ -1,0 +1,185 @@
+{
+  "game_id": "lm42",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    14,
+    12,
+    15,
+    16,
+    18
+  ],
+  "tags": [
+    "puzzle",
+    "laser",
+    "mirror",
+    "reflection",
+    "logic"
+  ],
+  "local_dir": "environment_files/lm42",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; if action_count == 0 then the full game is reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up on the grid"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down on the grid"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left on the grid"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right on the grid"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle selection mode; press again to place or remove a mirror at the cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last mirror placement"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "laser",
+        "gem",
+        "decoy",
+        "wall",
+        "mirror",
+        "prism"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "laser",
+        "gem",
+        "decoy",
+        "bomb",
+        "wall",
+        "fixed_mirror",
+        "mirror"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "laser",
+        "gem",
+        "decoy",
+        "bomb",
+        "mirror",
+        "prism"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "laser",
+        "gem",
+        "decoy",
+        "bomb",
+        "wall",
+        "mirror"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "laser",
+        "gem",
+        "decoy",
+        "bomb",
+        "wall",
+        "portal",
+        "moving_wall",
+        "mirror",
+        "prism"
+      ]
+    }
+  ]
+}

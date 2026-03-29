@@ -1,0 +1,213 @@
+{
+  "game_id": "eg03",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    6,
+    5,
+    9,
+    12,
+    12
+  ],
+  "tags": [
+    "puzzle",
+    "topological",
+    "dependency",
+    "factory",
+    "chain-reaction",
+    "dynamic-graph",
+    "resources",
+    "logic"
+  ],
+  "local_dir": "environment_files/eg03",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart from level 1 on consecutive resets"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one row on the machine grid"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one row on the machine grid"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left one column on the machine grid"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right one column on the machine grid"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Activate the machine under the cursor if dependencies are met and resources are available"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Click on a specific grid position using mouse coordinates",
+      "data_schema": {
+        "x": "int (0-63)",
+        "y": "int (0-63)"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move and restore previous game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "producer",
+        "lock",
+        "converter",
+        "distributor",
+        "assembler",
+        "blocking",
+        "dependencies",
+        "resources"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "producer",
+        "lock",
+        "converter",
+        "distributor",
+        "assembler",
+        "blocking",
+        "dependencies",
+        "resources",
+        "dynamic_deps"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "producer",
+        "lock",
+        "converter",
+        "distributor",
+        "assembler",
+        "blocking",
+        "dependencies",
+        "resources",
+        "dynamic_deps",
+        "consume_effects"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "producer",
+        "lock",
+        "converter",
+        "distributor",
+        "assembler",
+        "blocking",
+        "dependencies",
+        "resources",
+        "dynamic_deps",
+        "consume_effects",
+        "produce_effects"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "producer",
+        "lock",
+        "converter",
+        "distributor",
+        "assembler",
+        "blocking",
+        "dependencies",
+        "resources",
+        "dynamic_deps",
+        "consume_effects",
+        "produce_effects"
+      ]
+    }
+  ]
+}

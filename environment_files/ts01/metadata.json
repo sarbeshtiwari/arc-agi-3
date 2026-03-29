@@ -1,0 +1,172 @@
+{
+  "game_id": "ts01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    30,
+    45,
+    60,
+    80,
+    120
+  ],
+  "tags": [
+    "puzzle",
+    "assembly",
+    "spatial"
+  ],
+  "local_dir": "environment_files/ts01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; consecutive reset restarts from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player up; pushes piece if adjacent"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player down; pushes piece if adjacent"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player left; pushes piece if adjacent"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player right; pushes piece if adjacent"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last move and restore previous piece positions"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "push",
+        "zone",
+        "gate",
+        "wall"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "push",
+        "zone",
+        "gate",
+        "wall",
+        "decoy"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "push",
+        "zone",
+        "gate",
+        "fake_gate",
+        "wall",
+        "decoy"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "push",
+        "zone",
+        "l_zone",
+        "gate",
+        "fake_gate",
+        "wall",
+        "decoy"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "push",
+        "zone",
+        "zone_order",
+        "gate",
+        "fake_gate",
+        "wall",
+        "decoy"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+{
+  "game_id": "gv19",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    4,
+    4,
+    7,
+    8,
+    13
+  ],
+  "tags": [
+    "puzzle",
+    "gravity",
+    "physics",
+    "spatial",
+    "logic"
+  ],
+  "local_dir": "environment_files/gv19",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; consecutive reset restarts from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Flip gravity up. All balls slide upward (-1, 0)"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Flip gravity down. All balls slide downward (+1, 0)"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Flip gravity left. All balls slide left (0, -1)"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Flip gravity right. All balls slide right (0, +1)"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last gravity flip; costs one flip"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        6,
+        6
+      ],
+      "camera_size": [
+        48,
+        48
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "gravity_flip",
+        "colored_balls",
+        "matching_targets",
+        "walls",
+        "undo"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        7,
+        7
+      ],
+      "camera_size": [
+        48,
+        48
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "gravity_flip",
+        "colored_balls",
+        "matching_targets",
+        "walls",
+        "undo"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        48,
+        48
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "gravity_flip",
+        "colored_balls",
+        "matching_targets",
+        "walls",
+        "undo"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        9,
+        9
+      ],
+      "camera_size": [
+        48,
+        48
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "gravity_flip",
+        "colored_balls",
+        "matching_targets",
+        "walls",
+        "undo"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        48,
+        48
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "gravity_flip",
+        "colored_balls",
+        "matching_targets",
+        "walls",
+        "undo"
+      ]
+    }
+  ]
+}

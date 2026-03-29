@@ -1,0 +1,163 @@
+{
+  "game_id": "cd01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    50,
+    150,
+    100,
+    250,
+    500
+  ],
+  "tags": [
+    "puzzle",
+    "logic",
+    "paths",
+    "connect"
+  ],
+  "local_dir": "environment_files/cd01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Select endpoint or deselect current path"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last path segment"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        8,
+        8
+      ],
+      "display_size": [
+        8,
+        8
+      ],
+      "mechanics": [
+        "path",
+        "endpoint"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "path",
+        "endpoint"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        10,
+        9
+      ],
+      "camera_size": [
+        10,
+        9
+      ],
+      "display_size": [
+        10,
+        9
+      ],
+      "mechanics": [
+        "path",
+        "endpoint",
+        "bridge"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "path",
+        "endpoint",
+        "bridge"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "path",
+        "endpoint",
+        "bridge"
+      ]
+    }
+  ]
+}

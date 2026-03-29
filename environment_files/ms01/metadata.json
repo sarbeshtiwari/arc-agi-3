@@ -1,0 +1,170 @@
+{
+  "game_id": "ms01",
+  "total_levels": 5,
+  "default_fps": 1,
+  "baseline_actions": [
+    9,
+    15,
+    16,
+    22,
+    13
+  ],
+  "tags": [
+    "symmetry",
+    "spatial",
+    "inference",
+    "progressive"
+  ],
+  "local_dir": "environment_files/ms01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level and if action_count == 0 then the full game is reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up (0, -1)"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down (0, +1)"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left (-1, 0)"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right (+1, 0)"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Mirror the cell at cursor position across the symmetry axis"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Click at {x, y} screen coordinates; mirrors the clicked cell across the symmetry axis",
+      "data_schema": {
+        "x": "int (0-63)",
+        "y": "int (0-63)"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move; restores grid and cursor to previous state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "mirror",
+        "vertical_axis"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "mirror",
+        "horizontal_axis"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "mirror",
+        "dual_axis"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        20,
+        20
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "mirror",
+        "diagonal_main_axis"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        24,
+        24
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "mirror",
+        "diagonal_anti_axis"
+      ]
+    }
+  ]
+}

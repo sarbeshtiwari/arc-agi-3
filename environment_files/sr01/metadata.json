@@ -1,0 +1,217 @@
+{
+  "game_id": "sr01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    12,
+    18,
+    15,
+    24,
+    24
+  ],
+  "tags": [
+    "puzzle",
+    "measurement",
+    "jugs",
+    "water",
+    "inductive",
+    "logic"
+  ],
+  "local_dir": "environment_files/sr01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; a second consecutive press (without other actions) restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up (0, -1) in grid coordinates; y increases downward"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down (0, +1) in grid coordinates; y increases downward"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left (-1, 0) in grid coordinates"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right (+1, 0) in grid coordinates"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Interact: fill jug from top tap, select pour source, or pour into jug under cursor"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move; always consumes one step from the step budget (same as other actions)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "jug",
+        "water",
+        "pour",
+        "fill",
+        "empty",
+        "target_volume",
+        "two_jugs",
+        "caps_3_5",
+        "target_4",
+        "max_steps_200",
+        "lives",
+        "hud",
+        "seeded_cursor_pool"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "jug",
+        "water",
+        "pour",
+        "fill",
+        "empty",
+        "target_volume",
+        "two_jugs",
+        "caps_4_7",
+        "target_5",
+        "max_steps_220",
+        "lives",
+        "hud",
+        "seeded_cursor_pool"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "jug",
+        "water",
+        "pour",
+        "fill",
+        "empty",
+        "target_volume",
+        "three_jugs",
+        "caps_3_5_7",
+        "target_6",
+        "max_steps_220",
+        "lives",
+        "hud",
+        "seeded_cursor_pool"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "jug",
+        "water",
+        "pour",
+        "fill",
+        "empty",
+        "target_volume",
+        "three_jugs",
+        "caps_4_6_9",
+        "target_7",
+        "max_steps_280",
+        "lives",
+        "hud",
+        "seeded_cursor_pool"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "jug",
+        "water",
+        "pour",
+        "fill",
+        "empty",
+        "target_volume",
+        "three_jugs",
+        "caps_3_5_8",
+        "target_6",
+        "max_steps_280",
+        "lives",
+        "hud",
+        "seeded_cursor_pool"
+      ]
+    }
+  ]
+}

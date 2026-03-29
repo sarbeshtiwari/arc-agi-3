@@ -93,8 +93,57 @@ _LEGACY_TO_INT = {
 _INT_TO_LEGACY = {v: k for k, v in _LEGACY_TO_INT.items()}
 
 
+# Common action name → legacy int mapping for games without ACTION_MAP
+_WELL_KNOWN_ACTIONS = {
+    "up": 1, "down": 2, "left": 3, "right": 4,
+    "select": 5, "click": 6, "undo": 7,
+}
+
+
 def build_action_translator(env):
     action_map = getattr(env, "ACTION_MAP", None) or {}
+
+    # Fallback: if no ACTION_MAP, infer from get_actions() or VALID_ACTIONS
+    inferred = False
+    if not action_map:
+        inferred = True
+        actions = []
+        if hasattr(env, "get_actions"):
+            try:
+                actions = env.get_actions() or []
+            except Exception:
+                actions = []
+        if not actions:
+            actions = getattr(env, "VALID_ACTIONS", []) or []
+
+        _log("info", "No ACTION_MAP found, building from available actions", available=actions)
+        # Build a synthetic ACTION_MAP: well-known names get standard slots,
+        # unknown names get next available slot
+        used_ints = {0}  # reserve 0 for reset
+        for name in actions:
+            low = name.lower()
+            if low == "reset":
+                action_map["reset"] = 0
+                continue
+            if low in _WELL_KNOWN_ACTIONS:
+                int_val = _WELL_KNOWN_ACTIONS[low]
+                action_map[low] = int_val
+                used_ints.add(int_val)
+
+        # Assign remaining unknown actions to next free slots
+        next_slot = 1
+        for name in actions:
+            low = name.lower()
+            if low in action_map:
+                continue
+            while next_slot in used_ints:
+                next_slot += 1
+            action_map[low] = next_slot
+            used_ints.add(next_slot)
+            next_slot += 1
+
+        _log("info", "Inferred ACTION_MAP", inferred_map=action_map)
+
     _log("debug", f"Building action translator", action_map=action_map)
     int_to_name = {}
     name_to_legacy = {}
@@ -112,16 +161,17 @@ def build_action_translator(env):
             resolved = int_to_name.get(int_val, legacy_action_str)
             _log("debug", f"Translated action: {legacy_action_str} -> {resolved}", legacy=legacy_action_str, resolved=resolved, int_val=int_val)
             return resolved
-        if legacy_action_str in action_map:
-            _log("debug", f"Action passed through: {legacy_action_str}")
-            return legacy_action_str
+        lower = legacy_action_str.lower()
+        if lower in action_map:
+            _log("debug", f"Action passed through: {lower}")
+            return lower
         _log("warn", f"Unknown action, passing through: {legacy_action_str}")
         return legacy_action_str
 
     def to_legacy_list(puzzle_action_names):
-        return [name_to_legacy.get(n, n) for n in puzzle_action_names]
+        return [name_to_legacy.get(n.lower() if isinstance(n, str) else n, n) for n in puzzle_action_names]
 
-    return translate, to_legacy_list
+    return translate, to_legacy_list, inferred
 
 
 # ---------------------------------------------------------------------------
@@ -132,10 +182,26 @@ def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, 
     grid = _extract_grid(env)
 
     state_str = "WIN" if done and info and info.get("reason") == "game_complete" else \
-                "GAME_OVER" if done and info and info.get("reason") == "death" else \
+                "GAME_OVER" if done else \
                 "NOT_FINISHED"
 
     metadata = game_state.metadata or {}
+
+    level = None
+    for key in ("level_index", "level", "current_level"):
+        if key in metadata and metadata[key] is not None:
+            level = metadata[key]
+            break
+    if level is None:
+        level = getattr(env, "_current_level_index", None)
+    if level is None:
+        level = getattr(env, "current_level", None)
+    if level is None:
+        engine = getattr(env, "_engine", None)
+        if engine:
+            level = getattr(engine, "_current_level_index", None)
+    if level is None:
+        level = 0
 
     image_b64 = None
     if game_state.image_observation:
@@ -147,7 +213,7 @@ def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, 
     _log("debug", "Frame built", 
          grid_size=f"{len(grid)}x{len(grid[0]) if grid and len(grid) > 0 else 0}",
          state=state_str, reward=reward, done=done,
-         game_level=metadata.get("level_index", 0),
+         game_level=level,
          total_actions=total_actions,
          valid_actions=valid_actions,
          legacy_actions=legacy_actions,
@@ -161,8 +227,8 @@ def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, 
         "width": len(grid[0]) if grid and len(grid) > 0 else 0,
         "height": len(grid) if grid else 0,
         "state": state_str,
-        "level": metadata.get("level_index", 0),
-        "levels_completed": metadata.get("level_index", 0),
+        "level": level,
+        "levels_completed": level,
         "total_actions": total_actions,
         "available_actions": legacy_actions,
         "reward": reward,
@@ -205,6 +271,7 @@ def main():
     env = None
     translate_action = None
     to_legacy_list = None
+    action_map_inferred = False
     total_actions = 0
 
     for line in sys.stdin:
@@ -243,7 +310,7 @@ def main():
                      has_engine=hasattr(env, "_engine"),
                      action_map=getattr(env, "ACTION_MAP", None))
 
-                translate_action, to_legacy_list = build_action_translator(env)
+                translate_action, to_legacy_list, action_map_inferred = build_action_translator(env)
                 total_actions = 0
 
                 _log("debug", "Calling env.reset() for initial state")
@@ -254,6 +321,7 @@ def main():
                      metadata=game_state.metadata)
 
                 frame = build_frame_from_game_state(env, game_state, total_actions, to_legacy_list)
+                frame["action_map_inferred"] = action_map_inferred
 
                 metadata = game_state.metadata or {}
                 init_time = round(time.time() - t0, 3)
@@ -271,6 +339,7 @@ def main():
                         "game_id": game_id,
                         "level_count": metadata.get("total_levels", 1),
                         "total_levels": metadata.get("total_levels", 1),
+                        "action_map_inferred": action_map_inferred,
                     },
                 })
 
@@ -306,6 +375,7 @@ def main():
                     done=step_result.done,
                     info=step_result.info,
                 )
+                frame["action_map_inferred"] = action_map_inferred
                 emit(frame)
 
             elif command == "reset":
@@ -322,6 +392,7 @@ def main():
                      metadata=game_state.metadata)
 
                 frame = build_frame_from_game_state(env, game_state, total_actions, to_legacy_list)
+                frame["action_map_inferred"] = action_map_inferred
                 emit(frame)
 
             elif command == "quit":

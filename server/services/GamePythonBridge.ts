@@ -72,6 +72,7 @@ interface ReadyResponse {
     game_id: string;
     level_count: number;
     total_levels: number;
+    action_map_inferred?: boolean;
   };
 }
 
@@ -205,12 +206,17 @@ export class GamePythonBridge {
     });
 
     if (msg.type === "ready") {
-      const frame = (msg as ReadyResponse).frame;
+      const ready = msg as ReadyResponse;
+      const frame = ready.frame;
+      if (ready.metadata?.action_map_inferred) {
+        frame.action_map_inferred = true;
+      }
       logService.info("bridge", "Game initialized via bridge", {
         game_id: gameId,
         grid_size: `${frame.height}x${frame.width}`,
         available_actions: frame.available_actions,
         level: frame.level,
+        action_map_inferred: !!ready.metadata?.action_map_inferred,
         pid: this.proc?.pid,
       });
       return frame;

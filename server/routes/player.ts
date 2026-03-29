@@ -92,6 +92,7 @@ function formatFrameResponse(frame: GameFrame, sessionGuid: string, extra?: Reco
     level: frame.level,
     total_actions: frame.total_actions,
     available_actions: frame.available_actions,
+    action_map_inferred: frame.action_map_inferred ?? false,
     reward: frame.reward ?? 0,
     done: frame.done ?? false,
     text_observation: frame.text_observation ?? "",
@@ -272,6 +273,9 @@ router.post(
       logService.error("game", `Failed to start game: ${e.message}`, {
         game_id: game.game_id,
         player_name: player_name || "guest",
+        error_stack: e.stack,
+        game_code: game.game_id,
+        session_guid: sessionGuid,
       });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
@@ -395,10 +399,12 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
-      logService.error("game", `Action failed: ${e.message}`, {
+      logService.error("game", `Action failed (public): ${e.message}`, {
         game_id: bridgeMeta.get(sessionGuid)?.gameId,
         session_guid: sessionGuid,
-        action,
+        action, x, y,
+        error_stack: e.stack,
+        tracker_state: tracker ? { level: tracker.currentLevel, actions_since_reset: tracker.actionsSinceReset, total_game_overs: tracker.totalGameOvers } : null,
       });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }
@@ -610,9 +616,12 @@ router.post(
     } catch (e: any) {
       bridge.kill();
       fs.rmSync(tempBase, { recursive: true, force: true });
-      logService.error("game", `Failed to start game: ${e.message}`, {
+      logService.error("game", `Failed to start ephemeral game: ${e.message}`, {
         game_id: gameId,
         player_name: playerName || "guest",
+        error_stack: e.stack,
+        game_py_path: gamePyPath,
+        session_guid: sessionGuid,
       });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
@@ -702,10 +711,12 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
-      logService.error("game", `Action failed: ${e.message}`, {
+      logService.error("game", `Action failed (ephemeral): ${e.message}`, {
         game_id: bridgeMeta.get(sessionGuid)?.gameId,
         session_guid: sessionGuid,
-        action,
+        action, x, y,
+        error_stack: e.stack,
+        tracker_state: tracker ? { level: tracker.currentLevel, actions_since_reset: tracker.actionsSinceReset, total_game_overs: tracker.totalGameOvers } : null,
       });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }
@@ -917,10 +928,12 @@ router.post(
       }
     } catch (e: any) {
       bridge.kill();
-      logService.error("game", `Failed to start game: ${e.message}`, {
+      logService.error("game", `Failed to start auth game: ${e.message}`, {
         game_id: game.game_id,
         user: req.user.username,
         user_id: userId,
+        error_stack: e.stack,
+        session_guid: sessionGuid,
       });
       throw new AppError(`Failed to start game: ${e.message}`, 500);
     }
@@ -1046,11 +1059,13 @@ router.post(
     try {
       frame = await bridge.sendAction(action, x, y);
     } catch (e: any) {
-      logService.error("game", `Action failed: ${e.message}`, {
+      logService.error("game", `Action failed (auth): ${e.message}`, {
         game_id: bridgeMeta.get(sessionGuid)?.gameId,
         session_guid: sessionGuid,
         user: req.user.username,
-        action,
+        action, x, y,
+        error_stack: e.stack,
+        tracker_state: tracker ? { level: tracker.currentLevel, actions_since_reset: tracker.actionsSinceReset, total_game_overs: tracker.totalGameOvers } : null,
       });
       throw new AppError(`Action failed: ${e.message}`, 500);
     }

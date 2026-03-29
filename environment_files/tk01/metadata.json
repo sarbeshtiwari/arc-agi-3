@@ -1,0 +1,169 @@
+{
+  "game_id": "tk01",
+  "total_levels": 5,
+  "default_fps": 5,
+  "baseline_actions": [
+    8,
+    15,
+    35,
+    60,
+    100
+  ],
+  "tags": [
+    "puzzle",
+    "logic",
+    "deduction",
+    "binary",
+    "grid"
+  ],
+  "local_dir": "environment_files/tk01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; consecutive reset restarts from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Place value A in the selected cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Place value B in the selected cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor to the previous cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor to the next cell"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Click on a cell to select and toggle its value (cycles Empty→A→B→Empty)",
+      "data_schema": {
+        "x": "int",
+        "y": "int"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action (costs 1 move)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "no_three"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        48,
+        48
+      ],
+      "mechanics": [
+        "no_three",
+        "balanced_rows"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        6,
+        6
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "no_three",
+        "balanced_rows",
+        "balanced_cols"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "no_three",
+        "balanced_rows",
+        "balanced_cols",
+        "x_constraints"
+      ]
+    },
+    {
+      "level": 5,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "no_three",
+        "balanced_rows",
+        "balanced_cols",
+        "x_constraints"
+      ]
+    }
+  ]
+}
