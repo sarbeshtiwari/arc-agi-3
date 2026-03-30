@@ -2,15 +2,15 @@ import pg from "pg";
 
 const { Pool } = pg;
 
-const isSSL = process.env.DATABASE_URL?.includes("neon.tech") ||
-  process.env.DATABASE_URL?.includes("sslmode=require");
-
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  host: process.env.DB_HOST || "localhost",
+  port: parseInt(process.env.DB_PORT || "5432", 10),
+  database: process.env.DB_NAME || "arc_agi_db",
+  user: process.env.DB_USER || "arcadmin",
+  password: process.env.DB_PASSWORD || "arcadmin",
   max: 50,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
-  ssl: isSSL ? { rejectUnauthorized: false } : undefined,
 });
 
 pool.on("error", (err) => {
@@ -166,7 +166,7 @@ export async function initDB() {
       INSERT INTO app_settings (key, value) VALUES ('recording_enabled', 'true')
         ON CONFLICT (key) DO NOTHING;
     `);
-    console.log(`[DB] PostgreSQL connected: ${process.env.DATABASE_URL?.replace(/\/\/.*@/, '//***@')}`);
+    console.log(`[DB] PostgreSQL connected: ${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
   } finally {
     client.release();
   }
