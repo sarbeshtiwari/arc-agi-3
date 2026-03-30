@@ -181,27 +181,21 @@ def build_action_translator(env):
 def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, reward=0.0, done=False, info=None):
     grid = _extract_grid(env)
 
-    state_str = "WIN" if done and info and info.get("reason") == "game_complete" else \
-                "GAME_OVER" if done else \
-                "NOT_FINISHED"
-
     metadata = game_state.metadata or {}
 
-    level = None
-    for key in ("level_index", "level", "current_level"):
-        if key in metadata and metadata[key] is not None:
-            level = metadata[key]
-            break
-    if level is None:
-        level = getattr(env, "_current_level_index", None)
-    if level is None:
-        level = getattr(env, "current_level", None)
-    if level is None:
-        engine = getattr(env, "_engine", None)
-        if engine:
-            level = getattr(engine, "_current_level_index", None)
-    if level is None:
-        level = 0
+    # WIN detection: check all known info keys, then fall back to metadata.game_over
+    if done:
+        is_win = (
+            info and any(info.get(k) == "game_complete" for k in ("reason", "event", "outcome"))
+        )
+        if not is_win and "game_over" in metadata:
+            # game_over=True means player lost, False means player won
+            is_win = not metadata["game_over"]
+        state_str = "WIN" if is_win else "GAME_OVER"
+    else:
+        state_str = "NOT_FINISHED"
+
+    level = metadata.get("level_index", 0) or 0
 
     image_b64 = None
     if game_state.image_observation:
@@ -229,6 +223,7 @@ def build_frame_from_game_state(env, game_state, total_actions, to_legacy_list, 
         "state": state_str,
         "level": level,
         "levels_completed": level,
+        "total_levels": metadata.get("total_levels") or 1,
         "total_actions": total_actions,
         "available_actions": legacy_actions,
         "reward": reward,
