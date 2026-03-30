@@ -2,20 +2,8 @@
   "game_id": "th01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    66,
-    138,
-    282,
-    570,
-    1146
-  ],
-  "tags": [
-    "puzzle",
-    "sorting",
-    "tower",
-    "color",
-    "logic"
-  ],
+  "baseline_actions": [66, 138, 282, 570, 1146],
+  "tags": ["puzzle", "sorting", "tower", "color", "logic"],
   "local_dir": "environment_files/th01",
   "available_actions": [
     {
@@ -64,108 +52,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        30,
-        30
-      ],
-      "camera_size": [
-        30,
-        30
-      ],
-      "display_size": [
-        30,
-        30
-      ],
-      "mechanics": [
-        "pole",
-        "block",
-        "sorting",
-        "cursor"
-      ]
+      "grid_size": [30, 30],
+      "camera_size": [30, 30],
+      "display_size": [30, 30],
+      "mechanics": ["pole", "block", "sorting", "cursor"]
     },
     {
       "level": 2,
-      "grid_size": [
-        30,
-        30
-      ],
-      "camera_size": [
-        30,
-        30
-      ],
-      "display_size": [
-        30,
-        30
-      ],
-      "mechanics": [
-        "pole",
-        "block",
-        "sorting",
-        "cursor"
-      ]
+      "grid_size": [30, 30],
+      "camera_size": [30, 30],
+      "display_size": [30, 30],
+      "mechanics": ["pole", "block", "sorting", "cursor"]
     },
     {
       "level": 3,
-      "grid_size": [
-        30,
-        30
-      ],
-      "camera_size": [
-        30,
-        30
-      ],
-      "display_size": [
-        30,
-        30
-      ],
-      "mechanics": [
-        "pole",
-        "block",
-        "sorting",
-        "cursor"
-      ]
+      "grid_size": [30, 30],
+      "camera_size": [30, 30],
+      "display_size": [30, 30],
+      "mechanics": ["pole", "block", "sorting", "cursor"]
     },
     {
       "level": 4,
-      "grid_size": [
-        30,
-        30
-      ],
-      "camera_size": [
-        30,
-        30
-      ],
-      "display_size": [
-        30,
-        30
-      ],
-      "mechanics": [
-        "pole",
-        "block",
-        "sorting",
-        "cursor"
-      ]
+      "grid_size": [30, 30],
+      "camera_size": [30, 30],
+      "display_size": [30, 30],
+      "mechanics": ["pole", "block", "sorting", "cursor"]
     },
     {
       "level": 5,
-      "grid_size": [
-        30,
-        30
-      ],
-      "camera_size": [
-        30,
-        30
-      ],
-      "display_size": [
-        30,
-        30
-      ],
-      "mechanics": [
-        "pole",
-        "block",
-        "sorting",
-        "cursor"
-      ]
+      "grid_size": [30, 30],
+      "camera_size": [30, 30],
+      "display_size": [30, 30],
+      "mechanics": ["pole", "block", "sorting", "cursor"]
     }
   ]
 }

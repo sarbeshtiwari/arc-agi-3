@@ -2,19 +2,8 @@
   "game_id": "gm01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    18,
-    30,
-    48,
-    60,
-    72
-  ],
-  "tags": [
-    "gravity",
-    "physics",
-    "planning",
-    "merge"
-  ],
+  "baseline_actions": [18, 30, 48, 60, 72],
+  "tags": ["gravity", "physics", "planning", "merge"],
   "local_dir": "environment_files/gm01",
   "available_actions": [
     {
@@ -63,111 +52,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        4,
-        4
-      ],
-      "camera_size": [
-        8,
-        8
-      ],
-      "display_size": [
-        8,
-        8
-      ],
-      "mechanics": [
-        "gravity",
-        "merge",
-        "wall"
-      ]
+      "grid_size": [4, 4],
+      "camera_size": [8, 8],
+      "display_size": [8, 8],
+      "mechanics": ["gravity", "merge", "wall"]
     },
     {
       "level": 2,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "merge",
-        "wall",
-        "multi-color",
-        "partitioned-rooms"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "merge", "wall", "multi-color", "partitioned-rooms"]
     },
     {
       "level": 3,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "gravity",
-        "merge",
-        "wall",
-        "multi-color",
-        "nested-chambers"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["gravity", "merge", "wall", "multi-color", "nested-chambers"]
     },
     {
       "level": 4,
-      "grid_size": [
-        24,
-        24
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
-      "mechanics": [
-        "gravity",
-        "merge",
-        "wall",
-        "multi-color",
-        "scattered-obstacles"
-      ]
+      "grid_size": [24, 24],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
+      "mechanics": ["gravity", "merge", "wall", "multi-color", "scattered-obstacles"]
     },
     {
       "level": 5,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "gravity",
-        "merge",
-        "wall",
-        "multi-color",
-        "complex-partitioning"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["gravity", "merge", "wall", "multi-color", "complex-partitioning"]
     }
   ]
 }

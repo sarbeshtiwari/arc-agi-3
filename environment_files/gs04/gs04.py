@@ -760,6 +760,8 @@ class PuzzleEnvironment:
             "max_moves": g.max_moves,
             "lives": g.lives,
             "lives_max": g.lives_max,
+            "levels_completed": getattr(g, "_score", 0),
+            "game_over": getattr(getattr(g, "_state", None), "name", "") == "GAME_OVER",
         }
 
     def make_game_state(self, frame_data) -> GameState:

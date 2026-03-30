@@ -2,14 +2,7 @@
   "game_id": "fm01",
   "total_levels": 6,
   "default_fps": 5,
-  "baseline_actions": [
-    12,
-    16,
-    20,
-    24,
-    28,
-    32
-  ],
+  "baseline_actions": [12, 16, 20, 24, 28, 32],
   "tags": [
     "puzzle",
     "mathematics",
@@ -21,187 +14,56 @@
   ],
   "local_dir": "environment_files/fm01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level; double-tap resets the full game"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move cursor up one bar row"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move cursor down one bar row"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Jump cursor to previous unmatched bar"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Jump cursor to next unmatched bar"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Select current bar for matching"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the last move"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level; double-tap resets the full game" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Move cursor up one bar row" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Move cursor down one bar row" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Jump cursor to previous unmatched bar" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Jump cursor to next unmatched bar" },
+    { "id": 5, "name": "select", "type": "simple",  "description": "Select current bar for matching" },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo the last move" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "lives", "budget"]
     },
     {
       "level": 2,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "lives", "budget"]
     },
     {
       "level": 3,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "locked-pairs",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "locked-pairs", "lives", "budget"]
     },
     {
       "level": 4,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "locked-pairs",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "locked-pairs", "lives", "budget"]
     },
     {
       "level": 5,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "locked-pairs",
-        "shuffled-order",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "locked-pairs", "shuffled-order", "lives", "budget"]
     },
     {
       "level": 6,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "fraction-bars",
-        "pair-matching",
-        "cursor",
-        "locked-pairs",
-        "shuffled-order",
-        "lives",
-        "budget"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["fraction-bars", "pair-matching", "cursor", "locked-pairs", "shuffled-order", "lives", "budget"]
     }
   ]
 }

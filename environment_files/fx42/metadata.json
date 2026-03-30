@@ -2,19 +2,8 @@
   "game_id": "fx42",
   "total_levels": 5,
   "default_fps": 15,
-  "baseline_actions": [
-    10,
-    20,
-    30,
-    30,
-    30
-  ],
-  "tags": [
-    "puzzle",
-    "grid",
-    "color",
-    "logic"
-  ],
+  "baseline_actions": [10, 20, 30, 30, 30],
+  "tags": ["puzzle", "grid", "color", "logic"],
   "local_dir": "environment_files/fx42",
   "available_actions": [
     {
@@ -63,99 +52,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        3,
-        3
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "orthogonal_toggle",
-        "color_cycle_2"
-      ]
+      "grid_size": [3, 3],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["orthogonal_toggle", "color_cycle_2"]
     },
     {
       "level": 2,
-      "grid_size": [
-        3,
-        3
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "diagonal_toggle",
-        "color_cycle_3"
-      ]
+      "grid_size": [3, 3],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["diagonal_toggle", "color_cycle_3"]
     },
     {
       "level": 3,
-      "grid_size": [
-        4,
-        4
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "orthogonal_toggle",
-        "color_cycle_2"
-      ]
+      "grid_size": [4, 4],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["orthogonal_toggle", "color_cycle_2"]
     },
     {
       "level": 4,
-      "grid_size": [
-        4,
-        4
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "orthogonal_toggle",
-        "diagonal_toggle",
-        "color_cycle_3"
-      ]
+      "grid_size": [4, 4],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["orthogonal_toggle", "diagonal_toggle", "color_cycle_3"]
     },
     {
       "level": 5,
-      "grid_size": [
-        5,
-        5
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "all_neighbors_toggle",
-        "color_cycle_3"
-      ]
+      "grid_size": [5, 5],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["all_neighbors_toggle", "color_cycle_3"]
     }
   ]
 }

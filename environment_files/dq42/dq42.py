@@ -923,6 +923,8 @@ class PuzzleEnvironment:
                 "hand": e._hand,
                 "done": done,
                 "info": info or {},
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

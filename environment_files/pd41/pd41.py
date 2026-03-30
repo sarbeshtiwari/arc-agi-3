@@ -697,6 +697,8 @@ class PuzzleEnvironment:
                 "lives": self._engine._lives,
                 "max_lives": MAX_LIVES,
                 "game_over": self._engine._game_over,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": self._engine._level_index,
             },
         )
 

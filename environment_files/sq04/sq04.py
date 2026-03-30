@@ -715,6 +715,9 @@ class PuzzleEnvironment:
                 "slider_pos": self._engine.slider_pos
                 if hasattr(self._engine, "slider_pos")
                 else 0,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": self._engine.level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

@@ -909,6 +909,9 @@ class PuzzleEnvironment:
             "max_moves": e._max_moves,
             "progress": e._progress,
             "total_targets": len(e._targets),
+            "levels_completed": getattr(e, "_score", 0),
+            "level_index": e._current_level_index,
+            "game_over": getattr(getattr(e, "_state", None), "name", "") == "GAME_OVER",
         }
 
 

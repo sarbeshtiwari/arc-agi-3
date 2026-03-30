@@ -1269,6 +1269,9 @@ class PuzzleEnvironment:
                 "total_lights": eng.total_lights,
                 "light_radius": eng.light_radius,
                 "mirror_active": eng.mirror_active,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": eng.level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

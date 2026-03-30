@@ -2,184 +2,23 @@
   "game_id": "bw01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    15,
-    18,
-    25,
-    30,
-    40
-  ],
-  "tags": [
-    "puzzle",
-    "pathfinding",
-    "escape",
-    "wave"
-  ],
+  "baseline_actions": [15, 18, 25, 30, 40],
+  "tags": ["puzzle", "pathfinding", "escape", "wave"],
   "local_dir": "environment_files/bw01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level or restart game"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move agent up one cell"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move agent down one cell"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move agent left one cell"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move agent right one cell"
-    },
-    {
-      "id": 6,
-      "name": "click",
-      "type": "complex",
-      "description": "Teleport agent to clicked cell",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last move"
-    }
+    {"id": 0, "name": "reset", "type": "system", "description": "Reset current level or restart game"},
+    {"id": 1, "name": "up", "type": "simple", "description": "Move agent up one cell"},
+    {"id": 2, "name": "down", "type": "simple", "description": "Move agent down one cell"},
+    {"id": 3, "name": "left", "type": "simple", "description": "Move agent left one cell"},
+    {"id": 4, "name": "right", "type": "simple", "description": "Move agent right one cell"},
+    {"id": 6, "name": "click", "type": "complex", "description": "Teleport agent to clicked cell", "data_schema": {"x": "int (0-63)", "y": "int (0-63)"}},
+    {"id": 7, "name": "undo", "type": "simple", "description": "Undo last move"}
   ],
   "levels": [
-    {
-      "level": 1,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        12,
-        12
-      ],
-      "mechanics": [
-        "wave",
-        "wall",
-        "death_block",
-        "reverse",
-        "trail"
-      ]
-    },
-    {
-      "level": 2,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        12,
-        12
-      ],
-      "mechanics": [
-        "wave",
-        "wall",
-        "death_block",
-        "reverse",
-        "trail"
-      ]
-    },
-    {
-      "level": 3,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "wave",
-        "wall",
-        "death_block",
-        "reverse",
-        "blink",
-        "trail"
-      ]
-    },
-    {
-      "level": 4,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "wave",
-        "wall",
-        "death_block",
-        "reverse",
-        "speed",
-        "moving_wall",
-        "trail"
-      ]
-    },
-    {
-      "level": 5,
-      "grid_size": [
-        24,
-        24
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        24,
-        24
-      ],
-      "mechanics": [
-        "wave",
-        "wall",
-        "death_block",
-        "reverse",
-        "blink",
-        "speed",
-        "moving_wall",
-        "trail"
-      ]
-    }
+    {"level": 1, "grid_size": [12, 12], "camera_size": [16, 16], "display_size": [12, 12], "mechanics": ["wave", "wall", "death_block", "reverse", "trail"]},
+    {"level": 2, "grid_size": [12, 12], "camera_size": [16, 16], "display_size": [12, 12], "mechanics": ["wave", "wall", "death_block", "reverse", "trail"]},
+    {"level": 3, "grid_size": [16, 16], "camera_size": [20, 20], "display_size": [16, 16], "mechanics": ["wave", "wall", "death_block", "reverse", "blink", "trail"]},
+    {"level": 4, "grid_size": [20, 20], "camera_size": [32, 32], "display_size": [20, 20], "mechanics": ["wave", "wall", "death_block", "reverse", "speed", "moving_wall", "trail"]},
+    {"level": 5, "grid_size": [24, 24], "camera_size": [32, 32], "display_size": [24, 24], "mechanics": ["wave", "wall", "death_block", "reverse", "blink", "speed", "moving_wall", "trail"]}
   ]
 }

@@ -842,6 +842,9 @@ class PuzzleEnvironment:
                 "knight_placed": g._engine.knight_placed,
                 "cursor_x": g._engine.cursor_x,
                 "cursor_y": g._engine.cursor_y,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": g.level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

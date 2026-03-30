@@ -2,13 +2,7 @@
   "game_id": "gs04",
   "total_levels": 5,
   "default_fps": 10,
-  "baseline_actions": [
-    4,
-    4,
-    7,
-    8,
-    8
-  ],
+  "baseline_actions": [4, 4, 7, 8, 8],
   "tags": [
     "puzzle",
     "physics",
@@ -20,160 +14,48 @@
   ],
   "local_dir": "environment_files/gs04",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level; double-tap resets the full game"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Apply gravity northward (all blocks fall up)"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Apply gravity southward (all blocks fall down)"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Apply gravity westward (all blocks fall left)"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Apply gravity eastward (all blocks fall right)"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the last move"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level; double-tap resets the full game" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Apply gravity northward (all blocks fall up)" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Apply gravity southward (all blocks fall down)" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Apply gravity westward (all blocks fall left)" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Apply gravity eastward (all blocks fall right)" },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo the last move" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "blocks",
-        "targets",
-        "lives",
-        "move-limit"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "blocks", "targets", "lives", "move-limit"]
     },
     {
       "level": 2,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "blocks",
-        "targets",
-        "blockers",
-        "lives",
-        "move-limit"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "blocks", "targets", "blockers", "lives", "move-limit"]
     },
     {
       "level": 3,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "blocks",
-        "targets",
-        "blockers",
-        "flash-feedback",
-        "lives",
-        "move-limit"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "blocks", "targets", "blockers", "flash-feedback", "lives", "move-limit"]
     },
     {
       "level": 4,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "blocks",
-        "targets",
-        "blockers",
-        "flash-feedback",
-        "lives",
-        "move-limit"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "blocks", "targets", "blockers", "flash-feedback", "lives", "move-limit"]
     },
     {
       "level": 5,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "gravity",
-        "blocks",
-        "targets",
-        "blockers",
-        "flash-feedback",
-        "lives",
-        "move-limit"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["gravity", "blocks", "targets", "blockers", "flash-feedback", "lives", "move-limit"]
     }
   ]
 }

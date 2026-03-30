@@ -2,19 +2,8 @@
   "game_id": "cc51",
   "total_levels": 5,
   "default_fps": 10,
-  "baseline_actions": [
-    50,
-    100,
-    160,
-    250,
-    350
-  ],
-  "tags": [
-    "puzzle",
-    "grid",
-    "chase",
-    "painting"
-  ],
+  "baseline_actions": [50, 100, 160, 250, 350],
+  "tags": ["puzzle", "grid", "chase", "painting"],
   "local_dir": "environment_files/cc51",
   "available_actions": [
     {
@@ -73,98 +62,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        6,
-        6
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "paint",
-        "enemy_chase"
-      ]
+      "grid_size": [6, 6],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["paint", "enemy_chase"]
     },
     {
       "level": 2,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "paint",
-        "enemy_chase"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["paint", "enemy_chase"]
     },
     {
       "level": 3,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "paint",
-        "enemy_chase"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["paint", "enemy_chase"]
     },
     {
       "level": 4,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "paint",
-        "enemy_chase"
-      ]
+      "grid_size": [12, 12],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["paint", "enemy_chase"]
     },
     {
       "level": 5,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "paint",
-        "enemy_chase"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["paint", "enemy_chase"]
     }
   ]
 }

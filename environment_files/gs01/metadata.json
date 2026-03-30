@@ -2,13 +2,7 @@
   "game_id": "gs01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    21,
-    39,
-    44,
-    46,
-    48
-  ],
+  "baseline_actions": [21, 39, 44, 46, 48],
   "tags": [
     "puzzle",
     "gravity",
@@ -18,156 +12,48 @@
   ],
   "local_dir": "environment_files/gs01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move up"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move down"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move left"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move right"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the last move, restoring previous state (costs 1 move)"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Move up" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Move down" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Move left" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Move right" },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo the last move, restoring previous state (costs 1 move)" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "wall",
-        "shadow",
-        "gravity_slide"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["wall", "shadow", "gravity_slide"]
     },
     {
       "level": 2,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "wall",
-        "shadow",
-        "gravity_slide",
-        "key",
-        "gate"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["wall", "shadow", "gravity_slide", "key", "gate"]
     },
     {
       "level": 3,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "wall",
-        "shadow",
-        "gravity_slide",
-        "movable_block",
-        "switch",
-        "toggle_gate"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["wall", "shadow", "gravity_slide", "movable_block", "switch", "toggle_gate"]
     },
     {
       "level": 4,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "wall",
-        "shadow",
-        "gravity_slide",
-        "trap_floor"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["wall", "shadow", "gravity_slide", "trap_floor"]
     },
     {
       "level": 5,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "wall",
-        "shadow",
-        "gravity_slide",
-        "key",
-        "gate",
-        "movable_block",
-        "switch",
-        "toggle_gate",
-        "trap_floor",
-        "teleporter"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["wall", "shadow", "gravity_slide", "key", "gate", "movable_block", "switch", "toggle_gate", "trap_floor", "teleporter"]
     }
   ]
 }

@@ -2,189 +2,24 @@
   "game_id": "dg01",
   "total_levels": 6,
   "default_fps": 5,
-  "baseline_actions": [
-    7,
-    9,
-    20,
-    28,
-    38,
-    42
-  ],
-  "tags": [
-    "logic",
-    "puzzle",
-    "dice"
-  ],
+  "baseline_actions": [7, 9, 20, 28, 38, 42],
+  "tags": ["logic", "puzzle", "dice"],
   "local_dir": "environment_files/dg01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move player up, dice rolls north"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move player down, dice rolls south"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move player left, dice rolls west"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move player right, dice rolls east"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Activate bulb at current position"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the previous action"
-    }
+    { "id": 0, "name": "reset", "type": "system", "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up", "type": "simple", "description": "Move player up, dice rolls north" },
+    { "id": 2, "name": "down", "type": "simple", "description": "Move player down, dice rolls south" },
+    { "id": 3, "name": "left", "type": "simple", "description": "Move player left, dice rolls west" },
+    { "id": 4, "name": "right", "type": "simple", "description": "Move player right, dice rolls east" },
+    { "id": 5, "name": "select", "type": "simple", "description": "Activate bulb at current position" },
+    { "id": 7, "name": "undo", "type": "simple", "description": "Undo the previous action" }
   ],
   "levels": [
-    {
-      "level": 1,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        27,
-        27
-      ],
-      "display_size": [
-        27,
-        27
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling"
-      ]
-    },
-    {
-      "level": 2,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        27,
-        27
-      ],
-      "display_size": [
-        27,
-        27
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling",
-        "color_changer"
-      ]
-    },
-    {
-      "level": 3,
-      "grid_size": [
-        11,
-        11
-      ],
-      "camera_size": [
-        33,
-        33
-      ],
-      "display_size": [
-        33,
-        33
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling",
-        "color_changer"
-      ]
-    },
-    {
-      "level": 4,
-      "grid_size": [
-        13,
-        11
-      ],
-      "camera_size": [
-        39,
-        33
-      ],
-      "display_size": [
-        39,
-        33
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling",
-        "color_changer"
-      ]
-    },
-    {
-      "level": 5,
-      "grid_size": [
-        15,
-        11
-      ],
-      "camera_size": [
-        45,
-        33
-      ],
-      "display_size": [
-        45,
-        33
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling",
-        "color_changer"
-      ]
-    },
-    {
-      "level": 6,
-      "grid_size": [
-        17,
-        13
-      ],
-      "camera_size": [
-        51,
-        39
-      ],
-      "display_size": [
-        51,
-        39
-      ],
-      "mechanics": [
-        "gate",
-        "bulb",
-        "dice_rolling",
-        "color_changer"
-      ]
-    }
+    { "level": 1, "grid_size": [9, 9], "camera_size": [27, 27], "display_size": [27, 27], "mechanics": ["gate", "bulb", "dice_rolling"] },
+    { "level": 2, "grid_size": [9, 9], "camera_size": [27, 27], "display_size": [27, 27], "mechanics": ["gate", "bulb", "dice_rolling", "color_changer"] },
+    { "level": 3, "grid_size": [11, 11], "camera_size": [33, 33], "display_size": [33, 33], "mechanics": ["gate", "bulb", "dice_rolling", "color_changer"] },
+    { "level": 4, "grid_size": [13, 11], "camera_size": [39, 33], "display_size": [39, 33], "mechanics": ["gate", "bulb", "dice_rolling", "color_changer"] },
+    { "level": 5, "grid_size": [15, 11], "camera_size": [45, 33], "display_size": [45, 33], "mechanics": ["gate", "bulb", "dice_rolling", "color_changer"] },
+    { "level": 6, "grid_size": [17, 13], "camera_size": [51, 39], "display_size": [51, 39], "mechanics": ["gate", "bulb", "dice_rolling", "color_changer"] }
   ]
 }

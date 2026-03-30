@@ -679,6 +679,8 @@ class PuzzleEnvironment:
             "matched_cells": matched_cells,
             "total_cells": total_cells,
             "cursor": (g._cur_r, g._cur_c),
+            "levels_completed": getattr(g, "_score", 0),
+            "game_over": getattr(getattr(g, "_state", None), "name", "") == "GAME_OVER",
         }
 
     def _make_game_state(self, frame_data) -> GameState:

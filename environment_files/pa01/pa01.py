@@ -856,6 +856,8 @@ class PuzzleEnvironment:
             "grid_size": (w, h),
             "terminal": self._episode_terminal(),
             "done": self._done,
+            "levels_completed": getattr(g, "_score", 0),
+            "game_over": getattr(getattr(g, "_state", None), "name", "") == "GAME_OVER",
         }
 
 

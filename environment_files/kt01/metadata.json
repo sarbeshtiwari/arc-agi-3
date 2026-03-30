@@ -2,13 +2,7 @@
   "game_id": "kt01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    50,
-    65,
-    90,
-    115,
-    140
-  ],
+  "baseline_actions": [50, 65, 90, 115, 140],
   "tags": [
     "puzzle",
     "logic",
@@ -66,111 +60,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        5,
-        5
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "knight_tour",
-        "cursor",
-        "visited_cells",
-        "lives"
-      ]
+      "grid_size": [5, 5],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["knight_tour", "cursor", "visited_cells", "lives"]
     },
     {
       "level": 2,
-      "grid_size": [
-        6,
-        6
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "knight_tour",
-        "cursor",
-        "visited_cells",
-        "lives"
-      ]
+      "grid_size": [6, 6],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["knight_tour", "cursor", "visited_cells", "lives"]
     },
     {
       "level": 3,
-      "grid_size": [
-        7,
-        7
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "knight_tour",
-        "cursor",
-        "visited_cells",
-        "bomb",
-        "lives"
-      ]
+      "grid_size": [7, 7],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["knight_tour", "cursor", "visited_cells", "bomb", "lives"]
     },
     {
       "level": 4,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "knight_tour",
-        "cursor",
-        "visited_cells",
-        "bomb",
-        "lives"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["knight_tour", "cursor", "visited_cells", "bomb", "lives"]
     },
     {
       "level": 5,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
-      "mechanics": [
-        "knight_tour",
-        "cursor",
-        "visited_cells",
-        "bomb",
-        "lives"
-      ]
+      "grid_size": [9, 9],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
+      "mechanics": ["knight_tour", "cursor", "visited_cells", "bomb", "lives"]
     }
   ]
 }

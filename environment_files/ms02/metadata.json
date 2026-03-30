@@ -2,20 +2,8 @@
   "game_id": "ms02",
   "total_levels": 5,
   "default_fps": 1,
-  "baseline_actions": [
-    4,
-    6,
-    7,
-    10,
-    12
-  ],
-  "tags": [
-    "circuit",
-    "routing",
-    "logic",
-    "propagation",
-    "progressive"
-  ],
+  "baseline_actions": [4, 6, 7, 10, 12],
+  "tags": ["circuit", "routing", "logic", "propagation", "progressive"],
   "local_dir": "environment_files/ms02",
   "available_actions": [
     {
@@ -59,10 +47,7 @@
       "name": "click",
       "type": "complex",
       "description": "Click at {x, y} screen coordinates; rotates the 3x3 wire block at the clicked position clockwise",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
+      "data_schema": { "x": "int (0-63)", "y": "int (0-63)" }
     },
     {
       "id": 7,
@@ -74,97 +59,37 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        14,
-        14
-      ],
-      "camera_size": [
-        14,
-        14
-      ],
-      "display_size": [
-        14,
-        14
-      ],
-      "mechanics": [
-        "wire_rotation",
-        "signal_propagation"
-      ]
+      "grid_size": [14, 14],
+      "camera_size": [14, 14],
+      "display_size": [14, 14],
+      "mechanics": ["wire_rotation", "signal_propagation"]
     },
     {
       "level": 2,
-      "grid_size": [
-        18,
-        18
-      ],
-      "camera_size": [
-        18,
-        18
-      ],
-      "display_size": [
-        18,
-        18
-      ],
-      "mechanics": [
-        "wire_rotation",
-        "signal_propagation"
-      ]
+      "grid_size": [18, 18],
+      "camera_size": [18, 18],
+      "display_size": [18, 18],
+      "mechanics": ["wire_rotation", "signal_propagation"]
     },
     {
       "level": 3,
-      "grid_size": [
-        22,
-        22
-      ],
-      "camera_size": [
-        22,
-        22
-      ],
-      "display_size": [
-        22,
-        22
-      ],
-      "mechanics": [
-        "wire_rotation",
-        "signal_propagation",
-        "gate"
-      ]
+      "grid_size": [22, 22],
+      "camera_size": [22, 22],
+      "display_size": [22, 22],
+      "mechanics": ["wire_rotation", "signal_propagation", "gate"]
     },
     {
       "level": 4,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "wire_rotation",
-        "signal_propagation",
-        "gate",
-        "hazard"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["wire_rotation", "signal_propagation", "gate", "hazard"]
     },
     {
       "level": 5,
-      "grid_size": [
-        48,
-        48
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [48, 48],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "wire_rotation",
         "signal_propagation",

@@ -939,6 +939,9 @@ class PuzzleEnvironment:
             "lives": e._lives,
             "moves_remaining": e.max_moves - e.move_count,
             "max_moves": e.max_moves,
+            "levels_completed": getattr(e, "_score", 0),
+            "level_index": e.level_index,
+            "game_over": getattr(getattr(e, "_state", None), "name", "") == "GAME_OVER",
         }
 
 

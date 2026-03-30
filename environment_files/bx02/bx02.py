@@ -1017,7 +1017,12 @@ class PuzzleEnvironment:
                 image_observation=None,
                 valid_actions=None,
                 turn=self._total_turns,
-                metadata={"total_levels": self._total_levels},
+                metadata={
+                    "total_levels": self._total_levels,
+                    "levels_completed": getattr(self._engine, "_score", 0),
+                    "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                    "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
+                },
             )
 
         text_obs = self._engine._build_text_observation()
@@ -1033,7 +1038,12 @@ class PuzzleEnvironment:
             image_observation=image_obs,
             valid_actions=valid,
             turn=self._total_turns,
-            metadata={"total_levels": self._total_levels},
+            metadata={
+                "total_levels": self._total_levels,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
+            },
         )
 
 

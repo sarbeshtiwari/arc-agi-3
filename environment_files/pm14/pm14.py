@@ -1301,6 +1301,9 @@ class PuzzleEnvironment:
             "moves_remaining": self._eng.moves_remaining,
             "current_budget": self._eng.current_budget,
             "lives": self._eng.lives,
+            "levels_completed": getattr(self._engine, "_score", 0),
+            "level_index": self._eng.level_index,
+            "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
         }
         return GameState(
             text_observation=text,

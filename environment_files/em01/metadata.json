@@ -2,20 +2,8 @@
   "game_id": "em01",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    15,
-    20,
-    35,
-    40,
-    25
-  ],
-  "tags": [
-    "puzzle",
-    "push-block",
-    "ice",
-    "conveyor",
-    "wraparound"
-  ],
+  "baseline_actions": [15, 20, 35, 40, 25],
+  "tags": ["puzzle", "push-block", "ice", "conveyor", "wraparound"],
   "local_dir": "environment_files/em01",
   "available_actions": [
     {
@@ -64,115 +52,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        40,
-        40
-      ],
-      "display_size": [
-        40,
-        40
-      ],
-      "mechanics": [
-        "trap",
-        "barrier",
-        "node",
-        "block",
-        "exit"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [40, 40],
+      "display_size": [40, 40],
+      "mechanics": ["trap", "barrier", "node", "block", "exit"]
     },
     {
       "level": 2,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
-      "mechanics": [
-        "trap",
-        "barrier",
-        "node",
-        "block",
-        "exit",
-        "ice"
-      ]
+      "grid_size": [12, 12],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
+      "mechanics": ["trap", "barrier", "node", "block", "exit", "ice"]
     },
     {
       "level": 3,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
-      "mechanics": [
-        "barrier",
-        "node",
-        "block",
-        "exit",
-        "conveyor"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
+      "mechanics": ["barrier", "node", "block", "exit", "conveyor"]
     },
     {
       "level": 4,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
-      "mechanics": [
-        "barrier",
-        "node",
-        "block",
-        "exit",
-        "ice"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
+      "mechanics": ["barrier", "node", "block", "exit", "ice"]
     },
     {
       "level": 5,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "trap",
-        "barrier",
-        "node",
-        "block",
-        "exit",
-        "wraparound"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["trap", "barrier", "node", "block", "exit", "wraparound"]
     }
   ]
 }

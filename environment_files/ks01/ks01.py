@@ -641,6 +641,9 @@ class PuzzleEnvironment:
                 valid_actions=None,
                 turn=self._total_turns,
                 metadata={
+                    "levels_completed": getattr(self._engine, "_score", 0),
+                    "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                    "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
                     "total_levels": len(self._engine._levels),"terminal": True},
             )
         if hasattr(g, "_items") and g._items:
@@ -673,6 +676,9 @@ class PuzzleEnvironment:
                 if hasattr(g, "_target")
                 else False,
                 "terminal": terminal,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": g._current_level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

@@ -1017,6 +1017,9 @@ class PuzzleEnvironment:
                 "lives": lives,
                 "moves_left": moves_left,
                 "selected_gap": list(selected_gap) if selected_gap else None,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

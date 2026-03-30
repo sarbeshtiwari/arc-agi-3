@@ -57,107 +57,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "color_shift",
-        "movement",
-        "lives"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["color_shift", "movement", "lives"]
     },
     {
       "level": 2,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "color_shift",
-        "movement",
-        "lives"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["color_shift", "movement", "lives"]
     },
     {
       "level": 3,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "color_shift",
-        "movement",
-        "lives"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["color_shift", "movement", "lives"]
     },
     {
       "level": 4,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "color_shift",
-        "movement",
-        "frozen",
-        "danger",
-        "lives"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["color_shift", "movement", "frozen", "danger", "lives"]
     },
     {
       "level": 5,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        32,
-        32
-      ],
-      "mechanics": [
-        "color_shift",
-        "movement",
-        "frozen",
-        "danger",
-        "lives"
-      ]
+      "grid_size": [12, 12],
+      "camera_size": [32, 32],
+      "display_size": [32, 32],
+      "mechanics": ["color_shift", "movement", "frozen", "danger", "lives"]
     }
   ]
 }

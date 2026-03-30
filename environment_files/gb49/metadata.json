@@ -2,20 +2,8 @@
   "game_id": "gb49",
   "total_levels": 5,
   "default_fps": 10,
-  "baseline_actions": [
-    6,
-    8,
-    11,
-    14,
-    20
-  ],
-  "tags": [
-    "puzzle",
-    "sliding-blocks",
-    "sokoban",
-    "grid",
-    "turn-based"
-  ],
+  "baseline_actions": [6, 8, 11, 14, 20],
+  "tags": ["puzzle", "sliding-blocks", "sokoban", "grid", "turn-based"],
   "local_dir": "environment_files/gb49",
   "available_actions": [
     {
@@ -68,103 +56,38 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "tilt",
-        "blocks",
-        "walls"
-      ]
+      "grid_size": [9, 9],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["tilt", "blocks", "walls"]
     },
     {
       "level": 2,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "tilt",
-        "blocks",
-        "walls"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["tilt", "blocks", "walls"]
     },
     {
       "level": 3,
-      "grid_size": [
-        11,
-        11
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "tilt",
-        "blocks",
-        "walls"
-      ]
+      "grid_size": [11, 11],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["tilt", "blocks", "walls"]
     },
     {
       "level": 4,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "tilt",
-        "blocks",
-        "walls"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["tilt", "blocks", "walls"]
     },
     {
       "level": 5,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "tilt",
-        "blocks",
-        "walls"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["tilt", "blocks", "walls"]
     }
   ]
 }

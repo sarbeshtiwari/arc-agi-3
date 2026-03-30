@@ -1511,6 +1511,9 @@ class PuzzleEnvironment:
             "grid_height": g._grid_sizes[idx][1],
             "cursor_x": g._cursor_x,
             "cursor_y": g._cursor_y,
+            "levels_completed": getattr(g, "_score", 0),
+            "level_index": idx,
+            "game_over": getattr(getattr(g, "_state", None), "name", "") == "GAME_OVER",
         }
 
     def _render_image(self) -> bytes:

@@ -610,6 +610,9 @@ class PuzzleEnvironment:
                 "enemy_positions": [list(ep) for ep in e._enemies],
                 "grid_rows": e._rows,
                 "grid_cols": e._cols,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": e._current_level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

@@ -2,21 +2,8 @@
   "game_id": "pm14",
   "total_levels": 6,
   "default_fps": 5,
-  "baseline_actions": [
-    28,
-    36,
-    45,
-    56,
-    68,
-    84
-  ],
-  "tags": [
-    "puzzle",
-    "maze",
-    "portal",
-    "spatial",
-    "discovery"
-  ],
+  "baseline_actions": [28, 36, 45, 56, 68, 84],
+  "tags": ["puzzle", "maze", "portal", "spatial", "discovery"],
   "local_dir": "environment_files/pm14",
   "available_actions": [
     {
@@ -65,141 +52,45 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     },
     {
       "level": 2,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     },
     {
       "level": 3,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     },
     {
       "level": 4,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     },
     {
       "level": 5,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     },
     {
       "level": 6,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "portal",
-        "special_portal",
-        "pressure_tile",
-        "relief_tile",
-        "wall",
-        "gate"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["portal", "special_portal", "pressure_tile", "relief_tile", "wall", "gate"]
     }
   ]
 }

@@ -959,6 +959,9 @@ class PuzzleEnvironment:
             valid_actions=self.get_actions(),
             turn=self._turn,
             metadata={
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
                 "total_levels": len(self._engine._levels),"lives": lives},
         )
 

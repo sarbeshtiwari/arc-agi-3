@@ -2,167 +2,23 @@
   "game_id": "rs01",
   "total_levels": 5,
   "default_fps": 10,
-  "baseline_actions": [
-    12,
-    12,
-    12,
-    20,
-    20
-  ],
-  "tags": [
-    "puzzle",
-    "sliding",
-    "inertia",
-    "planning"
-  ],
+  "baseline_actions": [12, 12, 12, 20, 20],
+  "tags": ["puzzle", "sliding", "inertia", "planning"],
   "local_dir": "environment_files/rs01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level or restart game"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Slide active block up"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Slide active block down"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Slide active block left"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Slide active block right"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Cycle to next unlocked block"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last action"
-    }
+    {"id": 0, "name": "reset", "type": "system", "description": "Reset current level or restart game"},
+    {"id": 1, "name": "up", "type": "simple", "description": "Slide active block up"},
+    {"id": 2, "name": "down", "type": "simple", "description": "Slide active block down"},
+    {"id": 3, "name": "left", "type": "simple", "description": "Slide active block left"},
+    {"id": 4, "name": "right", "type": "simple", "description": "Slide active block right"},
+    {"id": 5, "name": "select", "type": "simple", "description": "Cycle to next unlocked block"},
+    {"id": 7, "name": "undo", "type": "simple", "description": "Undo last action"}
   ],
   "levels": [
-    {
-      "level": 1,
-      "grid_size": [
-        14,
-        17
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        14,
-        17
-      ],
-      "mechanics": [
-        "slide",
-        "target",
-        "multi-block"
-      ]
-    },
-    {
-      "level": 2,
-      "grid_size": [
-        14,
-        17
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        14,
-        17
-      ],
-      "mechanics": [
-        "slide",
-        "target",
-        "multi-block"
-      ]
-    },
-    {
-      "level": 3,
-      "grid_size": [
-        14,
-        17
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        14,
-        17
-      ],
-      "mechanics": [
-        "slide",
-        "target",
-        "multi-block"
-      ]
-    },
-    {
-      "level": 4,
-      "grid_size": [
-        22,
-        25
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        22,
-        25
-      ],
-      "mechanics": [
-        "slide",
-        "target",
-        "multi-block",
-        "cracked",
-        "hole"
-      ]
-    },
-    {
-      "level": 5,
-      "grid_size": [
-        22,
-        26
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        22,
-        26
-      ],
-      "mechanics": [
-        "slide",
-        "target",
-        "multi-block",
-        "hole"
-      ]
-    }
+    {"level": 1, "grid_size": [14, 17], "camera_size": [64, 64], "display_size": [14, 17], "mechanics": ["slide", "target", "multi-block"]},
+    {"level": 2, "grid_size": [14, 17], "camera_size": [64, 64], "display_size": [14, 17], "mechanics": ["slide", "target", "multi-block"]},
+    {"level": 3, "grid_size": [14, 17], "camera_size": [64, 64], "display_size": [14, 17], "mechanics": ["slide", "target", "multi-block"]},
+    {"level": 4, "grid_size": [22, 25], "camera_size": [64, 64], "display_size": [22, 25], "mechanics": ["slide", "target", "multi-block", "cracked", "hole"]},
+    {"level": 5, "grid_size": [22, 26], "camera_size": [64, 64], "display_size": [22, 26], "mechanics": ["slide", "target", "multi-block", "hole"]}
   ]
 }

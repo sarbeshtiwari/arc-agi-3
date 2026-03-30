@@ -2,13 +2,7 @@
   "game_id": "dq42",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    12,
-    16,
-    20,
-    23,
-    26
-  ],
+  "baseline_actions": [12, 16, 20, 23, 26],
   "tags": [
     "puzzle",
     "sorting",
@@ -18,164 +12,50 @@
   ],
   "local_dir": "environment_files/dq42",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move cursor up"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move cursor down"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move cursor left"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move cursor right"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Context-dependent: dequeue/enqueue/pop/push"
-    },
-    {
-      "id": 6,
-      "name": "click",
-      "type": "complex",
-      "description": "Click a position directly",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last move, restoring previous state"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Move cursor up" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Move cursor down" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Move cursor left" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Move cursor right" },
+    { "id": 5, "name": "select", "type": "simple",  "description": "Context-dependent: dequeue/enqueue/pop/push" },
+    { "id": 6, "name": "click",  "type": "complex", "description": "Click a position directly", "data_schema": { "x": "int (0-63)", "y": "int (0-63)" } },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo last move, restoring previous state" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "queue",
-        "stack",
-        "hand",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["queue", "stack", "hand", "sorting"]
     },
     {
       "level": 2,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "queue",
-        "stack",
-        "hand",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["queue", "stack", "hand", "sorting"]
     },
     {
       "level": 3,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "queue",
-        "stack",
-        "hand",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["queue", "stack", "hand", "sorting"]
     },
     {
       "level": 4,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "queue",
-        "stack",
-        "hand",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["queue", "stack", "hand", "sorting"]
     },
     {
       "level": 5,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "queue",
-        "stack",
-        "hand",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["queue", "stack", "hand", "sorting"]
     }
   ]
 }

@@ -828,7 +828,12 @@ class PuzzleEnvironment:
             valid_actions=self.get_actions(),
             turn=self._turn,
             metadata={
-                "total_levels": len(self._engine._levels),"level": self._level_index + 1},
+                "total_levels": len(self._engine._levels),
+                "level": self._level_index + 1,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": self._level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
+            },
         )
 
     def step(self, action: str) -> StepResult:

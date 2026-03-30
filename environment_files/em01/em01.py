@@ -987,7 +987,12 @@ class PuzzleEnvironment:
             image_observation=img,
             valid_actions=valid,
             turn=self._total_turns,
-            metadata={"total_levels": len(self._engine._levels)},
+            metadata={
+                "total_levels": len(self._engine._levels),
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": getattr(self._engine, "_current_level_index", getattr(self._engine, "level_index", 0)),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
+            },
         )
 
     def reset(self) -> GameState:

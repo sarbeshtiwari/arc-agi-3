@@ -2,13 +2,7 @@
   "game_id": "sq04",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    6,
-    20,
-    31,
-    158,
-    241
-  ],
+  "baseline_actions": [6, 20, 31, 158, 241],
   "tags": [
     "sorting",
     "algorithm",
@@ -18,154 +12,49 @@
   ],
   "local_dir": "environment_files/sq04",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move up, costs one move"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move down, costs one move"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move slider/cursor one position to the left"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move slider/cursor one position to the right"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Swap the two bars under the slider"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the last action, reverting array and slider state"
-    }
+    { "id": 0, "name": "reset", "type": "system", "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up", "type": "simple", "description": "Move up, costs one move" },
+    { "id": 2, "name": "down", "type": "simple", "description": "Move down, costs one move" },
+    { "id": 3, "name": "left", "type": "simple", "description": "Move slider/cursor one position to the left" },
+    { "id": 4, "name": "right", "type": "simple", "description": "Move slider/cursor one position to the right" },
+    { "id": 5, "name": "select", "type": "simple", "description": "Swap the two bars under the slider" },
+    { "id": 7, "name": "undo", "type": "simple", "description": "Undo the last action, reverting array and slider state" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        31,
-        31
-      ],
-      "mechanics": [
-        "swap",
-        "slider",
-        "border_drain",
-        "lives"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [31, 31],
+      "mechanics": ["swap", "slider", "border_drain", "lives"]
     },
     {
       "level": 2,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        31,
-        31
-      ],
-      "mechanics": [
-        "swap",
-        "slider",
-        "border_drain",
-        "lives"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [31, 31],
+      "mechanics": ["swap", "slider", "border_drain", "lives"]
     },
     {
       "level": 3,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        31,
-        31
-      ],
-      "mechanics": [
-        "swap",
-        "slider",
-        "border_drain",
-        "lives"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [31, 31],
+      "mechanics": ["swap", "slider", "border_drain", "lives"]
     },
     {
       "level": 4,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        31,
-        31
-      ],
-      "mechanics": [
-        "swap",
-        "slider",
-        "border_drain",
-        "lives"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [31, 31],
+      "mechanics": ["swap", "slider", "border_drain", "lives"]
     },
     {
       "level": 5,
-      "grid_size": [
-        32,
-        32
-      ],
-      "camera_size": [
-        32,
-        32
-      ],
-      "display_size": [
-        31,
-        31
-      ],
-      "mechanics": [
-        "swap",
-        "slider",
-        "border_drain",
-        "lives"
-      ]
+      "grid_size": [32, 32],
+      "camera_size": [32, 32],
+      "display_size": [31, 31],
+      "mechanics": ["swap", "slider", "border_drain", "lives"]
     }
   ]
 }

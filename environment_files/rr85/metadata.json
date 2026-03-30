@@ -2,13 +2,7 @@
   "game_id": "rr85",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    14,
-    18,
-    20,
-    24,
-    28
-  ],
+  "baseline_actions": [14, 18, 20, 24, 28],
   "tags": [
     "puzzle",
     "sorting",
@@ -18,169 +12,50 @@
   ],
   "local_dir": "environment_files/rr85",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Rotate entire ring clockwise by 1"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Rotate entire ring counter-clockwise by 1"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move cursor counter-clockwise"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move cursor clockwise"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Pick up / place / swap block at cursor"
-    },
-    {
-      "id": 6,
-      "name": "click",
-      "type": "complex",
-      "description": "Click at screen coords to pick up / place / swap block at nearest ring slot or rotate ring CW if near center",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last move"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Rotate entire ring clockwise by 1" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Rotate entire ring counter-clockwise by 1" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Move cursor counter-clockwise" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Move cursor clockwise" },
+    { "id": 5, "name": "select", "type": "simple",  "description": "Pick up / place / swap block at cursor" },
+    { "id": 6, "name": "click",  "type": "complex", "description": "Click at screen coords to pick up / place / swap block at nearest ring slot or rotate ring CW if near center", "data_schema": { "x": "int (0-63)", "y": "int (0-63)" } },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo last move" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "ring",
-        "rotation",
-        "hand",
-        "locked-blocks",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["ring", "rotation", "hand", "locked-blocks", "sorting"]
     },
     {
       "level": 2,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "ring",
-        "rotation",
-        "hand",
-        "locked-blocks",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["ring", "rotation", "hand", "locked-blocks", "sorting"]
     },
     {
       "level": 3,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "ring",
-        "rotation",
-        "hand",
-        "locked-blocks",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["ring", "rotation", "hand", "locked-blocks", "sorting"]
     },
     {
       "level": 4,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "ring",
-        "rotation",
-        "hand",
-        "locked-blocks",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["ring", "rotation", "hand", "locked-blocks", "sorting"]
     },
     {
       "level": 5,
-      "grid_size": [
-        64,
-        64
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "ring",
-        "rotation",
-        "hand",
-        "locked-blocks",
-        "sorting"
-      ]
+      "grid_size": [64, 64],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["ring", "rotation", "hand", "locked-blocks", "sorting"]
     }
   ]
 }

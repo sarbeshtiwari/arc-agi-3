@@ -2,13 +2,7 @@
   "game_id": "gf42",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    3,
-    3,
-    4,
-    7,
-    10
-  ],
+  "baseline_actions": [3, 3, 4, 7, 10],
   "tags": [
     "puzzle",
     "swap",
@@ -21,150 +15,49 @@
   ],
   "local_dir": "environment_files/gf42",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move cursor up (unlocked) or swap block up (locked)"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move cursor down (unlocked) or swap block down (locked)"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move cursor left (unlocked) or swap block left (locked)"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move cursor right (unlocked) or swap block right (locked)"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Toggle lock on selected cell; locked = swap mode, unlocked = navigate mode"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo the last action; reverts grid, cursor, and lock state; costs one move"
-    }
+    { "id": 0, "name": "reset",       "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",          "type": "simple",  "description": "Move cursor up (unlocked) or swap block up (locked)" },
+    { "id": 2, "name": "down",        "type": "simple",  "description": "Move cursor down (unlocked) or swap block down (locked)" },
+    { "id": 3, "name": "left",        "type": "simple",  "description": "Move cursor left (unlocked) or swap block left (locked)" },
+    { "id": 4, "name": "right",       "type": "simple",  "description": "Move cursor right (unlocked) or swap block right (locked)" },
+    { "id": 5, "name": "select",      "type": "simple",  "description": "Toggle lock on selected cell; locked = swap mode, unlocked = navigate mode" },
+    { "id": 7, "name": "undo",        "type": "simple",  "description": "Undo the last action; reverts grid, cursor, and lock state; costs one move" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        18,
-        10
-      ],
-      "camera_size": [
-        18,
-        10
-      ],
-      "display_size": [
-        18,
-        10
-      ],
-      "mechanics": [
-        "swap",
-        "cursor",
-        "lock"
-      ]
+      "grid_size": [18, 10],
+      "camera_size": [18, 10],
+      "display_size": [18, 10],
+      "mechanics": ["swap", "cursor", "lock"]
     },
     {
       "level": 2,
-      "grid_size": [
-        26,
-        14
-      ],
-      "camera_size": [
-        26,
-        14
-      ],
-      "display_size": [
-        26,
-        14
-      ],
-      "mechanics": [
-        "swap",
-        "cursor",
-        "lock"
-      ]
+      "grid_size": [26, 14],
+      "camera_size": [26, 14],
+      "display_size": [26, 14],
+      "mechanics": ["swap", "cursor", "lock"]
     },
     {
       "level": 3,
-      "grid_size": [
-        34,
-        18
-      ],
-      "camera_size": [
-        34,
-        18
-      ],
-      "display_size": [
-        34,
-        18
-      ],
-      "mechanics": [
-        "swap",
-        "cursor",
-        "lock"
-      ]
+      "grid_size": [34, 18],
+      "camera_size": [34, 18],
+      "display_size": [34, 18],
+      "mechanics": ["swap", "cursor", "lock"]
     },
     {
       "level": 4,
-      "grid_size": [
-        42,
-        22
-      ],
-      "camera_size": [
-        42,
-        22
-      ],
-      "display_size": [
-        42,
-        22
-      ],
-      "mechanics": [
-        "swap",
-        "cursor",
-        "lock"
-      ]
+      "grid_size": [42, 22],
+      "camera_size": [42, 22],
+      "display_size": [42, 22],
+      "mechanics": ["swap", "cursor", "lock"]
     },
     {
       "level": 5,
-      "grid_size": [
-        50,
-        26
-      ],
-      "camera_size": [
-        50,
-        26
-      ],
-      "display_size": [
-        50,
-        26
-      ],
-      "mechanics": [
-        "swap",
-        "cursor",
-        "lock",
-        "multi-color"
-      ]
+      "grid_size": [50, 26],
+      "camera_size": [50, 26],
+      "display_size": [50, 26],
+      "mechanics": ["swap", "cursor", "lock", "multi-color"]
     }
   ]
 }

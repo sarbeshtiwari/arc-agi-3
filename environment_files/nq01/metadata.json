@@ -2,14 +2,7 @@
   "game_id": "nq01",
   "total_levels": 6,
   "default_fps": 8,
-  "baseline_actions": [
-    15,
-    20,
-    25,
-    30,
-    35,
-    45
-  ],
+  "baseline_actions": [15, 20, 25, 30, 35, 45],
   "tags": [
     "puzzle",
     "logic",
@@ -17,176 +10,58 @@
   ],
   "local_dir": "environment_files/nq01",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move cursor up (-1, 0)"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move cursor down (+1, 0)"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move cursor left (0, -1)"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move cursor right (0, +1)"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Place or remove a piece at cursor position"
-    },
-    {
-      "id": 6,
-      "name": "click",
-      "type": "complex",
-      "description": "Click at screen coords to place or remove a piece",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last placement or removal"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Move cursor up (-1, 0)" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Move cursor down (+1, 0)" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Move cursor left (0, -1)" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Move cursor right (0, +1)" },
+    { "id": 5, "name": "select", "type": "simple",  "description": "Place or remove a piece at cursor position" },
+    { "id": 6, "name": "click",  "type": "complex", "description": "Click at screen coords to place or remove a piece",
+      "data_schema": { "x": "int (0-63)", "y": "int (0-63)" } },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo last placement or removal" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        5,
-        5
-      ],
-      "camera_size": [
-        5,
-        5
-      ],
-      "display_size": [
-        5,
-        5
-      ],
-      "mechanics": [
-        "placement",
-        "walls"
-      ]
+      "grid_size": [5, 5],
+      "camera_size": [5, 5],
+      "display_size": [5, 5],
+      "mechanics": ["placement", "walls"]
     },
     {
       "level": 2,
-      "grid_size": [
-        6,
-        6
-      ],
-      "camera_size": [
-        6,
-        6
-      ],
-      "display_size": [
-        6,
-        6
-      ],
-      "mechanics": [
-        "placement",
-        "walls"
-      ]
+      "grid_size": [6, 6],
+      "camera_size": [6, 6],
+      "display_size": [6, 6],
+      "mechanics": ["placement", "walls"]
     },
     {
       "level": 3,
-      "grid_size": [
-        7,
-        7
-      ],
-      "camera_size": [
-        7,
-        7
-      ],
-      "display_size": [
-        7,
-        7
-      ],
-      "mechanics": [
-        "placement",
-        "walls"
-      ]
+      "grid_size": [7, 7],
+      "camera_size": [7, 7],
+      "display_size": [7, 7],
+      "mechanics": ["placement", "walls"]
     },
     {
       "level": 4,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        8,
-        8
-      ],
-      "display_size": [
-        8,
-        8
-      ],
-      "mechanics": [
-        "placement",
-        "walls",
-        "pre_placed"
-      ]
+      "grid_size": [8, 8],
+      "camera_size": [8, 8],
+      "display_size": [8, 8],
+      "mechanics": ["placement", "walls", "pre_placed"]
     },
     {
       "level": 5,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        9,
-        9
-      ],
-      "display_size": [
-        9,
-        9
-      ],
-      "mechanics": [
-        "placement",
-        "walls",
-        "pre_placed"
-      ]
+      "grid_size": [9, 9],
+      "camera_size": [9, 9],
+      "display_size": [9, 9],
+      "mechanics": ["placement", "walls", "pre_placed"]
     },
     {
       "level": 6,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        10,
-        10
-      ],
-      "display_size": [
-        10,
-        10
-      ],
-      "mechanics": [
-        "placement",
-        "walls",
-        "pre_placed"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [10, 10],
+      "display_size": [10, 10],
+      "mechanics": ["placement", "walls", "pre_placed"]
     }
   ]
 }

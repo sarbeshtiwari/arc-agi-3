@@ -860,6 +860,8 @@ class PuzzleEnvironment:
                 "available_actions": self.get_actions()
                 if not self._done
                 else ["reset"],
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

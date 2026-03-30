@@ -925,6 +925,9 @@ class PuzzleEnvironment:
                 "cursor": (sel_x, sel_y),
                 "matched": matched,
                 "total": total,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": level_idx,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

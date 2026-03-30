@@ -2,15 +2,7 @@
   "game_id": "mx47",
   "total_levels": 7,
   "default_fps": 5,
-  "baseline_actions": [
-    38,
-    42,
-    45,
-    55,
-    80,
-    100,
-    120
-  ],
+  "baseline_actions": [38, 42, 45, 55, 80, 100, 120],
   "tags": [
     "puzzle",
     "maze",
@@ -20,199 +12,62 @@
   ],
   "local_dir": "environment_files/mx47",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Move player up (0, -1)"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Move player down (0, +1)"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move player left (-1, 0)"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move player right (+1, 0)"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last move, restoring previous state"
-    }
+    { "id": 0, "name": "reset",  "type": "system",  "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up",     "type": "simple",  "description": "Move player up (0, -1)" },
+    { "id": 2, "name": "down",   "type": "simple",  "description": "Move player down (0, +1)" },
+    { "id": 3, "name": "left",   "type": "simple",  "description": "Move player left (-1, 0)" },
+    { "id": 4, "name": "right",  "type": "simple",  "description": "Move player right (+1, 0)" },
+    { "id": 7, "name": "undo",   "type": "simple",  "description": "Undo last move, restoring previous state" }
   ],
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "exit"]
     },
     {
       "level": 2,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "exit"]
     },
     {
       "level": 3,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "enemy",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "enemy", "exit"]
     },
     {
       "level": 4,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "spike",
-        "death-switch",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "spike", "death-switch", "exit"]
     },
     {
       "level": 5,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "death-switch",
-        "static-wall",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "death-switch", "static-wall", "exit"]
     },
     {
       "level": 6,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "enemy",
-        "spike",
-        "reversed-controls",
-        "static-wall",
-        "exit"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "enemy", "spike", "reversed-controls", "static-wall", "exit"]
     },
     {
       "level": 7,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        20,
-        20
-      ],
-      "display_size": [
-        20,
-        20
-      ],
-      "mechanics": [
-        "phase-wall",
-        "switch",
-        "enemy",
-        "spike",
-        "death-switch",
-        "fake-exit",
-        "hidden-exit",
-        "master-switch",
-        "reversed-controls",
-        "static-wall"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [20, 20],
+      "display_size": [20, 20],
+      "mechanics": ["phase-wall", "switch", "enemy", "spike", "death-switch", "fake-exit", "hidden-exit", "master-switch", "reversed-controls", "static-wall"]
     }
   ]
 }

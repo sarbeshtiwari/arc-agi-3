@@ -2,21 +2,8 @@
   "game_id": "mx07",
   "total_levels": 6,
   "default_fps": 10,
-  "baseline_actions": [
-    4,
-    14,
-    22,
-    34,
-    50,
-    70
-  ],
-  "tags": [
-    "puzzle",
-    "spatial-reasoning",
-    "beam",
-    "mirror",
-    "rotation"
-  ],
+  "baseline_actions": [4, 14, 22, 34, 50, 70],
+  "tags": ["puzzle", "spatial-reasoning", "beam", "mirror", "rotation"],
   "local_dir": "environment_files/mx07",
   "available_actions": [
     {
@@ -75,131 +62,45 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver"]
     },
     {
       "level": 2,
-      "grid_size": [
-        21,
-        21
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver"
-      ]
+      "grid_size": [21, 21],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver"]
     },
     {
       "level": 3,
-      "grid_size": [
-        14,
-        14
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver"
-      ]
+      "grid_size": [14, 14],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver"]
     },
     {
       "level": 4,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver"
-      ]
+      "grid_size": [16, 16],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver"]
     },
     {
       "level": 5,
-      "grid_size": [
-        18,
-        18
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver",
-        "wrap"
-      ]
+      "grid_size": [18, 18],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver", "wrap"]
     },
     {
       "level": 6,
-      "grid_size": [
-        20,
-        20
-      ],
-      "camera_size": [
-        64,
-        64
-      ],
-      "display_size": [
-        64,
-        64
-      ],
-      "mechanics": [
-        "mirror",
-        "beam",
-        "emitter",
-        "receiver",
-        "wrap"
-      ]
+      "grid_size": [20, 20],
+      "camera_size": [64, 64],
+      "display_size": [64, 64],
+      "mechanics": ["mirror", "beam", "emitter", "receiver", "wrap"]
     }
   ]
 }

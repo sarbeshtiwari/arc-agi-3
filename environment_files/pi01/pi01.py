@@ -801,6 +801,9 @@ class PuzzleEnvironment:
                 "moves_used": e.move_count,
                 "move_limit": e.move_limit,
                 "lives": e.lives,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": min(e._level_num, len(e._levels)),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

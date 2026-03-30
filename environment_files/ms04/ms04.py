@@ -1368,6 +1368,8 @@ class PuzzleEnvironment:
             "lives": g._lives,
             "max_lives": TOTAL_LIVES,
             "game_over": g._game_over,
+            "levels_completed": getattr(g, "_score", 0),
+            "level_index": idx,
         }
 
     def _make_game_state(self) -> GameState:

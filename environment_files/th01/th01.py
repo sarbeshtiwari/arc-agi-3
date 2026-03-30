@@ -862,6 +862,9 @@ class PuzzleEnvironment:
                 "stacks": [s[:] for s in g._stacks],
                 "selected": g._selected,
                 "cursor": g._cursor,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": g._current_level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

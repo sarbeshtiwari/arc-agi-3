@@ -2,172 +2,23 @@
   "game_id": "st88",
   "total_levels": 5,
   "default_fps": 10,
-  "baseline_actions": [
-    20,
-    30,
-    40,
-    50,
-    60
-  ],
-  "tags": [
-    "puzzle",
-    "stacking",
-    "tetris",
-    "strategy",
-    "matching"
-  ],
+  "baseline_actions": [20, 30, 40, 50, 60],
+  "tags": ["puzzle", "stacking", "tetris", "strategy", "matching"],
   "local_dir": "environment_files/st88",
   "available_actions": [
-    {
-      "id": 0,
-      "name": "reset",
-      "type": "system",
-      "description": "Reset current level and if action_count == 0 then the full game is reset"
-    },
-    {
-      "id": 1,
-      "name": "up",
-      "type": "simple",
-      "description": "Select previous piece in staging area"
-    },
-    {
-      "id": 2,
-      "name": "down",
-      "type": "simple",
-      "description": "Select next piece in staging area"
-    },
-    {
-      "id": 3,
-      "name": "left",
-      "type": "simple",
-      "description": "Move column cursor left in placement mode"
-    },
-    {
-      "id": 4,
-      "name": "right",
-      "type": "simple",
-      "description": "Move column cursor right in placement mode"
-    },
-    {
-      "id": 5,
-      "name": "select",
-      "type": "simple",
-      "description": "Enter placement mode or drop piece"
-    },
-    {
-      "id": 7,
-      "name": "undo",
-      "type": "simple",
-      "description": "Undo last move, restoring previous state"
-    }
+    { "id": 0, "name": "reset", "type": "system", "description": "Reset current level and if action_count == 0 then the full game is reset" },
+    { "id": 1, "name": "up", "type": "simple", "description": "Select previous piece in staging area" },
+    { "id": 2, "name": "down", "type": "simple", "description": "Select next piece in staging area" },
+    { "id": 3, "name": "left", "type": "simple", "description": "Move column cursor left in placement mode" },
+    { "id": 4, "name": "right", "type": "simple", "description": "Move column cursor right in placement mode" },
+    { "id": 5, "name": "select", "type": "simple", "description": "Enter placement mode or drop piece" },
+    { "id": 7, "name": "undo", "type": "simple", "description": "Undo last move, restoring previous state" }
   ],
   "levels": [
-    {
-      "level": 1,
-      "grid_size": [
-        60,
-        60
-      ],
-      "camera_size": [
-        60,
-        60
-      ],
-      "display_size": [
-        60,
-        60
-      ],
-      "mechanics": [
-        "stacking",
-        "matching",
-        "gravity",
-        "path_building"
-      ]
-    },
-    {
-      "level": 2,
-      "grid_size": [
-        60,
-        60
-      ],
-      "camera_size": [
-        60,
-        60
-      ],
-      "display_size": [
-        60,
-        60
-      ],
-      "mechanics": [
-        "stacking",
-        "matching",
-        "gravity",
-        "path_building"
-      ]
-    },
-    {
-      "level": 3,
-      "grid_size": [
-        60,
-        60
-      ],
-      "camera_size": [
-        60,
-        60
-      ],
-      "display_size": [
-        60,
-        60
-      ],
-      "mechanics": [
-        "stacking",
-        "matching",
-        "gravity",
-        "path_building"
-      ]
-    },
-    {
-      "level": 4,
-      "grid_size": [
-        60,
-        60
-      ],
-      "camera_size": [
-        60,
-        60
-      ],
-      "display_size": [
-        60,
-        60
-      ],
-      "mechanics": [
-        "stacking",
-        "matching",
-        "gravity",
-        "shape_swap",
-        "path_building"
-      ]
-    },
-    {
-      "level": 5,
-      "grid_size": [
-        60,
-        60
-      ],
-      "camera_size": [
-        60,
-        60
-      ],
-      "display_size": [
-        60,
-        60
-      ],
-      "mechanics": [
-        "stacking",
-        "matching",
-        "gravity",
-        "rotation",
-        "path_building"
-      ]
-    }
+    { "level": 1, "grid_size": [60, 60], "camera_size": [60, 60], "display_size": [60, 60], "mechanics": ["stacking", "matching", "gravity", "path_building"] },
+    { "level": 2, "grid_size": [60, 60], "camera_size": [60, 60], "display_size": [60, 60], "mechanics": ["stacking", "matching", "gravity", "path_building"] },
+    { "level": 3, "grid_size": [60, 60], "camera_size": [60, 60], "display_size": [60, 60], "mechanics": ["stacking", "matching", "gravity", "path_building"] },
+    { "level": 4, "grid_size": [60, 60], "camera_size": [60, 60], "display_size": [60, 60], "mechanics": ["stacking", "matching", "gravity", "shape_swap", "path_building"] },
+    { "level": 5, "grid_size": [60, 60], "camera_size": [60, 60], "display_size": [60, 60], "mechanics": ["stacking", "matching", "gravity", "rotation", "path_building"] }
   ]
 }

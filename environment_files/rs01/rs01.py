@@ -554,6 +554,9 @@ class PuzzleEnvironment:
             "max_lives": MAX_LIVES,
             "blocks_total": len(g._targets),
             "blocks_locked": len(g._locked),
+            "levels_completed": getattr(g, "_score", 0),
+            "level_index": g._level_idx,
+            "game_over": getattr(getattr(g, "_state", None), "name", "") == "GAME_OVER",
         }
 
 

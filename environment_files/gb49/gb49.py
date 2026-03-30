@@ -1342,6 +1342,9 @@ class PuzzleEnvironment:
                 "max_moves": e._mc.max_moves,
                 "grid_w": e._cw,
                 "grid_h": e._ch,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": e._current_level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

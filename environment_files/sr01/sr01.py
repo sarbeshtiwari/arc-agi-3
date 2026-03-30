@@ -853,6 +853,9 @@ class PuzzleEnvironment:
                 "lives": g._lives,
                 "steps_remaining": g._hud.remaining if hasattr(g, "_hud") else 0,
                 "max_steps": g._hud.max_steps if hasattr(g, "_hud") else 0,
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "level_index": g.level_index,
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

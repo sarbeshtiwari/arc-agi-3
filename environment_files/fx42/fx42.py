@@ -808,6 +808,8 @@ class PuzzleEnvironment:
                 "level_index": e._current_level_index,
                 "total_levels": len(levels),
                 "grid_size": [e.grid_rows, e.grid_cols],
+                "levels_completed": getattr(self._engine, "_score", 0),
+                "game_over": getattr(getattr(self._engine, "_state", None), "name", "") == "GAME_OVER",
             },
         )
 

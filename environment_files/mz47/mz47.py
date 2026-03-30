@@ -1196,6 +1196,7 @@ class PuzzleEnvironment:
                 "game_over": e._game_over,
                 "done": done,
                 "info": info or {},
+                "levels_completed": getattr(self._engine, "_score", 0),
             },
         )
 

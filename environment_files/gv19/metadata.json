@@ -2,20 +2,8 @@
   "game_id": "gv19",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    4,
-    4,
-    7,
-    8,
-    13
-  ],
-  "tags": [
-    "puzzle",
-    "gravity",
-    "physics",
-    "spatial",
-    "logic"
-  ],
+  "baseline_actions": [4, 4, 7, 8, 13],
+  "tags": ["puzzle", "gravity", "physics", "spatial", "logic"],
   "local_dir": "environment_files/gv19",
   "available_actions": [
     {
@@ -58,18 +46,9 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        6,
-        6
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [6, 6],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "gravity_flip",
         "colored_balls",
@@ -80,18 +59,9 @@
     },
     {
       "level": 2,
-      "grid_size": [
-        7,
-        7
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [7, 7],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "gravity_flip",
         "colored_balls",
@@ -102,18 +72,9 @@
     },
     {
       "level": 3,
-      "grid_size": [
-        8,
-        8
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [8, 8],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "gravity_flip",
         "colored_balls",
@@ -124,18 +85,9 @@
     },
     {
       "level": 4,
-      "grid_size": [
-        9,
-        9
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [9, 9],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "gravity_flip",
         "colored_balls",
@@ -146,18 +98,9 @@
     },
     {
       "level": 5,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        48,
-        48
-      ],
-      "display_size": [
-        48,
-        48
-      ],
+      "grid_size": [10, 10],
+      "camera_size": [48, 48],
+      "display_size": [48, 48],
       "mechanics": [
         "gravity_flip",
         "colored_balls",

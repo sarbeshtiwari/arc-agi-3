@@ -14,13 +14,8 @@ COPY . .
 RUN npm run build
 
 
-# Stage 2: Production image with Node.js + Python
-FROM node:20-slim
-
-# Install Python 3 + pip
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends python3 python3-pip python3-venv && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# Stage 2: Production image with Node.js + Python 3.13 (arc-agi requires >=3.12)
+FROM nikolaik/python-nodejs:python3.13-nodejs20-slim
 
 WORKDIR /app
 
@@ -33,7 +28,7 @@ COPY --from=builder /app/server/requirements.txt ./server/requirements.txt
 COPY --from=builder /app/environment_files ./environment_files
 
 # Install Python dependencies
-RUN python3 -m pip install --break-system-packages -r server/requirements.txt
+RUN pip install -r server/requirements.txt
 
 # Write .python-bin marker so GamePythonBridge finds Python
 RUN which python3 > .python-bin

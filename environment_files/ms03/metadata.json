@@ -2,20 +2,8 @@
   "game_id": "ms03",
   "total_levels": 5,
   "default_fps": 5,
-  "baseline_actions": [
-    4,
-    6,
-    8,
-    11,
-    9
-  ],
-  "tags": [
-    "puzzle",
-    "light",
-    "reflection",
-    "routing",
-    "spatial"
-  ],
+  "baseline_actions": [4, 6, 8, 11, 9],
+  "tags": ["puzzle", "light", "reflection", "routing", "spatial"],
   "local_dir": "environment_files/ms03",
   "available_actions": [
     {
@@ -59,10 +47,7 @@
       "name": "click",
       "type": "complex",
       "description": "Click at {x, y} screen coordinates; toggles mirror at that grid cell",
-      "data_schema": {
-        "x": "int (0-63)",
-        "y": "int (0-63)"
-      }
+      "data_schema": { "x": "int (0-63)", "y": "int (0-63)" }
     },
     {
       "id": 7,
@@ -74,39 +59,16 @@
   "levels": [
     {
       "level": 1,
-      "grid_size": [
-        10,
-        10
-      ],
-      "camera_size": [
-        10,
-        10
-      ],
-      "display_size": [
-        10,
-        10
-      ],
-      "mechanics": [
-        "mirror",
-        "wall",
-        "source",
-        "target"
-      ]
+      "grid_size": [10, 10],
+      "camera_size": [10, 10],
+      "display_size": [10, 10],
+      "mechanics": ["mirror", "wall", "source", "target"]
     },
     {
       "level": 2,
-      "grid_size": [
-        12,
-        12
-      ],
-      "camera_size": [
-        12,
-        12
-      ],
-      "display_size": [
-        12,
-        12
-      ],
+      "grid_size": [12, 12],
+      "camera_size": [12, 12],
+      "display_size": [12, 12],
       "mechanics": [
         "mirror",
         "wall",
@@ -118,18 +80,9 @@
     },
     {
       "level": 3,
-      "grid_size": [
-        16,
-        16
-      ],
-      "camera_size": [
-        16,
-        16
-      ],
-      "display_size": [
-        16,
-        16
-      ],
+      "grid_size": [16, 16],
+      "camera_size": [16, 16],
+      "display_size": [16, 16],
       "mechanics": [
         "mirror",
         "wall",
@@ -142,18 +95,9 @@
     },
     {
       "level": 4,
-      "grid_size": [
-        16,
-        15
-      ],
-      "camera_size": [
-        16,
-        15
-      ],
-      "display_size": [
-        16,
-        15
-      ],
+      "grid_size": [16, 15],
+      "camera_size": [16, 15],
+      "display_size": [16, 15],
       "mechanics": [
         "mirror",
         "wall",
@@ -168,18 +112,9 @@
     },
     {
       "level": 5,
-      "grid_size": [
-        20,
-        19
-      ],
-      "camera_size": [
-        20,
-        19
-      ],
-      "display_size": [
-        20,
-        19
-      ],
+      "grid_size": [20, 19],
+      "camera_size": [20, 19],
+      "display_size": [20, 19],
       "mechanics": [
         "mirror",
         "wall",
