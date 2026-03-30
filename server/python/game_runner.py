@@ -169,7 +169,12 @@ def build_action_translator(env):
         return legacy_action_str
 
     def to_legacy_list(puzzle_action_names):
-        return [name_to_legacy.get(n.lower() if isinstance(n, str) else n, n) for n in puzzle_action_names]
+        result = []
+        for n in puzzle_action_names:
+            key = n.lower() if isinstance(n, str) else (n.name.lower() if hasattr(n, 'name') else str(n).lower())
+            legacy = name_to_legacy.get(key, _INT_TO_LEGACY.get(n.value if hasattr(n, 'value') else n, str(n)))
+            result.append(legacy)
+        return result
 
     return translate, to_legacy_list, inferred
 
