@@ -31,7 +31,6 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/server/python ./server/python
 COPY --from=builder /app/server/requirements.txt ./server/requirements.txt
 COPY --from=builder /app/environment_files ./environment_files
-COPY --from=builder /app/client/dist ./client/dist
 
 # Install Python dependencies
 RUN python3 -m pip install --break-system-packages -r server/requirements.txt
