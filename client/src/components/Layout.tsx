@@ -4,8 +4,10 @@ import { motion } from 'framer-motion';
 import { useAuth } from '../hooks/useAuth';
 import {
   LayoutDashboard, Gamepad2, Upload, Users, LogOut,
-  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer, FlaskConical, ScrollText
+  ChevronLeft, ChevronRight, Inbox, ExternalLink, Timer, FlaskConical, ScrollText,
+  Sun, Moon, Activity
 } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 
 const navSections = [
   {
@@ -39,6 +41,7 @@ const navSections = [
     label: 'System',
     items: [
       { path: '/admin/logs', label: 'Logs', icon: ScrollText, page: 'logs' },
+      { path: '/admin/system', label: 'System Status', icon: Activity, page: 'logs' },
     ],
   },
 ];
@@ -47,6 +50,7 @@ export default function Layout() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   // Filter nav items based on user's allowed_pages
   const allowedPages = user?.allowed_pages || [];
@@ -66,23 +70,23 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
       {/* Sidebar */}
       <motion.aside
-        className={`bg-gray-950 border-r border-gray-800/60 flex flex-col shrink-0 relative`}
+        className={`bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800/60 flex flex-col shrink-0 relative`}
         animate={{ width: collapsed ? 68 : 240 }}
         transition={{ duration: 0.2, ease: 'easeInOut' }}
       >
         {/* Header */}
-        <div className={`h-14 flex items-center border-b border-gray-800/60 ${collapsed ? 'justify-center px-0' : 'px-5'}`}>
+        <div className={`h-14 flex items-center border-b border-gray-200 dark:border-gray-800/60 ${collapsed ? 'justify-center px-0' : 'px-5'}`}>
           {!collapsed && (
             <Link to="/admin" className="flex items-center gap-2.5 group">
               <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center">
                 <span className="text-white text-xs font-bold">A</span>
               </div>
               <div>
-                <p className="text-sm font-semibold text-white leading-none">ARC-AGI</p>
-                <p className="text-[10px] text-gray-500 leading-none mt-0.5">Admin Panel</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white leading-none">ARC-AGI</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500 leading-none mt-0.5">Admin Panel</p>
               </div>
             </Link>
           )}
@@ -99,12 +103,12 @@ export default function Layout() {
             <div key={si} className={si > 0 ? 'mt-5' : ''}>
               {/* Section label */}
               {!collapsed && (
-                <p className="px-5 mb-1.5 text-[10px] font-semibold text-gray-500 uppercase tracking-widest">
+                <p className="px-5 mb-1.5 text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                   {section.label}
                 </p>
               )}
               {collapsed && si > 0 && (
-                <div className="mx-auto w-6 border-t border-gray-800/60 mb-3" />
+                <div className="mx-auto w-6 border-t border-gray-200 dark:border-gray-800/60 mb-3" />
               )}
 
               <div className="space-y-0.5 px-2.5">
@@ -120,7 +124,7 @@ export default function Layout() {
                       } ${
                         active
                           ? 'bg-blue-500/10 text-blue-400'
-                          : 'text-gray-400 hover:text-gray-200 hover:bg-white/[0.04]'
+                          : 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-black/[0.04] dark:hover:bg-white/[0.04]'
                       }`}
                     >
                       {/* Active indicator bar */}
@@ -136,7 +140,7 @@ export default function Layout() {
 
                       {/* Tooltip on collapsed */}
                       {collapsed && (
-                        <span className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-800 border border-gray-700 text-xs text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+                        <span className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-xs text-gray-900 dark:text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
                           {item.label}
                         </span>
                       )}
@@ -149,38 +153,59 @@ export default function Layout() {
         </nav>
 
         {/* User + collapse */}
-        <div className="border-t border-gray-800/60">
+        <div className="border-t border-gray-200 dark:border-gray-800/60">
           {/* User info */}
           <div className={`flex items-center ${collapsed ? 'justify-center py-3' : 'px-4 py-3 gap-3'}`}>
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-xs font-bold shrink-0 relative group">
               {user?.username?.[0]?.toUpperCase() || '?'}
               {collapsed && (
-                <span className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-800 border border-gray-700 text-xs text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
+                <span className="absolute left-full ml-2 px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-xs text-gray-900 dark:text-white whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity z-50 shadow-lg">
                   {user?.username}
                 </span>
               )}
             </div>
             {!collapsed && (
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-medium text-white truncate">{user?.username}</p>
-                <p className="text-[10px] text-gray-500">{user?.is_admin ? 'Admin' : 'User'}</p>
+                <p className="text-[13px] font-medium text-gray-900 dark:text-white truncate">{user?.username}</p>
+                <p className="text-[10px] text-gray-400 dark:text-gray-500">{user?.is_admin ? 'Admin' : 'User'}</p>
               </div>
             )}
             {!collapsed && (
-              <button
-                onClick={logout}
-                title="Logout"
-                className="p-1.5 rounded-md text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-              >
-                <LogOut size={16} strokeWidth={1.8} />
-              </button>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={toggleTheme}
+                  title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                  className="p-1.5 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors"
+                >
+                  {theme === 'dark' ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
+                </button>
+                <button
+                  onClick={logout}
+                  title="Logout"
+                  className="p-1.5 rounded-md text-gray-400 dark:text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                >
+                  <LogOut size={16} strokeWidth={1.8} />
+                </button>
+              </div>
             )}
           </div>
+
+          {collapsed && (
+            <div className="flex justify-center py-2">
+              <button
+                onClick={toggleTheme}
+                title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+                className="p-1.5 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-black/[0.04] dark:hover:bg-white/[0.04] transition-colors"
+              >
+                {theme === 'dark' ? <Sun size={16} strokeWidth={1.8} /> : <Moon size={16} strokeWidth={1.8} />}
+              </button>
+            </div>
+          )}
 
           {/* Collapse toggle */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className={`w-full flex items-center justify-center py-2.5 text-gray-500 hover:text-gray-300 transition-colors border-t border-gray-800/40 hover:bg-white/[0.02]`}
+            className={`w-full flex items-center justify-center py-2.5 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors border-t border-gray-200 dark:border-gray-800/40 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]`}
           >
             {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
           </button>

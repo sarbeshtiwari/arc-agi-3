@@ -34,28 +34,28 @@ export function EvalNotepad({ content, gameId, modelId, runIndex }: EvalNotepadP
 
   return (
     <div
-      className={`border bg-gray-900 rounded-lg overflow-hidden transition-all duration-300 ${
+      className={`border bg-white dark:bg-gray-900 rounded-lg overflow-hidden transition-all duration-300 ${
         flash
           ? 'border-amber-500/60 shadow-[0_0_12px_rgba(245,158,11,0.15)]'
-          : 'border-gray-800'
+          : 'border-gray-200 dark:border-gray-800'
       }`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-800">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-2">
           <StickyNote className="h-3.5 w-3.5 text-amber-400" />
-          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-300">
+          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
             Notepad
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono text-gray-600">
+          <span className="text-[9px] font-mono text-gray-400 dark:text-gray-600">
             {gameId || '—'} | {modelId || '—'} | Run {runIndex + 1}
           </span>
           <button
             onClick={handleCopy}
             disabled={!content}
-            className="flex items-center gap-1 text-[9px] font-mono text-gray-500 hover:text-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-1 text-[9px] font-mono text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
             title="Copy notepad"
           >
             {copied ? (
@@ -68,14 +68,14 @@ export function EvalNotepad({ content, gameId, modelId, runIndex }: EvalNotepadP
       </div>
 
       {/* Content */}
-      <div className="bg-gray-950 p-3 min-h-[120px] max-h-[300px] overflow-y-auto">
+      <div className="bg-gray-50 dark:bg-gray-950 p-3 min-h-[120px] max-h-[300px] overflow-y-auto">
         {content ? (
-          <pre className="text-[11px] font-mono text-gray-300 leading-relaxed whitespace-pre-wrap break-words">
+          <pre className="text-[11px] font-mono text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap break-words">
             {content}
           </pre>
         ) : (
           <div className="flex items-center justify-center h-20">
-            <span className="text-[10px] font-mono text-gray-700">
+            <span className="text-[10px] font-mono text-gray-400 dark:text-gray-700">
               Notepad empty
             </span>
           </div>

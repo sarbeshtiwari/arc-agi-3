@@ -52,7 +52,7 @@ export default function GamePreviewCanvas({ gameId, size = 140 }) {
   if (loading) {
     return (
       <div
-        className="animate-pulse bg-gray-800 rounded-lg"
+        className="animate-pulse bg-gray-200 dark:bg-gray-800 rounded-lg"
         style={{ width: size, height: size }}
       />
     );
@@ -61,10 +61,10 @@ export default function GamePreviewCanvas({ gameId, size = 140 }) {
   if (!preview?.grid) {
     return (
       <div
-        className="bg-gray-800 rounded-lg flex items-center justify-center"
+        className="bg-gray-200 dark:bg-gray-800 rounded-lg flex items-center justify-center"
         style={{ width: size, height: size }}
       >
-        <span className="text-gray-600 text-xs">No preview</span>
+        <span className="text-gray-400 dark:text-gray-600 text-xs">No preview</span>
       </div>
     );
   }

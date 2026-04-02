@@ -127,15 +127,15 @@ export default function VideoRecorder({
           paddingTop: '80px', pointerEvents: 'none',
         }}>
           <div style={{ pointerEvents: 'auto' }}
-            className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 animate-slide-down"
+            className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 animate-slide-down"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-red-500/15 border border-red-500/30 flex items-center justify-center">
                 <Video size={20} className="text-red-400" />
               </div>
               <div>
-                <h3 className="text-white font-semibold text-sm">Record this session?</h3>
-                <p className="text-gray-400 text-xs mt-0.5">
+                <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Record this session?</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
                   720p video streamed to server. No RAM/storage used on your device.
                 </p>
               </div>
@@ -144,19 +144,19 @@ export default function VideoRecorder({
               <button
                 onClick={handlePromptRecord}
                 disabled={isEphemeral}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-xl text-sm font-medium transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 hover:bg-red-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white rounded-xl text-sm font-medium transition-colors"
               >
                 <Video size={16} /> {isEphemeral ? 'Not available' : 'Record'}
               </button>
               <button
                 onClick={handlePromptSkip}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-sm transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl text-sm transition-colors"
               >
                 <VideoOff size={16} /> Skip
               </button>
             </div>
             {isEphemeral && (
-              <p className="text-[10px] text-gray-500 mt-2 text-center">Recording is only available for games on the platform.</p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 text-center">Recording is only available for games on the platform.</p>
             )}
           </div>
         </div>,
@@ -169,7 +169,7 @@ export default function VideoRecorder({
       {recordingEnabled && !isRecording && !hasRecording && promptDismissed && !isEphemeral && (
         <button
           onClick={handleManualStart}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 rounded-lg text-xs transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-xs transition-colors"
         >
           <Video size={14} /> Record
         </button>
@@ -202,7 +202,7 @@ export default function VideoRecorder({
           </button>
           <button
             onClick={handleDelete}
-            className="flex items-center gap-1 px-2 py-1 text-[10px] text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-gray-700 rounded-md transition-colors"
+            className="flex items-center gap-1 px-2 py-1 text-[10px] text-gray-500 dark:text-gray-400 hover:text-red-400 hover:bg-red-500/10 border border-gray-300 dark:border-gray-700 rounded-md transition-colors"
             title="Delete recording"
           >
             <Trash2 size={10} />

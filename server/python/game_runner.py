@@ -35,7 +35,7 @@ def _log(level: str, msg: str, **extra):
     payload = {"type": "log", "level": level, "message": msg}
     if extra:
         payload["metadata"] = extra
-    print(json.dumps(payload), flush=True)
+    print(json.dumps(payload, default=str), flush=True)
 
 
 # ---------------------------------------------------------------------------

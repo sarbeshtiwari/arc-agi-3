@@ -113,7 +113,7 @@ const GameCanvas = forwardRef(function GameCanvas({
         width={canvasWidth}
         height={canvasHeight}
         onClick={handleClick}
-        className={`rounded-lg border border-gray-700 ${interactive ? 'cursor-crosshair' : ''}`}
+        className={`rounded-lg border border-gray-300 dark:border-gray-700 ${interactive ? 'cursor-crosshair' : ''}`}
         style={{
           maxWidth: `${maxCanvasWidth}px`,
           maxHeight: `${maxCanvasHeight}px`,

@@ -70,6 +70,10 @@ export const gamesAPI = {
   clearSessions: (gameId) => client.delete(`/games/${gameId}/sessions`),
   getSource: (gameId) => client.get(`/games/${gameId}/source`),
   syncLocal: () => client.post('/games/sync-local'),
+  bulkUpload: (formData) =>
+    client.post('/games/bulk-upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }),
   // Videos
   // Video recording - streaming
   videoStart: (gameId, playerName = '', ext = 'webm') =>
@@ -184,6 +188,12 @@ export const logsAPI = {
     const token = localStorage.getItem('arc_token');
     return `${window.location.origin}/api/admin/logs/stream?token=${token}`;
   },
+};
+
+export const systemAPI = {
+  status: () => client.get('/admin/system/status'),
+  cleanupExpired: () => client.post('/admin/system/cleanup-expired'),
+  killBridges: () => client.post('/admin/system/kill-bridges'),
 };
 
 export default client;

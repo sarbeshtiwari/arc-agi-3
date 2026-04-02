@@ -222,6 +222,15 @@ class LogService {
     return count;
   }
 
+  async purgeAll(): Promise<number> {
+    const result = await pool.query(`DELETE FROM app_logs RETURNING id`);
+    const count = result.rowCount || 0;
+    if (count > 0) {
+      console.log(`[LogService] Purged ALL ${count} logs`);
+    }
+    return count;
+  }
+
   private startCleanupScheduler(): void {
     setTimeout(() => this.cleanup().catch(() => {}), 10_000);
 

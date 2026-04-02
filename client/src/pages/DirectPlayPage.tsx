@@ -6,8 +6,10 @@ import VideoRecorder from '../components/VideoRecorder';
 import {
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
   RotateCcw, Undo, Zap, Trophy, Square, X as XIcon,
-  ChevronLeft, Skull, Clock, Layers, Home, Target, AlertTriangle
+  ChevronLeft, Skull, Clock, Layers, Home, Target, AlertTriangle,
+  Sun, Moon
 } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 
 const ACTION_KEYS = {
   w: 'ACTION1', arrowup: 'ACTION1',
@@ -27,6 +29,7 @@ function formatTime(seconds) {
 export default function DirectPlayPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, toggleTheme } = useTheme();
   const { gameFile, metadataFile, playerName } = location.state || {};
 
   const [sessionGuid, setSessionGuid] = useState(null);
@@ -215,7 +218,7 @@ export default function DirectPlayPage() {
 
   if (loading && !isPlaying) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
       </div>
     );
@@ -223,11 +226,11 @@ export default function DirectPlayPage() {
 
   if (error && !isPlaying) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
         <div className="text-center">
           <XIcon size={48} className="mx-auto text-red-400 mb-4" />
           <p className="text-red-400 font-medium mb-2">Failed to load game</p>
-          <p className="text-gray-500 text-sm mb-6">{error}</p>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mb-6">{error}</p>
           <Link to="/" className="text-blue-400 hover:text-blue-300 text-sm">Back to home</Link>
         </div>
       </div>
@@ -235,18 +238,26 @@ export default function DirectPlayPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 flex flex-col">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col">
       {/* ── Top Bar ── */}
-      <header className="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800 sticky top-0 z-30">
+      <header className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 h-12 flex items-center gap-3">
-          <Link to="/" onClick={() => { if (sessionGuid) endGame(); }} className="p-1 rounded-md hover:bg-gray-800 text-gray-500 hover:text-white transition-colors">
+          <Link to="/" onClick={() => { if (sessionGuid) endGame(); }} className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
             <ChevronLeft size={18} />
           </Link>
-          <span className="text-white font-mono font-bold text-sm">{gameId}</span>
+          <span className="text-gray-900 dark:text-white font-mono font-bold text-sm">{gameId}</span>
           <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 text-[10px] font-medium rounded-full">Direct Play</span>
           {playerName && <span className="text-blue-400 text-xs">({playerName})</span>}
 
           <div className="flex-1" />
+
+          <button
+            onClick={toggleTheme}
+            className="p-1.5 rounded-md border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
 
           {isPlaying && (
             <>
@@ -290,9 +301,9 @@ export default function DirectPlayPage() {
                 <div className={`relative rounded-xl overflow-hidden border-2 transition-all duration-300 ${
                   isWin ? 'border-green-500/50 shadow-[0_0_30px_rgba(74,222,128,0.15)]' :
                   isGameOver ? 'border-red-500/50 shadow-[0_0_30px_rgba(248,113,113,0.15)]' :
-                  'border-gray-800'
-                }`}>
-                  <div className={`bg-gray-900 p-3 transition-all duration-300 ${
+                   'border-gray-200 dark:border-gray-800'
+                 }`}>
+                  <div className={`bg-white dark:bg-gray-900 p-3 transition-all duration-300 ${
                     resetAnim ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
                   } ${canvasShake ? 'animate-shake' : ''}`}>
                     <GameCanvas
@@ -329,10 +340,10 @@ export default function DirectPlayPage() {
                           </div>
                           <div className="glitch-stats flex items-center justify-center gap-3 mt-2">
                             <span className="font-mono text-xs text-green-400/80">{levelClearAnim.actions} MOVES</span>
-                            <span className="text-gray-600">|</span>
+                            <span className="text-gray-300 dark:text-gray-600">|</span>
                             <span className="font-mono text-xs text-green-400/80">{formatTime(levelClearAnim.time)}</span>
                           </div>
-                          <div className="glitch-next font-mono text-[10px] text-gray-500 mt-3 tracking-widest uppercase">
+                            <div className="glitch-next font-mono text-[10px] text-gray-400 dark:text-gray-500 mt-3 tracking-widest uppercase">
                             &gt; Loading level {levelClearAnim.nextLevel}_
                           </div>
                         </div>
@@ -413,7 +424,7 @@ export default function DirectPlayPage() {
                                   <p className="text-[10px] text-red-400/60 uppercase tracking-widest mt-0.5">Actions</p>
                                 </div>
                               </div>
-                              <Link to="/" className="inline-flex items-center gap-1.5 px-5 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded-lg transition-colors">
+                              <Link to="/" className="inline-flex items-center gap-1.5 px-5 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg transition-colors">
                                 <Home size={14} /> Back to Games
                               </Link>
                             </>
@@ -433,18 +444,18 @@ export default function DirectPlayPage() {
                   </div>
                   <DPadButton icon={ArrowRight} action="ACTION4" active={lastAction === 'ACTION4'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION4')} kbd="D" />
 
-                  <div className="w-px h-10 bg-gray-800 mx-2" />
+                   <div className="w-px h-10 bg-gray-200 dark:bg-gray-800 mx-2" />
 
                   <ActionButton icon={Zap} label="Action" action="ACTION5" active={lastAction === 'ACTION5'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION5')} kbd="Space" />
                   <ActionButton icon={Undo} label="Undo" action="ACTION7" active={lastAction === 'ACTION7'} available={available} disabled={isGameOver} onClick={() => sendAction('ACTION7')} kbd="Z" />
                   <ActionButton icon={RotateCcw} label="Reset" action="_reset" available={['_reset']} disabled={false} onClick={resetGame} kbd="R" spinning={resetAnim} />
 
-                  <div className="w-px h-10 bg-gray-800 mx-2" />
+                  <div className="w-px h-10 bg-gray-200 dark:bg-gray-800 mx-2" />
 
                   {/* Level indicator */}
-                  <div className="flex items-center gap-1.5 px-3 h-11 bg-gray-800/60 rounded-xl border border-gray-700/50">
+                  <div className="flex items-center gap-1.5 px-3 h-11 bg-gray-100/60 dark:bg-gray-800/60 rounded-xl border border-gray-300/50 dark:border-gray-700/50">
                     <Layers size={14} className="text-blue-400" />
-                    <span className="text-xs font-mono text-white font-medium">
+                    <span className="text-xs font-mono text-gray-900 dark:text-white font-medium">
                       {isWin && totalLevels ? totalLevels : (frame?.level ?? 0) + 1}{totalLevels ? ` / ${totalLevels}` : ''}
                     </span>
                   </div>
@@ -477,17 +488,17 @@ export default function DirectPlayPage() {
               {/* ── Right Panel ── */}
               <div className="w-52 shrink-0 space-y-3 hidden md:block">
                 {(completedLevels.length > 0 || currentLevelStats) && (
-                  <div className="bg-gray-900 rounded-xl border border-gray-800 p-3.5">
-                    <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2.5">Levels</h3>
+                  <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5">
+                    <h3 className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2.5">Levels</h3>
                     <div className="space-y-1.5">
                       {completedLevels.map((ls, i) => (
-                        <div key={i} className="bg-gray-800/50 rounded-lg p-2">
+                        <div key={i} className="bg-gray-100/50 dark:bg-gray-800/50 rounded-lg p-2">
                           <div className="flex items-center gap-2 text-[11px]">
                             <span className="w-4 h-4 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center text-green-400 text-[8px] font-bold shrink-0">{ls.level + 1}</span>
-                            <span className="text-gray-400 flex-1">{ls.actions}m</span>
-                            <span className="text-gray-500 font-mono tabular-nums">{formatTime(ls.time)}</span>
+                            <span className="text-gray-500 dark:text-gray-400 flex-1">{ls.actions}m</span>
+                            <span className="text-gray-400 dark:text-gray-500 font-mono tabular-nums">{formatTime(ls.time)}</span>
                           </div>
-                          <div className="flex items-center gap-2 mt-1 ml-6 text-[10px] text-gray-500">
+                          <div className="flex items-center gap-2 mt-1 ml-6 text-[10px] text-gray-400 dark:text-gray-500">
                             {ls.game_overs > 0 && <span className="text-red-400">{ls.game_overs} death{ls.game_overs > 1 ? 's' : ''}</span>}
                             {ls.lives_used > 0 && <span>{ls.lives_used} lives</span>}
                             {ls.resets > 0 && <span>{ls.resets} reset{ls.resets > 1 ? 's' : ''}</span>}
@@ -498,10 +509,10 @@ export default function DirectPlayPage() {
                         <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-2">
                           <div className="flex items-center gap-2 text-[11px]">
                             <span className="w-4 h-4 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 text-[8px] font-bold shrink-0 animate-pulse">{currentLevelStats.level + 1}</span>
-                            <span className="text-gray-400 flex-1">{currentLevelStats.actions}m</span>
+                            <span className="text-gray-500 dark:text-gray-400 flex-1">{currentLevelStats.actions}m</span>
                             <span className="text-blue-400 font-mono tabular-nums">{formatTime(currentLevelStats.time)}</span>
                           </div>
-                          <div className="flex items-center gap-2 mt-1 ml-6 text-[10px] text-gray-500">
+                          <div className="flex items-center gap-2 mt-1 ml-6 text-[10px] text-gray-400 dark:text-gray-500">
                             {currentLevelStats.game_overs > 0 && <span className="text-red-400">{currentLevelStats.game_overs} death{currentLevelStats.game_overs > 1 ? 's' : ''}</span>}
                             {currentLevelStats.lives_used > 0 && <span>{currentLevelStats.lives_used} lives</span>}
                             {currentLevelStats.resets > 0 && <span>{currentLevelStats.resets} reset{currentLevelStats.resets > 1 ? 's' : ''}</span>}
@@ -512,8 +523,8 @@ export default function DirectPlayPage() {
                   </div>
                 )}
 
-                <div className="bg-gray-900 rounded-xl border border-gray-800 p-3.5">
-                  <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2.5">Shortcuts</h3>
+                <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-3.5">
+                  <h3 className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2.5">Shortcuts</h3>
                   <div className="space-y-1.5">
                     <KbdRow keys="W A S D" desc="Move" />
                     <KbdRow keys="Space" desc="Action" />
@@ -586,9 +597,9 @@ export default function DirectPlayPage() {
 // ── Sub-components (same as PublicPlayPage) ──
 
 function StatPill({ icon: Icon, value, color = 'white' }: any) {
-  const colors = { blue: 'text-blue-400', green: 'text-green-400', red: 'text-red-400', white: 'text-white' };
+  const colors = { blue: 'text-blue-400', green: 'text-green-400', red: 'text-red-400', white: 'text-gray-900 dark:text-white' };
   return (
-    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800/60 rounded-md border border-gray-700/50">
+    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-100/60 dark:bg-gray-800/60 rounded-md border border-gray-300/50 dark:border-gray-700/50">
       <Icon size={12} className={colors[color]} />
       <span className={`font-mono text-xs font-medium tabular-nums ${colors[color]}`}>{value}</span>
     </div>
@@ -598,8 +609,8 @@ function StatPill({ icon: Icon, value, color = 'white' }: any) {
 function OverlayStat({ label, value }: any) {
   return (
     <div className="text-center">
-      <p className="text-xl font-bold text-white font-mono">{value}</p>
-      <p className="text-[10px] text-gray-500 uppercase tracking-wider">{label}</p>
+      <p className="text-xl font-bold text-gray-900 dark:text-white font-mono">{value}</p>
+      <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider">{label}</p>
     </div>
   );
 }
@@ -609,9 +620,9 @@ function DPadButton({ icon: Icon, action, active, available, disabled, onClick, 
   return (
     <button onClick={onClick} disabled={!enabled} title={kbd}
       className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all duration-100 ${
-        !enabled ? 'bg-gray-800/30 text-gray-700 cursor-not-allowed' :
+        !enabled ? 'bg-gray-100/30 dark:bg-gray-800/30 text-gray-300 dark:text-gray-700 cursor-not-allowed' :
         active ? 'bg-blue-600 text-white scale-90 shadow-lg shadow-blue-500/20' :
-        'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 active:scale-90'
+        'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 active:scale-90'
       }`}>
       <Icon size={18} />
     </button>
@@ -623,9 +634,9 @@ function ActionButton({ icon: Icon, label, action, active, available, disabled, 
   return (
     <button onClick={onClick} disabled={!enabled} title={`${label} (${kbd})`}
       className={`h-11 px-3 rounded-xl flex items-center gap-1.5 transition-all duration-100 text-xs font-medium ${
-        !enabled ? 'bg-gray-800/30 text-gray-700 cursor-not-allowed' :
+        !enabled ? 'bg-gray-100/30 dark:bg-gray-800/30 text-gray-300 dark:text-gray-700 cursor-not-allowed' :
         active ? 'bg-blue-600 text-white scale-95' :
-        'bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 active:scale-95'
+        'bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 active:scale-95'
       }`}>
       <Icon size={14} className={spinning ? 'animate-spin' : ''} />
       <span className="hidden sm:inline">{label}</span>
@@ -638,10 +649,10 @@ function KbdRow({ keys, desc }: any) {
     <div className="flex items-center justify-between">
       <div className="flex gap-1">
         {keys.split(' ').map((k) => (
-          <kbd key={k} className="px-1.5 py-0.5 bg-gray-800 border border-gray-700 rounded text-[10px] font-mono text-gray-400">{k}</kbd>
+          <kbd key={k} className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-[10px] font-mono text-gray-500 dark:text-gray-400">{k}</kbd>
         ))}
       </div>
-      <span className="text-[10px] text-gray-500">{desc}</span>
+      <span className="text-[10px] text-gray-400 dark:text-gray-500">{desc}</span>
     </div>
   );
 }

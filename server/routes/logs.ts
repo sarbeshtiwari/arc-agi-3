@@ -61,7 +61,7 @@ router.delete(
   requireAdmin,
   async (_req, res, next) => {
     try {
-      const deleted = await logService.cleanup();
+      const deleted = await logService.purgeAll();
       res.json({ deleted });
     } catch (err) {
       next(err);

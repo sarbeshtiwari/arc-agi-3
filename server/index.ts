@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { registerRoutes } from "./routes.js";
 import { setupVite } from "./vite.js";
+import pool from "./db.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -59,3 +60,15 @@ const port = parseInt(process.env.PORT || "5000");
 server.listen(port, "0.0.0.0", () => {
   console.log(`[SERVER] Running on http://localhost:${port} (${isDev ? "development" : "production"})`);
 });
+
+const CLEANUP_INTERVAL_MS = 60 * 60 * 1000;
+setInterval(async () => {
+  try {
+    const result = await pool.query("DELETE FROM temp_game_sessions WHERE expires_at < NOW()");
+    if ((result.rowCount ?? 0) > 0) {
+      console.log(`[CLEANUP] Purged ${result.rowCount} expired temp sessions`);
+    }
+  } catch (err: any) {
+    console.error("[CLEANUP] Failed to purge expired sessions:", err.message);
+  }
+}, CLEANUP_INTERVAL_MS);

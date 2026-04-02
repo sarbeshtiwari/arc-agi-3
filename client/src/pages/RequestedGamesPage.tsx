@@ -28,24 +28,24 @@ function SourceModal({ source, onClose }: any) {
   if (!source) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-      <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-3xl max-h-[80vh] flex flex-col mx-4">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
-          <div className="flex items-center gap-2 text-white font-semibold"><Code size={18} /> Source Code</div>
-          <button onClick={onClose} className="p-1.5 rounded hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"><X size={18} /></button>
+        <div className="bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-xl w-full max-w-3xl max-h-[80vh] flex flex-col mx-4">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center gap-2 text-gray-900 dark:text-white font-semibold"><Code size={18} /> Source Code</div>
+          <button onClick={onClose} className="p-1.5 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"><X size={18} /></button>
         </div>
         {source.metadata && (
-          <div className="px-6 py-3 border-b border-gray-800 bg-gray-800/40">
+          <div className="px-6 py-3 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/40">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
-              {source.metadata.game_id && <div><span className="text-gray-500">Game ID:</span> <span className="text-gray-200">{source.metadata.game_id}</span></div>}
-              {source.metadata.default_fps != null && <div><span className="text-gray-500">FPS:</span> <span className="text-gray-200">{source.metadata.default_fps}</span></div>}
+              {source.metadata.game_id && <div><span className="text-gray-400 dark:text-gray-500">Game ID:</span> <span className="text-gray-700 dark:text-gray-200">{source.metadata.game_id}</span></div>}
+              {source.metadata.default_fps != null && <div><span className="text-gray-400 dark:text-gray-500">FPS:</span> <span className="text-gray-700 dark:text-gray-200">{source.metadata.default_fps}</span></div>}
               {source.metadata.tags?.length > 0 && (
-                <div className="col-span-full"><span className="text-gray-500">Tags:</span> {source.metadata.tags.map(t => <span key={t} className="inline-block px-2 py-0.5 mr-1 rounded bg-gray-700 text-gray-300 text-xs">{t}</span>)}</div>
+                <div className="col-span-full"><span className="text-gray-400 dark:text-gray-500">Tags:</span> {source.metadata.tags.map(t => <span key={t} className="inline-block px-2 py-0.5 mr-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs">{t}</span>)}</div>
               )}
             </div>
           </div>
         )}
         <div className="flex-1 overflow-auto p-6">
-          <pre className="text-sm text-gray-300 font-mono whitespace-pre-wrap break-words leading-relaxed">{source.source_code || '(no source available)'}</pre>
+          <pre className="text-sm text-gray-700 dark:text-gray-300 font-mono whitespace-pre-wrap break-words leading-relaxed">{source.source_code || '(no source available)'}</pre>
         </div>
       </div>
     </div>
@@ -127,8 +127,8 @@ export default function RequestedGamesPage() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Game Requests</h1>
-        <p className="text-gray-400 mt-1">Review and manage game submissions</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Game Requests</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">Review and manage game submissions</p>
       </div>
 
       {error && (
@@ -144,12 +144,12 @@ export default function RequestedGamesPage() {
         </div>
       ) : requests.length === 0 ? (
         <div className="text-center py-16">
-          <Gamepad2 size={40} className="mx-auto text-gray-600 mb-3" />
-          <p className="text-gray-400 text-lg">No requests</p>
-          <p className="text-gray-600 text-sm mt-1">Submissions will appear here.</p>
+          <Gamepad2 size={40} className="mx-auto text-gray-400 dark:text-gray-600 mb-3" />
+          <p className="text-gray-500 dark:text-gray-400 text-lg">No requests</p>
+          <p className="text-gray-400 dark:text-gray-600 text-sm mt-1">Submissions will appear here.</p>
         </div>
       ) : (
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden divide-y divide-gray-800/50">
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden divide-y divide-gray-200/50 dark:divide-gray-800/50">
           {requests.map((req) => {
             const isOpen = expandedId === req.id;
             return (
@@ -157,20 +157,20 @@ export default function RequestedGamesPage() {
                 {/* Collapsed row */}
                 <button
                   onClick={() => toggle(req.id)}
-                  className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors ${isOpen ? 'bg-gray-800/60' : 'hover:bg-gray-800/30'}`}
+                  className={`w-full flex items-center gap-3 px-5 py-3.5 text-left transition-colors ${isOpen ? 'bg-gray-100/60 dark:bg-gray-800/60' : 'hover:bg-gray-100/30 dark:hover:bg-gray-800/30'}`}
                 >
-                  <span className="text-gray-500">{isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
-                  <span className="font-mono font-bold text-white text-sm min-w-[60px]">{req.game_id}</span>
+                  <span className="text-gray-400 dark:text-gray-500">{isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}</span>
+                  <span className="font-mono font-bold text-gray-900 dark:text-white text-sm min-w-[60px]">{req.game_id}</span>
                   <StatusBadge status={req.status} />
                   {req.requester_name && (
-                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                       <User size={11} /> {req.requester_name}
                     </span>
                   )}
                   {req.game_owner_name && req.game_owner_name !== req.requester_name && (
-                    <span className="text-xs text-gray-500">by {req.game_owner_name}</span>
+                    <span className="text-xs text-gray-400 dark:text-gray-500">by {req.game_owner_name}</span>
                   )}
-                  <span className="ml-auto text-[11px] text-gray-600">
+                  <span className="ml-auto text-[11px] text-gray-400 dark:text-gray-600">
                     {new Date(req.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </button>
@@ -184,50 +184,50 @@ export default function RequestedGamesPage() {
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                  <div className="bg-gray-800/30 border-t border-gray-700/50 px-6 py-5 space-y-4">
+                   <div className="bg-gray-50 dark:bg-gray-800/30 border-t border-gray-300/50 dark:border-gray-700/50 px-6 py-5 space-y-4">
                     {/* Rejection note */}
                     {req.status === 'rejected' && req.admin_note && (
                       <div className="px-3 py-2 bg-red-500/5 border border-red-500/20 rounded-lg">
                         <p className="text-[10px] text-red-400 uppercase tracking-wider mb-0.5">Rejection Note</p>
-                        <p className="text-xs text-gray-300">{req.admin_note}</p>
+                         <p className="text-xs text-gray-700 dark:text-gray-300">{req.admin_note}</p>
                       </div>
                     )}
 
                     {/* Info grid */}
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Requester</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Requester</p>
                         <div className="space-y-1">
-                          <p className="flex items-center gap-1.5 text-gray-300"><User size={12} className="text-gray-500" /> {req.requester_name}</p>
-                          {req.requester_email && <p className="flex items-center gap-1.5 text-gray-400"><Mail size={12} className="text-gray-500" /> {req.requester_email}</p>}
+                          <p className="flex items-center gap-1.5 text-gray-700 dark:text-gray-300"><User size={12} className="text-gray-400 dark:text-gray-500" /> {req.requester_name}</p>
+                          {req.requester_email && <p className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400"><Mail size={12} className="text-gray-400 dark:text-gray-500" /> {req.requester_email}</p>}
                         </div>
                       </div>
                       <div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Owner</p>
-                        <p className="text-gray-300">{req.game_owner_name || '--'}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Owner</p>
+                        <p className="text-gray-700 dark:text-gray-300">{req.game_owner_name || '--'}</p>
                       </div>
                     </div>
 
                     {/* Description */}
                     {req.description && (
                       <div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Description</p>
-                        <p className="text-sm text-gray-300 bg-gray-900/50 rounded-lg p-3">{req.description}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Description</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100/50 dark:bg-gray-900/50 rounded-lg p-3">{req.description}</p>
                       </div>
                     )}
 
                     {/* Rules */}
                     {req.game_rules && (
                       <div>
-                        <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Game Rules</p>
-                        <p className="text-sm text-gray-300 bg-gray-900/50 rounded-lg p-3 whitespace-pre-wrap">{req.game_rules}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1">Game Rules</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 bg-gray-100/50 dark:bg-gray-900/50 rounded-lg p-3 whitespace-pre-wrap">{req.game_rules}</p>
                       </div>
                     )}
 
                     {/* Message */}
                     {req.message && (
-                      <div className="flex items-start gap-2 text-sm text-gray-400 bg-gray-900/50 rounded-lg p-3">
-                        <MessageSquare size={14} className="text-gray-500 shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400 bg-gray-100/50 dark:bg-gray-900/50 rounded-lg p-3">
+                        <MessageSquare size={14} className="text-gray-400 dark:text-gray-500 shrink-0 mt-0.5" />
                         <p>{req.message}</p>
                       </div>
                     )}
@@ -258,15 +258,15 @@ export default function RequestedGamesPage() {
                           onChange={(e) => setRejectNote(e.target.value)}
                           onKeyDown={(e) => { if (e.key === 'Enter') openConfirm({ title: `Reject "${req.game_id}"?`, message: 'This request will be marked as rejected.', variant: 'warning', confirmText: 'Reject', onConfirm: () => { closeConfirm(); handleReject(req.id); } }); if (e.key === 'Escape') { setRejectingId(null); setRejectNote(''); } }}
                           autoFocus
-                          className="flex-1 px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none focus:border-red-500/50"
+                          className="flex-1 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-red-500/50"
                         />
                         <button onClick={() => openConfirm({ title: `Reject "${req.game_id}"?`, message: 'Marked as rejected.', variant: 'warning', confirmText: 'Reject', onConfirm: () => { closeConfirm(); handleReject(req.id); } })} className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm">Confirm</button>
-                        <button onClick={() => { setRejectingId(null); setRejectNote(''); }} className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded-lg text-sm">Cancel</button>
+                        <button onClick={() => { setRejectingId(null); setRejectNote(''); }} className="px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg text-sm">Cancel</button>
                       </div>
                     )}
 
                     {/* Actions */}
-                    <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-700/50">
+                      <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-300/50 dark:border-gray-700/50">
                       {/* Play */}
                       <button
                         onClick={() => handlePlay(req)}
@@ -297,7 +297,7 @@ export default function RequestedGamesPage() {
                       )}
 
                       <button onClick={() => handleViewSource(req.id)} disabled={sourceLoading === req.id}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm transition-colors disabled:opacity-50">
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm transition-colors disabled:opacity-50">
                         {sourceLoading === req.id ? <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-gray-400" /> : <Eye size={14} />}
                         Source
                       </button>
@@ -305,7 +305,7 @@ export default function RequestedGamesPage() {
                       <button
                         onClick={() => openConfirm({ title: 'Delete request?', message: 'Permanently removes the request. Cannot be undone.', variant: 'danger', confirmText: 'Delete', onConfirm: () => { closeConfirm(); handleDelete(req.id); } })}
                         disabled={!!actionLoading[req.id]}
-                        className="flex items-center gap-1.5 px-3 py-1.5 ml-auto bg-gray-800 hover:bg-red-600/20 text-gray-500 hover:text-red-400 rounded-lg text-sm transition-colors disabled:opacity-50"
+                        className="flex items-center gap-1.5 px-3 py-1.5 ml-auto bg-gray-100 dark:bg-gray-800 hover:bg-red-600/20 text-gray-400 dark:text-gray-500 hover:text-red-400 rounded-lg text-sm transition-colors disabled:opacity-50"
                       >
                         <Trash2 size={14} /> Delete
                       </button>

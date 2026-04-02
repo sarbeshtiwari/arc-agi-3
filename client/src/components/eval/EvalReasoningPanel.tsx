@@ -50,9 +50,9 @@ export function EvalReasoningPanel({ timeline }: EvalReasoningPanelProps) {
     },
     result: {
       icon: Zap,
-      color: 'text-gray-400',
-      bg: 'bg-gray-800/50',
-      border: 'border-gray-700/50',
+      color: 'text-gray-500 dark:text-gray-400',
+      bg: 'bg-gray-100/50 dark:bg-gray-800/50',
+      border: 'border-gray-300/50 dark:border-gray-700/50',
     },
     message: {
       icon: AlertTriangle,
@@ -63,23 +63,23 @@ export function EvalReasoningPanel({ timeline }: EvalReasoningPanelProps) {
   };
 
   return (
-    <div className="border border-gray-800 bg-gray-900 rounded-lg overflow-hidden flex flex-col h-[600px]">
+    <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg overflow-hidden flex flex-col h-[600px]">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2.5 border-b border-gray-800 shrink-0">
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-gray-200 dark:border-gray-800 shrink-0">
         <div className="flex items-center gap-2">
           <Brain className="h-3.5 w-3.5 text-blue-400" />
-          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-300">
+          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
             Reasoning
           </span>
           {timeline.length > 0 && (
-            <span className="text-[9px] font-mono text-gray-600">
+            <span className="text-[9px] font-mono text-gray-400 dark:text-gray-600">
               {timeline.length} entries
             </span>
           )}
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 text-[9px] font-mono text-gray-500 hover:text-gray-300 transition-colors"
+          className="flex items-center gap-1 text-[9px] font-mono text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           title="Copy all reasoning"
         >
           {copied ? (
@@ -98,7 +98,7 @@ export function EvalReasoningPanel({ timeline }: EvalReasoningPanelProps) {
       >
         {timeline.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <span className="text-[11px] font-mono text-gray-600">
+            <span className="text-[11px] font-mono text-gray-400 dark:text-gray-600">
               No reasoning yet...
             </span>
           </div>
@@ -117,28 +117,28 @@ export function EvalReasoningPanel({ timeline }: EvalReasoningPanelProps) {
                   <span className={`text-[10px] font-mono font-semibold uppercase ${style.color}`}>
                     {entry.type}
                   </span>
-                  <span className="text-[9px] font-mono text-gray-600">
+                  <span className="text-[9px] font-mono text-gray-400 dark:text-gray-600">
                     Turn {entry.turn}
                   </span>
                   {entry.action && (
                     <>
-                      <span className="text-gray-700">|</span>
-                      <span className="text-[10px] font-mono text-emerald-300 font-semibold">
+                      <span className="text-gray-300 dark:text-gray-700">|</span>
+                      <span className="text-[10px] font-mono text-emerald-600 dark:text-emerald-300 font-semibold">
                         {entry.action}
                       </span>
                     </>
                   )}
                   {entry.score !== undefined && (
                     <>
-                      <span className="text-gray-700">|</span>
-                      <span className="text-[10px] font-mono text-amber-300">
+                      <span className="text-gray-300 dark:text-gray-700">|</span>
+                      <span className="text-[10px] font-mono text-amber-600 dark:text-amber-300">
                         Score: {entry.score}
                       </span>
                     </>
                   )}
                 </div>
                 {entry.reasoning && (
-                  <p className="text-[11px] font-mono text-gray-300 leading-relaxed whitespace-pre-wrap pl-5">
+                  <p className="text-[11px] font-mono text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap pl-5">
                     {entry.reasoning}
                   </p>
                 )}

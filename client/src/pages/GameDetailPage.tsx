@@ -177,19 +177,19 @@ export default function GameDetailPage() {
     <div>
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Link to="/admin/games" className="p-2 rounded-lg hover:bg-gray-800 text-gray-400">
+        <Link to="/admin/games" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
           <ChevronLeft size={20} />
         </Link>
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-white">{game.name}</h1>
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">{game.name}</h1>
             <span className={`px-2 py-1 rounded text-xs font-medium ${
               game.is_active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
             }`}>
               {game.is_active ? 'Active' : 'Inactive'}
             </span>
           </div>
-          <p className="text-sm text-gray-400 font-mono">{game.game_id}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 font-mono">{game.game_id}</p>
         </div>
         <div className="flex gap-2">
           <Link
@@ -241,7 +241,7 @@ export default function GameDetailPage() {
       )}
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-800 mb-6">
+      <div className="flex border-b border-gray-200 dark:border-gray-800 mb-6">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -253,7 +253,7 @@ export default function GameDetailPage() {
             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
               activeTab === tab.id
                 ? 'border-blue-500 text-blue-400'
-                : 'border-transparent text-gray-400 hover:text-white'
+                : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
             }`}
           >
             <tab.icon size={16} /> {tab.label}
@@ -265,9 +265,9 @@ export default function GameDetailPage() {
       {activeTab === 'overview' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Info */}
-          <div className="lg:col-span-2 bg-gray-900 rounded-xl border border-gray-800 p-6">
+          <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">Game Information</h2>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Game Information</h2>
               <button
                 onClick={() => setEditing(!editing)}
                 className="flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300"
@@ -279,94 +279,94 @@ export default function GameDetailPage() {
             {editing ? (
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">Name</label>
+                  <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Name</label>
                   <input
                     value={editForm.name}
                     onChange={(e) => setEditForm(f => ({ ...f, name: e.target.value }))}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                    className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">Description</label>
+                  <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Description</label>
                   <textarea
                     value={editForm.description}
                     onChange={(e) => setEditForm(f => ({ ...f, description: e.target.value }))}
                     rows={3}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm resize-none"
+                    className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm resize-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">Game Rules</label>
+                  <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Game Rules</label>
                   <textarea
                     value={editForm.game_rules}
                     onChange={(e) => setEditForm(f => ({ ...f, game_rules: e.target.value }))}
                     rows={4}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm resize-none"
+                    className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm resize-none"
                     placeholder="How to play, controls, objectives..."
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-400 mb-1">Game Owner Name</label>
+                  <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Game Owner Name</label>
                   <input
                     value={editForm.game_owner_name}
                     onChange={(e) => setEditForm(f => ({ ...f, game_owner_name: e.target.value }))}
-                    className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                    className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                     placeholder="Who created this game?"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Drive Link</label>
+                    <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Drive Link</label>
                     <input
                       type="url"
                       value={editForm.game_drive_link}
                       onChange={(e) => setEditForm(f => ({ ...f, game_drive_link: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                       placeholder="https://drive.google.com/..."
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Video Link</label>
+                    <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Video Link</label>
                     <input
                       type="url"
                       value={editForm.game_video_link}
                       onChange={(e) => setEditForm(f => ({ ...f, game_video_link: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                       placeholder="https://youtube.com/..."
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Default FPS</label>
+                    <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Default FPS</label>
                     <input
                       type="number"
                       value={editForm.default_fps}
                       onChange={(e) => setEditForm(f => ({ ...f, default_fps: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                       min={1} max={60}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-400 mb-1">Tags (comma-separated)</label>
+                    <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Tags (comma-separated)</label>
                     <input
                       value={editForm.tags}
                       onChange={(e) => setEditForm(f => ({ ...f, tags: e.target.value }))}
-                      className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                      className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                     />
                   </div>
                 </div>
 
                 {/* File Updates */}
-                <div className="border-t border-gray-700/50 pt-4 mt-4">
-                  <p className="text-sm text-gray-400 mb-3 font-medium">Update Game Files <span className="text-gray-600 font-normal">(optional)</span></p>
+                <div className="border-t border-gray-300/50 dark:border-gray-700/50 pt-4 mt-4">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 font-medium">Update Game Files <span className="text-gray-400 dark:text-gray-600 font-normal">(optional)</span></p>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-sm text-gray-500 mb-1">game.py</label>
+                      <label className="block text-sm text-gray-400 dark:text-gray-500 mb-1">game.py</label>
                       <label className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors text-sm ${
                         newGameFile
                           ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                          : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
+                          : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600'
                       }`}>
                         <Code size={14} />
                         <span className="truncate">{newGameFile ? newGameFile.name : 'Choose file...'}</span>
@@ -379,11 +379,11 @@ export default function GameDetailPage() {
                       </label>
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-500 mb-1">metadata.json</label>
+                      <label className="block text-sm text-gray-400 dark:text-gray-500 mb-1">metadata.json</label>
                       <label className={`flex items-center gap-2 px-3 py-2.5 rounded-lg border cursor-pointer transition-colors text-sm ${
                         newMetadataFile
                           ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
-                          : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
+                          : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600'
                       }`}>
                         <Settings size={14} />
                         <span className="truncate">{newMetadataFile ? newMetadataFile.name : 'Choose file...'}</span>
@@ -420,7 +420,7 @@ export default function GameDetailPage() {
                   </button>
                   <button
                     onClick={() => { setEditing(false); setNewGameFile(null); setNewMetadataFile(null); }}
-                    className="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm transition-colors"
+                    className="px-5 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm transition-colors"
                   >
                     Cancel
                   </button>
@@ -430,67 +430,67 @@ export default function GameDetailPage() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Name</p>
-                    <p className="text-white text-sm font-medium">{game.name || game.game_id}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Name</p>
+                    <p className="text-gray-900 dark:text-white text-sm font-medium">{game.name || game.game_id}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Game Owner</p>
-                    <p className="text-white text-sm">{game.game_owner_name || '--'}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Game Owner</p>
+                    <p className="text-gray-900 dark:text-white text-sm">{game.game_owner_name || '--'}</p>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Description</p>
-                  <p className="text-white text-sm">{game.description || 'No description'}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Description</p>
+                  <p className="text-gray-900 dark:text-white text-sm">{game.description || 'No description'}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Game Rules</p>
-                  <p className="text-white text-sm whitespace-pre-wrap">{game.game_rules || 'No rules specified'}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Game Rules</p>
+                  <p className="text-gray-900 dark:text-white text-sm whitespace-pre-wrap">{game.game_rules || 'No rules specified'}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Drive Link</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Drive Link</p>
                     {game.game_drive_link ? (
                       <a href={game.game_drive_link} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300 text-sm underline break-all">{game.game_drive_link}</a>
-                    ) : <span className="text-gray-600 text-sm">--</span>}
+                    ) : <span className="text-gray-400 dark:text-gray-600 text-sm">--</span>}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Video Link</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Video Link</p>
                     {game.game_video_link ? (
                       <a href={game.game_video_link} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 text-sm underline break-all">{game.game_video_link}</a>
-                    ) : <span className="text-gray-600 text-sm">--</span>}
+                    ) : <span className="text-gray-400 dark:text-gray-600 text-sm">--</span>}
                   </div>
                 </div>
                 <div className="grid grid-cols-4 gap-4">
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Version</p>
-                    <p className="text-white text-sm font-mono">{game.version}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Version</p>
+                    <p className="text-gray-900 dark:text-white text-sm font-mono">{game.version}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Game Code</p>
-                    <p className="text-white text-sm font-mono">{game.game_code}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Game Code</p>
+                    <p className="text-gray-900 dark:text-white text-sm font-mono">{game.game_code}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">FPS</p>
-                    <p className="text-white text-sm">{game.default_fps}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">FPS</p>
+                    <p className="text-gray-900 dark:text-white text-sm">{game.default_fps}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Grid Size</p>
-                    <p className="text-white text-sm">{game.grid_max_size}x{game.grid_max_size}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Grid Size</p>
+                    <p className="text-gray-900 dark:text-white text-sm">{game.grid_max_size}x{game.grid_max_size}</p>
                   </div>
                 </div>
                 {game.tags && game.tags.length > 0 && (
                   <div>
-                    <p className="text-sm text-gray-400 mb-2">Tags</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Tags</p>
                     <div className="flex flex-wrap gap-2">
                       {game.tags.map(tag => (
-                        <span key={tag} className="px-2 py-1 bg-gray-800 rounded text-xs text-gray-300">{tag}</span>
+                        <span key={tag} className="px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded text-xs text-gray-700 dark:text-gray-300">{tag}</span>
                       ))}
                     </div>
                   </div>
                 )}
                 <div>
-                  <p className="text-sm text-gray-400 mb-1">Created</p>
-                  <p className="text-white text-sm">{new Date(game.created_at).toLocaleString()}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Created</p>
+                  <p className="text-gray-900 dark:text-white text-sm">{new Date(game.created_at).toLocaleString()}</p>
                 </div>
               </div>
             )}
@@ -498,8 +498,8 @@ export default function GameDetailPage() {
 
           {/* Stats Card */}
           <div className="space-y-6">
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-              <h2 className="text-lg font-semibold text-white mb-4">Statistics</h2>
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Statistics</h2>
               <div className="space-y-4">
                 <StatItem label="Total Plays" value={game.total_plays} />
                 <StatItem label="Total Wins" value={game.total_wins} />
@@ -515,16 +515,16 @@ export default function GameDetailPage() {
 
             {/* Recent sessions mini-list on overview */}
             {sessions.length > 0 && (
-              <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-                <h2 className="text-sm font-semibold text-white mb-3">Recent Plays</h2>
+              <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Recent Plays</h2>
                 <div className="space-y-2">
                   {sessions.slice(0, 5).map((s) => (
-                    <div key={s.id} className="flex items-center justify-between py-1.5 border-b border-gray-800/50 last:border-0">
+                    <div key={s.id} className="flex items-center justify-between py-1.5 border-b border-gray-200/50 dark:border-gray-800/50 last:border-0">
                       <div className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full ${s.state === 'WIN' ? 'bg-green-400' : s.state === 'GAME_OVER' ? 'bg-red-400' : 'bg-blue-400'}`} />
-                        <span className="text-xs text-white">{s.player}</span>
+                        <span className="text-xs text-gray-900 dark:text-white">{s.player}</span>
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-gray-400">
+                      <div className="flex items-center gap-3 text-[11px] text-gray-500 dark:text-gray-400">
                         <span>Lv {s.current_level}</span>
                         <span>{s.total_actions} moves</span>
                         <span className="font-mono">{formatTime(s.total_time)}</span>
@@ -539,8 +539,8 @@ export default function GameDetailPage() {
       )}
 
       {activeTab === 'analytics' && (
-        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Analytics (Last 30 Days)</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Analytics (Last 30 Days)</h2>
           {analytics ? (
             <div>
               <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -555,20 +555,20 @@ export default function GameDetailPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-800">
-                        <th className="text-left py-2 text-gray-400 font-medium">Date</th>
-                        <th className="text-right py-2 text-gray-400 font-medium">Plays</th>
-                        <th className="text-right py-2 text-gray-400 font-medium">Wins</th>
-                        <th className="text-right py-2 text-gray-400 font-medium">Avg Time</th>
+                      <tr className="border-b border-gray-200 dark:border-gray-800">
+                        <th className="text-left py-2 text-gray-500 dark:text-gray-400 font-medium">Date</th>
+                        <th className="text-right py-2 text-gray-500 dark:text-gray-400 font-medium">Plays</th>
+                        <th className="text-right py-2 text-gray-500 dark:text-gray-400 font-medium">Wins</th>
+                        <th className="text-right py-2 text-gray-500 dark:text-gray-400 font-medium">Avg Time</th>
                       </tr>
                     </thead>
                     <tbody>
                       {analytics.daily_stats.map((day) => (
-                        <tr key={day.date} className="border-b border-gray-800/50">
-                          <td className="py-2 text-white">{day.date}</td>
-                          <td className="py-2 text-right text-gray-300">{day.plays}</td>
-                          <td className="py-2 text-right text-gray-300">{day.wins}</td>
-                          <td className="py-2 text-right text-gray-300">{day.avg_time ? formatTime(day.avg_time) : '-'}</td>
+                        <tr key={day.date} className="border-b border-gray-200/50 dark:border-gray-800/50">
+                          <td className="py-2 text-gray-900 dark:text-white">{day.date}</td>
+                          <td className="py-2 text-right text-gray-700 dark:text-gray-300">{day.plays}</td>
+                          <td className="py-2 text-right text-gray-700 dark:text-gray-300">{day.wins}</td>
+                          <td className="py-2 text-right text-gray-700 dark:text-gray-300">{day.avg_time ? formatTime(day.avg_time) : '-'}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -577,24 +577,24 @@ export default function GameDetailPage() {
               )}
             </div>
           ) : (
-            <p className="text-gray-400 text-sm">No analytics data available yet</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">No analytics data available yet</p>
           )}
         </div>
       )}
 
       {activeTab === 'source' && (
-        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Source Code</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Source Code</h2>
           {source ? (
             <div>
-              <h3 className="text-sm font-medium text-gray-300 mb-2">{game.game_code}.py</h3>
-              <pre className="bg-gray-950 rounded-lg p-4 overflow-x-auto text-sm text-gray-300 font-mono leading-relaxed border border-gray-800 max-h-[600px] overflow-y-auto">
+              <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{game.game_code}.py</h3>
+              <pre className="bg-gray-50 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto text-sm text-gray-700 dark:text-gray-300 font-mono leading-relaxed border border-gray-200 dark:border-gray-800 max-h-[600px] overflow-y-auto">
                 {source.source_code || 'No source code available'}
               </pre>
               {source.metadata && (
                 <>
-                  <h3 className="text-sm font-medium text-gray-300 mt-6 mb-2">metadata.json</h3>
-                  <pre className="bg-gray-950 rounded-lg p-4 overflow-x-auto text-sm text-gray-300 font-mono border border-gray-800">
+                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-6 mb-2">metadata.json</h3>
+                  <pre className="bg-gray-50 dark:bg-gray-950 rounded-lg p-4 overflow-x-auto text-sm text-gray-700 dark:text-gray-300 font-mono border border-gray-200 dark:border-gray-800">
                     {JSON.stringify(source.metadata, null, 2)}
                   </pre>
                 </>
@@ -629,8 +629,8 @@ export default function GameDetailPage() {
       )}
 
       {activeTab === 'videos' && (
-        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Gameplay Recordings</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Gameplay Recordings</h2>
           {videosLoading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
@@ -638,7 +638,7 @@ export default function GameDetailPage() {
           ) : videos.length > 0 ? (
             <div className="space-y-3">
               {videos.map((v: any) => (
-                <div key={v.filename} className="flex items-center gap-4 p-4 bg-gray-800/50 rounded-lg">
+                <div key={v.filename} className="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                   {/* Play preview */}
                   <div className="w-48 h-28 bg-black rounded-lg overflow-hidden shrink-0">
                     <video
@@ -650,10 +650,10 @@ export default function GameDetailPage() {
                   </div>
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-white truncate">{v.filename}</p>
-                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-400">
-                      <span>Player: <span className="text-gray-300">{v.player}</span></span>
-                      <span>Size: <span className="text-gray-300">{(v.size / (1024 * 1024)).toFixed(1)} MB</span></span>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{v.filename}</p>
+                    <div className="flex items-center gap-4 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <span>Player: <span className="text-gray-700 dark:text-gray-300">{v.player}</span></span>
+                      <span>Size: <span className="text-gray-700 dark:text-gray-300">{(v.size / (1024 * 1024)).toFixed(1)} MB</span></span>
                       <span>{new Date(v.created_at).toLocaleString()}</span>
                     </div>
                   </div>
@@ -662,7 +662,7 @@ export default function GameDetailPage() {
                     <a
                       href={`/api/games/${gameId}/videos/${v.filename}`}
                       download={v.filename}
-                      className="p-2 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-blue-400 transition-colors"
+                      className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-blue-400 transition-colors"
                       title="Download"
                     >
                       <Download size={16} />
@@ -675,7 +675,7 @@ export default function GameDetailPage() {
                           setVideos(prev => prev.filter(x => x.filename !== v.filename));
                         } catch (err) { console.error(err); }
                       }}
-                      className="p-2 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-red-400 transition-colors"
+                      className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 hover:text-red-400 transition-colors"
                       title="Delete"
                     >
                       <Trash2 size={16} />
@@ -685,7 +685,7 @@ export default function GameDetailPage() {
               ))}
             </div>
           ) : (
-            <p className="text-gray-400 text-sm">No recordings yet. Players can record gameplay from the play page.</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">No recordings yet. Players can record gameplay from the play page.</p>
           )}
         </div>
       )}
@@ -695,18 +695,18 @@ export default function GameDetailPage() {
 
 function StatItem({ label, value }: any) {
   return (
-    <div className="flex justify-between items-center py-2 border-b border-gray-800 last:border-0">
-      <span className="text-sm text-gray-400">{label}</span>
-      <span className="text-sm font-medium text-white">{value}</span>
+    <div className="flex justify-between items-center py-2 border-b border-gray-200 dark:border-gray-800 last:border-0">
+      <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>
+      <span className="text-sm font-medium text-gray-900 dark:text-white">{value}</span>
     </div>
   );
 }
 
 function MiniStat({ label, value }: any) {
   return (
-    <div className="bg-gray-800/50 rounded-lg p-3 text-center">
-      <p className="text-lg font-bold text-white">{value}</p>
-      <p className="text-xs text-gray-400">{label}</p>
+    <div className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3 text-center">
+      <p className="text-lg font-bold text-gray-900 dark:text-white">{value}</p>
+      <p className="text-xs text-gray-500 dark:text-gray-400">{label}</p>
     </div>
   );
 }
@@ -756,17 +756,17 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
 
   if (sessions.length === 0) {
     return (
-      <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">Sessions</h2>
-        <p className="text-gray-400 text-sm">No sessions yet</p>
+      <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Sessions</h2>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">No sessions yet</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
+    <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-white">Sessions ({sessions.length})</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Sessions ({sessions.length})</h2>
         <div className="flex items-center gap-2">
           {sessions.length > 0 && (
             <button
@@ -780,14 +780,14 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
       </div>
 
       {/* Export bar */}
-      <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-gray-800/40 rounded-lg border border-gray-700/50">
-        <Download size={14} className="text-gray-400" />
-        <span className="text-xs text-gray-400 mr-1">Export:</span>
+      <div className="flex flex-wrap items-center gap-2 mb-4 p-3 bg-gray-50 dark:bg-gray-800/40 rounded-lg border border-gray-200/50 dark:border-gray-700/50">
+        <Download size={14} className="text-gray-500 dark:text-gray-400" />
+        <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Export:</span>
 
         <select
           value={exportFilter}
           onChange={(e) => setExportFilter(e.target.value)}
-          className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs text-white focus:outline-none focus:border-blue-500/50"
+          className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500/50"
         >
           <option value="all">All Time</option>
           <option value="today">Today</option>
@@ -800,7 +800,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
             type="date"
             value={exportDate}
             onChange={(e) => setExportDate(e.target.value)}
-            className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs text-white focus:outline-none focus:border-blue-500/50"
+            className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500/50"
           />
         )}
 
@@ -810,14 +810,14 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
               type="date"
               value={exportDateFrom}
               onChange={(e) => setExportDateFrom(e.target.value)}
-              className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs text-white focus:outline-none focus:border-blue-500/50"
+              className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500/50"
             />
             <span className="text-xs text-gray-500">to</span>
             <input
               type="date"
               value={exportDateTo}
               onChange={(e) => setExportDateTo(e.target.value)}
-              className="px-2 py-1 bg-gray-800 border border-gray-700 rounded text-xs text-white focus:outline-none focus:border-blue-500/50"
+              className="px-2 py-1 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded text-xs text-gray-900 dark:text-white focus:outline-none focus:border-blue-500/50"
             />
           </>
         )}
@@ -825,7 +825,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
         <button
           onClick={handleExport}
           disabled={exporting || (exportFilter === 'date' && !exportDate) || (exportFilter === 'range' && (!exportDateFrom || !exportDateTo))}
-          className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded text-xs font-medium transition-colors"
+          className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-200 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500 text-white rounded text-xs font-medium transition-colors"
         >
           {exporting ? (
             <><div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white" /> Exporting...</>
@@ -856,7 +856,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
               <button
                 onClick={() => toggle(s.id)}
                 className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors ${
-                  isOpen ? 'bg-gray-800' : 'bg-gray-800/40 hover:bg-gray-800/70'
+                  isOpen ? 'bg-gray-100 dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-800/40 hover:bg-gray-100 dark:hover:bg-gray-800/70'
                 }`}
               >
                 {/* Expand icon */}
@@ -867,7 +867,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                 {/* Player */}
                 <div className="flex items-center gap-2 min-w-[120px]">
                   <User size={14} className="text-gray-500" />
-                  <span className="text-white text-sm font-medium truncate">{s.player}</span>
+                  <span className="text-gray-900 dark:text-white text-sm font-medium truncate">{s.player}</span>
                 </div>
 
                 {/* State badge */}
@@ -880,7 +880,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                 </span>
 
                 {/* Quick stats */}
-                <div className="flex items-center gap-4 ml-auto text-xs text-gray-400">
+                <div className="flex items-center gap-4 ml-auto text-xs text-gray-500 dark:text-gray-400">
                   <span className="flex items-center gap-1 font-mono">
                     <Layers size={12} className="text-blue-400" />
                     Lv {s.state === 'WIN' ? s.current_level : s.current_level + 1}
@@ -897,7 +897,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                     <Heart size={12} className="text-pink-400" />
                     {s.score != null ? s.score : '--'}
                   </span>
-                  <span className="text-gray-600 hidden sm:inline">
+                  <span className="text-gray-400 dark:text-gray-600 hidden sm:inline">
                     {new Date(s.started_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
@@ -912,28 +912,28 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                <div className="bg-gray-800/60 border-t border-gray-700/50 px-6 py-4">
+                <div className="bg-gray-50 dark:bg-gray-800/60 border-t border-gray-200/50 dark:border-gray-700/50 px-6 py-4">
                   {/* Summary stats */}
                   <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-4">
-                    <div className="bg-gray-900/60 rounded-lg p-3">
+                    <div className="bg-white/60 dark:bg-gray-900/60 rounded-lg p-3">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Total Time</p>
-                      <p className="text-white font-mono text-sm font-bold">{formatTime(s.total_time)}</p>
+                      <p className="text-gray-900 dark:text-white font-mono text-sm font-bold">{formatTime(s.total_time)}</p>
                     </div>
-                    <div className="bg-gray-900/60 rounded-lg p-3">
+                    <div className="bg-white/60 dark:bg-gray-900/60 rounded-lg p-3">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Actions</p>
-                      <p className="text-white font-mono text-sm font-bold">{s.total_actions}</p>
+                      <p className="text-gray-900 dark:text-white font-mono text-sm font-bold">{s.total_actions}</p>
                     </div>
-                    <div className="bg-gray-900/60 rounded-lg p-3">
+                    <div className="bg-white/60 dark:bg-gray-900/60 rounded-lg p-3">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Level Reached</p>
-                      <p className="text-white font-mono text-sm font-bold">Lv {s.state === 'WIN' ? s.current_level : s.current_level + 1}</p>
+                      <p className="text-gray-900 dark:text-white font-mono text-sm font-bold">Lv {s.state === 'WIN' ? s.current_level : s.current_level + 1}</p>
                     </div>
-                    <div className="bg-gray-900/60 rounded-lg p-3">
+                    <div className="bg-white/60 dark:bg-gray-900/60 rounded-lg p-3">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Game Overs</p>
                       <p className="text-red-400 font-mono text-sm font-bold">{s.game_overs ?? 0}</p>
                     </div>
-                    <div className="bg-gray-900/60 rounded-lg p-3">
+                    <div className="bg-white/60 dark:bg-gray-900/60 rounded-lg p-3">
                       <p className="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Score / Lives</p>
-                      <p className="text-white font-mono text-sm font-bold">{s.score != null ? s.score : '--'}</p>
+                      <p className="text-gray-900 dark:text-white font-mono text-sm font-bold">{s.score != null ? s.score : '--'}</p>
                     </div>
                   </div>
 
@@ -944,7 +944,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                       <div className="overflow-x-auto">
                         <table className="w-full text-xs">
                           <thead>
-                            <tr className="border-b border-gray-700/50">
+                            <tr className="border-b border-gray-300/50 dark:border-gray-700/50">
                               <th className="text-left py-2 px-3 text-gray-500 font-medium">Level</th>
                               <th className="text-right py-2 px-3 text-gray-500 font-medium">Time</th>
                               <th className="text-right py-2 px-3 text-gray-500 font-medium">Moves</th>
@@ -956,22 +956,22 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                           </thead>
                           <tbody>
                             {levelStats.map((ls, i) => (
-                              <tr key={i} className="border-b border-gray-800/50 last:border-0">
+                              <tr key={i} className="border-b border-gray-200/50 dark:border-gray-800/50 last:border-0">
                                 <td className="py-2 px-3">
-                                  <span className={`font-mono font-medium ${ls.completed ? 'text-green-400' : 'text-gray-300'}`}>
+                                  <span className={`font-mono font-medium ${ls.completed ? 'text-green-400' : 'text-gray-700 dark:text-gray-300'}`}>
                                     Lv {ls.level + 1}
                                   </span>
                                 </td>
-                                <td className="py-2 px-3 text-right font-mono text-gray-300">{formatTime(ls.time)}</td>
-                                <td className="py-2 px-3 text-right font-mono text-gray-300">{ls.actions}</td>
+                                <td className="py-2 px-3 text-right font-mono text-gray-700 dark:text-gray-300">{formatTime(ls.time)}</td>
+                                <td className="py-2 px-3 text-right font-mono text-gray-700 dark:text-gray-300">{ls.actions}</td>
                                 <td className="py-2 px-3 text-right font-mono text-red-400">{ls.game_overs || 0}</td>
-                                <td className="py-2 px-3 text-right font-mono text-gray-300">{ls.lives_used || 0}</td>
-                                <td className="py-2 px-3 text-right font-mono text-gray-300">{ls.resets || 0}</td>
+                                <td className="py-2 px-3 text-right font-mono text-gray-700 dark:text-gray-300">{ls.lives_used || 0}</td>
+                                <td className="py-2 px-3 text-right font-mono text-gray-700 dark:text-gray-300">{ls.resets || 0}</td>
                                 <td className="py-2 px-3 text-right">
                                   {ls.completed ? (
                                     <span className="px-1.5 py-0.5 rounded bg-green-500/15 text-green-400 text-[10px]">Completed</span>
                                   ) : (
-                                    <span className="px-1.5 py-0.5 rounded bg-gray-700 text-gray-400 text-[10px]">Incomplete</span>
+                                    <span className="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-[10px]">Incomplete</span>
                                   )}
                                 </td>
                               </tr>
@@ -985,7 +985,7 @@ function SessionsList({ sessions, formatTime, gameId, onClear }: any) {
                   )}
 
                    {/* Timestamps */}
-                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500">
+                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-200/50 dark:border-gray-700/50 text-[11px] text-gray-500">
                     <span>Started: {new Date(s.started_at).toLocaleString()}</span>
                     {s.ended_at && <span>Ended: {new Date(s.ended_at).toLocaleString()}</span>}
                   </div>

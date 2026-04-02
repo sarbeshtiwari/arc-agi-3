@@ -50,7 +50,7 @@ export default function ConfirmModal({
           transition={{ duration: 0.15 }}
         >
           <motion.div
-            className="bg-gray-900 border border-gray-800 rounded-xl w-full max-w-sm shadow-2xl animate-in"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl w-full max-w-sm shadow-2xl animate-in"
             onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -63,14 +63,14 @@ export default function ConfirmModal({
             <Icon size={20} className={v.iconColor} />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-white font-semibold text-base">{title}</h3>
+            <h3 className="text-gray-900 dark:text-white font-semibold text-base">{title}</h3>
             {message && (
-              <p className="text-gray-400 text-sm mt-1 leading-relaxed">{message}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1 leading-relaxed">{message}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-gray-500 hover:text-gray-300 hover:bg-gray-800 transition-colors shrink-0"
+            className="p-1 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors shrink-0"
           >
             <X size={16} />
           </button>
@@ -81,7 +81,7 @@ export default function ConfirmModal({
           <button
             onClick={onClose}
             disabled={loading}
-            className="flex-1 px-4 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 text-gray-300 rounded-lg text-sm font-medium transition-colors"
+            className="flex-1 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
           >
             {cancelText}
           </button>

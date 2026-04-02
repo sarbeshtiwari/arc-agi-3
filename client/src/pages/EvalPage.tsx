@@ -47,8 +47,8 @@ export default function EvalPage() {
             <FlaskConical className="h-4.5 w-4.5 text-blue-400" />
           </div>
           <div>
-            <h1 className="text-lg font-bold text-white">Eval Runner</h1>
-            <p className="text-xs text-gray-500">Run models against games — all models play in parallel</p>
+            <h1 className="text-lg font-bold text-gray-900 dark:text-white">Eval Runner</h1>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Run models against games — all models play in parallel</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -57,10 +57,10 @@ export default function EvalPage() {
             status === 'connecting' ? 'border-amber-700 bg-amber-950/30 text-amber-400 animate-pulse' :
             status === 'error' ? 'border-red-700 bg-red-950/30 text-red-400' :
             status === 'completed' ? 'border-blue-700 bg-blue-950/30 text-blue-400' :
-            'border-gray-700 bg-gray-900 text-gray-500'
+            'border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-400 dark:text-gray-500'
           }`}>{status}</span>
           {(status === 'completed' || status === 'cancelled' || status === 'error') && (
-            <button onClick={reset} className="text-[10px] font-mono text-gray-400 hover:text-white px-2 py-1 border border-gray-700 rounded hover:border-gray-500 transition-colors">Reset</button>
+            <button onClick={reset} className="text-[10px] font-mono text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white px-2 py-1 border border-gray-300 dark:border-gray-700 rounded hover:border-gray-400 dark:hover:border-gray-500 transition-colors">Reset</button>
           )}
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function EvalPage() {
       {error && (
         <div className="mb-4 flex items-center gap-2 px-4 py-2.5 bg-red-500/10 border border-red-500/30 rounded-lg">
           <AlertTriangle className="h-4 w-4 text-red-400 shrink-0" />
-          <span className="text-sm text-red-300 font-mono">{error}</span>
+          <span className="text-sm text-red-400 dark:text-red-300 font-mono">{error}</span>
         </div>
       )}
 
@@ -83,12 +83,12 @@ export default function EvalPage() {
         {/* Center: Game Grids — one per active model */}
         <div className="flex-1 min-w-0 space-y-3">
           {isRunning && currentGameId && (
-            <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 border border-gray-800 rounded-lg">
+            <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg">
               <Loader2 className="h-3.5 w-3.5 text-blue-400 animate-spin" />
-              <span className="text-[11px] font-mono text-gray-300">Game:</span>
-              <span className="text-[11px] font-mono text-emerald-300 font-semibold">{currentGameId}</span>
-              <span className="text-gray-700">|</span>
-              <span className="text-[11px] font-mono text-gray-400">{activeModels.length} models playing</span>
+              <span className="text-[11px] font-mono text-gray-700 dark:text-gray-300">Game:</span>
+              <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-300 font-semibold">{currentGameId}</span>
+              <span className="text-gray-300 dark:text-gray-700">|</span>
+              <span className="text-[11px] font-mono text-gray-500 dark:text-gray-400">{activeModels.length} models playing</span>
             </div>
           )}
 
@@ -107,15 +107,15 @@ export default function EvalPage() {
                   <div
                     key={ms.modelId}
                     onClick={() => setSelectedModel(ms.modelId)}
-                    className={`bg-gray-900 rounded-xl border p-3 cursor-pointer transition-all ${
-                      isSelected ? 'border-blue-500/50 ring-1 ring-blue-500/20' : 'border-gray-800 hover:border-gray-700'
+                    className={`bg-white dark:bg-gray-900 rounded-xl border p-3 cursor-pointer transition-all ${
+                      isSelected ? 'border-blue-500/50 ring-1 ring-blue-500/20' : 'border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700'
                     }`}
                   >
                     {/* Model header */}
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: color }} />
-                        <span className="text-xs font-bold text-white">{ms.modelId}</span>
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">{ms.modelId}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className={`text-[9px] px-1.5 py-0.5 rounded font-mono ${
@@ -137,11 +137,11 @@ export default function EvalPage() {
                     />
 
                     {/* Stats footer */}
-                    <div className="flex items-center justify-between mt-2 text-[9px] font-mono text-gray-500">
+                    <div className="flex items-center justify-between mt-2 text-[9px] font-mono text-gray-400 dark:text-gray-500">
                       <span>Run {ms.runIndex + 1} | Lv {ms.frame?.level ?? 0}</span>
                       <span>{turnCount} turns</span>
                       {ms.lastAction && (
-                        <span className="text-gray-400">{ms.lastAction}</span>
+                        <span className="text-gray-500 dark:text-gray-400">{ms.lastAction}</span>
                       )}
                     </div>
                   </div>
@@ -149,9 +149,9 @@ export default function EvalPage() {
               })}
             </div>
           ) : (
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-12 text-center">
-              <FlaskConical className="mx-auto h-10 w-10 text-gray-700 mb-3" />
-              <p className="text-gray-500 text-sm">Select games and models, then click Start</p>
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-12 text-center">
+              <FlaskConical className="mx-auto h-10 w-10 text-gray-300 dark:text-gray-700 mb-3" />
+              <p className="text-gray-400 dark:text-gray-500 text-sm">Select games and models, then click Start</p>
             </div>
           )}
 
@@ -163,10 +163,10 @@ export default function EvalPage() {
         <div className="w-80 shrink-0 space-y-3">
           {displayModel ? (
             <>
-              <div className="flex items-center gap-2 px-3 py-2 bg-gray-900 border border-gray-800 rounded-lg">
+              <div className="flex items-center gap-2 px-3 py-2 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg">
                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: MODEL_COLORS[displayModel.modelId] || '#6B7280' }} />
-                <span className="text-[11px] font-mono text-white font-bold">{displayModel.modelId}</span>
-                <span className="text-[9px] text-gray-500">click a grid to switch</span>
+                <span className="text-[11px] font-mono text-gray-900 dark:text-white font-bold">{displayModel.modelId}</span>
+                <span className="text-[9px] text-gray-400 dark:text-gray-500">click a grid to switch</span>
               </div>
               <EvalReasoningPanel timeline={displayModel.timeline} />
               <EvalNotepad
@@ -177,8 +177,8 @@ export default function EvalPage() {
               />
             </>
           ) : (
-            <div className="bg-gray-900 rounded-xl border border-gray-800 p-8 text-center">
-              <p className="text-gray-600 text-xs">Reasoning panel appears when models are running</p>
+            <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-8 text-center">
+              <p className="text-gray-400 dark:text-gray-600 text-xs">Reasoning panel appears when models are running</p>
             </div>
           )}
         </div>

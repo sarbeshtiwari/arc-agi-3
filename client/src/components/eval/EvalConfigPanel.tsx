@@ -124,11 +124,11 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
   };
 
   return (
-    <div className="border border-gray-800 bg-gray-900 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-800">
+      <div className="flex items-center gap-2 px-3 py-2.5 border-b border-gray-200 dark:border-gray-800">
         <Settings className="h-3.5 w-3.5 text-blue-400" />
-        <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-300">
+        <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
           Eval Config
         </span>
       </div>
@@ -142,7 +142,7 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
           >
             <div className="flex items-center gap-1.5">
               <Gamepad2 className="h-3 w-3 text-emerald-400" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 Games
               </span>
               {selectedGames.size > 0 && (
@@ -152,18 +152,18 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               )}
             </div>
             {gamesExpanded ? (
-              <ChevronUp className="h-3 w-3 text-gray-600" />
+              <ChevronUp className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             ) : (
-              <ChevronDown className="h-3 w-3 text-gray-600" />
+              <ChevronDown className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             )}
           </button>
 
           {gamesExpanded && (
-            <div className="max-h-40 overflow-y-auto space-y-0.5 border border-gray-800 rounded bg-gray-950 p-1.5">
+            <div className="max-h-40 overflow-y-auto space-y-0.5 border border-gray-200 dark:border-gray-800 rounded bg-gray-50 dark:bg-gray-950 p-1.5">
               {gamesLoading ? (
-                <div className="text-[10px] text-gray-600 font-mono py-2 text-center">Loading games...</div>
+                <div className="text-[10px] text-gray-400 dark:text-gray-600 font-mono py-2 text-center">Loading games...</div>
               ) : games.length === 0 ? (
-                <div className="text-[10px] text-gray-600 font-mono py-2 text-center">No games found</div>
+                <div className="text-[10px] text-gray-400 dark:text-gray-600 font-mono py-2 text-center">No games found</div>
               ) : (
                 games.map((g) => (
                   <label
@@ -171,17 +171,17 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
                     className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer transition-colors text-[11px] font-mono ${
                       selectedGames.has(g.game_id)
                         ? 'bg-emerald-500/10 text-emerald-300'
-                        : 'text-gray-400 hover:bg-gray-800'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={selectedGames.has(g.game_id)}
                       onChange={() => toggleGame(g.game_id)}
-                      className="h-3 w-3 rounded border-gray-600 bg-gray-800 text-emerald-500 focus:ring-0 focus:ring-offset-0"
+                      className="h-3 w-3 rounded border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-emerald-500 focus:ring-0 focus:ring-offset-0"
                     />
                     <span className="truncate flex-1">{g.name}</span>
-                    <span className="text-[9px] text-gray-600 shrink-0">{g.game_id}</span>
+                    <span className="text-[9px] text-gray-400 dark:text-gray-600 shrink-0">{g.game_id}</span>
                   </label>
                 ))
               )}
@@ -197,7 +197,7 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
           >
             <div className="flex items-center gap-1.5">
               <Cpu className="h-3 w-3 text-purple-400" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-500 dark:text-gray-400">
                 Models
               </span>
               {selectedModels.size > 0 && (
@@ -207,18 +207,18 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               )}
             </div>
             {modelsExpanded ? (
-              <ChevronUp className="h-3 w-3 text-gray-600" />
+              <ChevronUp className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             ) : (
-              <ChevronDown className="h-3 w-3 text-gray-600" />
+              <ChevronDown className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             )}
           </button>
 
           {modelsExpanded && (
-            <div className="max-h-36 overflow-y-auto space-y-0.5 border border-gray-800 rounded bg-gray-950 p-1.5">
+            <div className="max-h-36 overflow-y-auto space-y-0.5 border border-gray-200 dark:border-gray-800 rounded bg-gray-50 dark:bg-gray-950 p-1.5">
               {modelsLoading ? (
-                <div className="text-[10px] text-gray-600 font-mono py-2 text-center">Loading models...</div>
+                <div className="text-[10px] text-gray-400 dark:text-gray-600 font-mono py-2 text-center">Loading models...</div>
               ) : models.length === 0 ? (
-                <div className="text-[10px] text-gray-600 font-mono py-2 text-center">No models found</div>
+                <div className="text-[10px] text-gray-400 dark:text-gray-600 font-mono py-2 text-center">No models found</div>
               ) : (
                 models.map((m) => (
                   <label
@@ -226,14 +226,14 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
                     className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer transition-colors text-[11px] font-mono ${
                       selectedModels.has(m.id)
                         ? 'bg-purple-500/10 text-purple-300'
-                        : 'text-gray-400 hover:bg-gray-800'
+                        : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={selectedModels.has(m.id)}
                       onChange={() => toggleModel(m.id)}
-                      className="h-3 w-3 rounded border-gray-600 bg-gray-800 text-purple-500 focus:ring-0 focus:ring-offset-0"
+                      className="h-3 w-3 rounded border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-purple-500 focus:ring-0 focus:ring-offset-0"
                     />
                     <span className={`h-2 w-2 rounded-full shrink-0 ${MODEL_COLORS[m.color] || 'bg-gray-400'}`} />
                     <span className="truncate">{m.name}</span>
@@ -247,7 +247,7 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
         {/* Numeric Configs */}
         <div className="grid grid-cols-3 gap-2">
           <div className="space-y-1">
-            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-500">
+            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
               <Hash className="h-2.5 w-2.5" />
               Runs
             </label>
@@ -258,11 +258,11 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               value={runsPerGame}
               onChange={(e) => setRunsPerGame(Math.min(10, Math.max(1, Number(e.target.value))))}
               disabled={isRunning}
-              className="w-full bg-gray-950 border border-gray-700 text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
             />
           </div>
           <div className="space-y-1">
-            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-500">
+            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
               <Layers className="h-2.5 w-2.5" />
               Max Steps
             </label>
@@ -274,11 +274,11 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               value={maxSteps}
               onChange={(e) => setMaxSteps(Math.min(500, Math.max(50, Number(e.target.value))))}
               disabled={isRunning}
-              className="w-full bg-gray-950 border border-gray-700 text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
             />
           </div>
           <div className="space-y-1">
-            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-500">
+            <label className="flex items-center gap-1 text-[9px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
               <Brain className="h-2.5 w-2.5" />
               Context
             </label>
@@ -289,21 +289,21 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               value={contextWindow}
               onChange={(e) => setContextWindow(Math.min(20, Math.max(5, Number(e.target.value))))}
               disabled={isRunning}
-              className="w-full bg-gray-950 border border-gray-700 text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
             />
           </div>
         </div>
 
         {/* Reasoning Effort */}
         <div className="space-y-1">
-          <label className="text-[9px] font-mono uppercase tracking-wider text-gray-500">
+          <label className="text-[9px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
             Reasoning Effort
           </label>
           <select
             value={reasoningEffort}
             onChange={(e) => setReasoningEffort(e.target.value)}
             disabled={isRunning}
-            className="w-full bg-gray-950 border border-gray-700 text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
+            className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-xs font-mono px-2 py-1.5 rounded focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -318,15 +318,15 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
             className="flex items-center justify-between w-full text-left"
           >
             <div className="flex items-center gap-1">
-              <FileText className="h-2.5 w-2.5 text-gray-500" />
-              <span className="text-[9px] font-mono uppercase tracking-wider text-gray-500">
+              <FileText className="h-2.5 w-2.5 text-gray-400 dark:text-gray-500" />
+              <span className="text-[9px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-500">
                 System Prompt
               </span>
             </div>
             {promptExpanded ? (
-              <ChevronUp className="h-3 w-3 text-gray-600" />
+              <ChevronUp className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             ) : (
-              <ChevronDown className="h-3 w-3 text-gray-600" />
+              <ChevronDown className="h-3 w-3 text-gray-400 dark:text-gray-600" />
             )}
           </button>
           {promptExpanded && (
@@ -336,7 +336,7 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
               disabled={isRunning}
               placeholder="Enter system prompt (optional, uses playbook default if empty)..."
               rows={6}
-              className="w-full bg-gray-950 border border-gray-700 text-gray-200 text-[11px] font-mono px-2 py-1.5 rounded resize-y focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50 placeholder:text-gray-700"
+              className="w-full bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-700 text-gray-800 dark:text-gray-200 text-[11px] font-mono px-2 py-1.5 rounded resize-y focus:outline-none focus:border-blue-500/60 transition-colors disabled:opacity-50 placeholder:text-gray-400 dark:placeholder:text-gray-700"
             />
           )}
         </div>
@@ -348,7 +348,7 @@ export function EvalConfigPanel({ onStart, onCancel, isRunning }: EvalConfigPane
             disabled={!canStart}
             className="flex-1 flex items-center justify-center gap-2 py-2 text-[11px] font-mono font-semibold uppercase tracking-widest rounded transition-all
               bg-emerald-600 hover:bg-emerald-500 text-white
-              disabled:bg-gray-800 disabled:text-gray-600 disabled:cursor-not-allowed"
+              disabled:bg-gray-100 dark:disabled:bg-gray-800 disabled:text-gray-400 dark:disabled:text-gray-600 disabled:cursor-not-allowed"
           >
             <Play className="h-3.5 w-3.5" />
             Start Eval

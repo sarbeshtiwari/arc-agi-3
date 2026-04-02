@@ -37,8 +37,8 @@ export function EvalLogTerminal({ logs }: EvalLogTerminalProps) {
   const levelConfig: Record<string, { icon: typeof Info; color: string; timeColor: string }> = {
     info: {
       icon: Info,
-      color: 'text-gray-400',
-      timeColor: 'text-gray-600',
+      color: 'text-gray-500 dark:text-gray-400',
+      timeColor: 'text-gray-400 dark:text-gray-600',
     },
     warn: {
       icon: AlertTriangle,
@@ -53,16 +53,16 @@ export function EvalLogTerminal({ logs }: EvalLogTerminalProps) {
   };
 
   return (
-    <div className="border border-gray-800 bg-black rounded-lg overflow-hidden flex flex-col h-[280px]">
+    <div className="border border-gray-200 dark:border-gray-800 bg-white dark:bg-black rounded-lg overflow-hidden flex flex-col h-[280px]">
       {/* Header */}
-      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-800 bg-gray-950 shrink-0">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-950 shrink-0">
         <div className="flex items-center gap-2">
           <Terminal className="h-3.5 w-3.5 text-green-400" />
-          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-300">
+          <span className="text-[11px] font-mono font-semibold uppercase tracking-widest text-gray-700 dark:text-gray-300">
             Logs
           </span>
         </div>
-        <span className="text-[9px] font-mono text-gray-600">
+        <span className="text-[9px] font-mono text-gray-400 dark:text-gray-600">
           {logs.length} {logs.length > MAX_VISIBLE_LOGS ? `(showing ${MAX_VISIBLE_LOGS})` : ''} lines
         </span>
       </div>
@@ -74,7 +74,7 @@ export function EvalLogTerminal({ logs }: EvalLogTerminalProps) {
       >
         {visibleLogs.length === 0 ? (
           <div className="flex items-center justify-center h-full">
-            <span className="text-[10px] font-mono text-gray-700">
+            <span className="text-[10px] font-mono text-gray-400 dark:text-gray-700">
               No logs yet...
             </span>
           </div>
@@ -86,7 +86,7 @@ export function EvalLogTerminal({ logs }: EvalLogTerminalProps) {
             return (
               <div
                 key={i}
-                className="flex items-start gap-2 py-0.5 px-1 hover:bg-gray-900/50 rounded transition-colors group"
+                className="flex items-start gap-2 py-0.5 px-1 hover:bg-gray-50 dark:hover:bg-gray-900/50 rounded transition-colors group"
               >
                 <span className={`text-[10px] font-mono shrink-0 ${config.timeColor}`}>
                   {formatTime(log.timestamp)}

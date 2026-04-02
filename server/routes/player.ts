@@ -13,6 +13,8 @@ import logService from "../services/LogService.js";
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 const ENV_DIR = process.env.ENVIRONMENT_FILES_DIR || path.join(process.cwd(), "environment_files");
+const SESSION_IDLE_TIMEOUT_MS = parseInt(process.env.SESSION_IDLE_TIMEOUT_MS || String(15 * 60 * 1000), 10);
+const SESSION_SWEEP_INTERVAL_MS = parseInt(process.env.SESSION_SWEEP_INTERVAL_MS || String(60 * 1000), 10);
 
 // ──────────────────────────────────────────────
 // In-memory store for active game bridges
@@ -55,6 +57,58 @@ interface SessionTracker {
 }
 
 const sessionTrackers = new Map<string, SessionTracker>();
+const lastActivity = new Map<string, number>();
+
+// ──────────────────────────────────────────────
+// Idle session reaper
+// ──────────────────────────────────────────────
+
+function reapIdleSessions() {
+  const now = Date.now();
+  let reaped = 0;
+
+  for (const [sessionGuid, lastTime] of lastActivity) {
+    if (now - lastTime < SESSION_IDLE_TIMEOUT_MS) continue;
+
+    const meta = bridgeMeta.get(sessionGuid);
+    const gameId = meta?.gameId || "unknown";
+
+    // Kill bridge (Python subprocess)
+    const bridge = activeBridges.get(sessionGuid);
+    if (bridge) {
+      bridge.kill();
+      activeBridges.delete(sessionGuid);
+    }
+
+    // Clean temp dir (ephemeral sessions)
+    const tempDir = tempDirs.get(sessionGuid);
+    if (tempDir) {
+      try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
+      tempDirs.delete(sessionGuid);
+    }
+
+    // Clean all tracking maps
+    bridgeMeta.delete(sessionGuid);
+    sessionTrackers.delete(sessionGuid);
+    lastActivity.delete(sessionGuid);
+
+    reaped++;
+    logService.warn("game", `Reaped idle session: ${sessionGuid}`, {
+      session_guid: sessionGuid,
+      idle_ms: now - lastTime,
+      game_id: gameId,
+    });
+  }
+
+  if (reaped > 0) {
+    logService.info("game", `Session reaper: cleaned ${reaped} idle session(s)`, {
+      remaining_active: activeBridges.size,
+    });
+  }
+}
+
+const _reapInterval = setInterval(reapIdleSessions, SESSION_SWEEP_INTERVAL_MS);
+_reapInterval.unref();
 
 // ──────────────────────────────────────────────
 // Helpers
@@ -1250,5 +1304,39 @@ router.get(
     res.json(ARC_PALETTE);
   }),
 );
+
+export function getActiveBridgeStats() {
+  return {
+    active_bridges: activeBridges.size,
+    idle_timeout_ms: SESSION_IDLE_TIMEOUT_MS,
+    sweep_interval_ms: SESSION_SWEEP_INTERVAL_MS,
+  };
+}
+
+export function killAllBridges(): { killed: number } {
+  let killed = 0;
+  for (const [sessionGuid, bridge] of activeBridges) {
+    try {
+      bridge.kill();
+    } catch { /* already dead */ }
+    activeBridges.delete(sessionGuid);
+
+    const tempDir = tempDirs.get(sessionGuid);
+    if (tempDir) {
+      try { fs.rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
+      tempDirs.delete(sessionGuid);
+    }
+
+    bridgeMeta.delete(sessionGuid);
+    sessionTrackers.delete(sessionGuid);
+    lastActivity.delete(sessionGuid);
+    killed++;
+  }
+
+  if (killed > 0) {
+    logService.warn("game", `Force-killed all ${killed} active bridge(s) via admin action`);
+  }
+  return { killed };
+}
 
 export default router;

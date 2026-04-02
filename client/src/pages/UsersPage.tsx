@@ -13,6 +13,8 @@ const ALL_PAGES = [
   { id: 'upload', label: 'Upload' },
   { id: 'requests', label: 'Requests' },
   { id: 'users', label: 'Users' },
+  { id: 'eval', label: 'Eval Runner' },
+  { id: 'logs', label: 'Logs & System' },
 ];
 
 export default function UsersPage() {
@@ -149,8 +151,8 @@ export default function UsersPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Users</h1>
-          <p className="text-gray-400 mt-1">Manage admin panel users</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Users</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">Manage admin panel users</p>
         </div>
         <button
           onClick={() => setShowCreate(!showCreate)}
@@ -169,8 +171,8 @@ export default function UsersPage() {
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.2 }}
         >
-        <div className="bg-gray-900 rounded-xl border border-gray-800 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4">Create New User</h2>
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Create New User</h2>
           {error && (
             <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-lg p-3 mb-4">
               <AlertCircle size={14} className="text-red-400" />
@@ -180,31 +182,31 @@ export default function UsersPage() {
           <form onSubmit={handleCreate} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Username *</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Username *</label>
                 <input
                   value={newUser.username}
                   onChange={(e) => setNewUser(u => ({ ...u, username: e.target.value }))}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Password *</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Password *</label>
                 <input
                   type="password"
                   value={newUser.password}
                   onChange={(e) => setNewUser(u => ({ ...u, password: e.target.value }))}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Email</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Email</label>
                 <input
                   type="email"
                   value={newUser.email}
                   onChange={(e) => setNewUser(u => ({ ...u, email: e.target.value }))}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                 />
               </div>
               <div className="flex items-end">
@@ -213,9 +215,9 @@ export default function UsersPage() {
                     type="checkbox"
                     checked={newUser.is_admin}
                     onChange={(e) => setNewUser(u => ({ ...u, is_admin: e.target.checked }))}
-                    className="rounded border-gray-600"
+                    className="rounded border-gray-300 dark:border-gray-600"
                   />
-                  <span className="text-sm text-gray-300">Admin privileges</span>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">Admin privileges</span>
                 </label>
               </div>
             </div>
@@ -223,7 +225,7 @@ export default function UsersPage() {
             {/* Page Access (only show when not admin) */}
             {!newUser.is_admin && (
               <div>
-                <label className="block text-sm text-gray-400 mb-2">Page Access</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-2">Page Access</label>
                 <div className="flex flex-wrap gap-2">
                   {ALL_PAGES.map((page) => (
                     <button
@@ -233,7 +235,7 @@ export default function UsersPage() {
                       className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                         newUser.allowed_pages.includes(page.id)
                           ? 'bg-blue-500/20 border-blue-500/40 text-blue-400'
-                          : 'bg-gray-800 border-gray-700 text-gray-400 hover:border-gray-600'
+                          : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600'
                       }`}
                     >
                       {page.label}
@@ -256,7 +258,7 @@ export default function UsersPage() {
               <button
                 type="button"
                 onClick={() => { setShowCreate(false); setError(''); }}
-                className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm"
+                className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm"
               >
                 Cancel
               </button>
@@ -273,36 +275,36 @@ export default function UsersPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
       ) : (
-        <div className="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-800 bg-gray-800/50">
-                <th className="text-left px-6 py-3 text-gray-400 font-medium">User</th>
-                <th className="text-left px-6 py-3 text-gray-400 font-medium">Email</th>
-                <th className="text-center px-6 py-3 text-gray-400 font-medium">Role</th>
-                <th className="text-left px-6 py-3 text-gray-400 font-medium">Page Access</th>
-                <th className="text-center px-6 py-3 text-gray-400 font-medium">Status</th>
-                <th className="text-right px-6 py-3 text-gray-400 font-medium">Actions</th>
+              <tr className="border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-800/50">
+                <th className="text-left px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">User</th>
+                <th className="text-left px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">Email</th>
+                <th className="text-center px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">Role</th>
+                <th className="text-left px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">Page Access</th>
+                <th className="text-center px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">Status</th>
+                <th className="text-right px-6 py-3 text-gray-500 dark:text-gray-400 font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                <tr key={u.id} className="border-b border-gray-200/50 dark:border-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-800/30">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-blue-600/30 flex items-center justify-center text-blue-400 text-sm font-bold">
                         {u.username[0].toUpperCase()}
                       </div>
-                      <span className="text-white font-medium">{u.username}</span>
+                      <span className="text-gray-900 dark:text-white font-medium">{u.username}</span>
                       {u.id === currentUser?.id && (
-                        <span className="text-xs text-gray-500">(you)</span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">(you)</span>
                       )}
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-gray-400">{u.email || '-'}</td>
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">{u.email || '-'}</td>
                   <td className="px-6 py-4 text-center">
                     <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      u.is_admin ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-700 text-gray-300'
+                      u.is_admin ? 'bg-purple-500/20 text-purple-400' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
                     }`}>
                       {u.is_admin ? 'Admin' : 'User'}
                     </span>
@@ -317,7 +319,7 @@ export default function UsersPage() {
                             className={`px-2 py-0.5 rounded text-[11px] font-medium border transition-colors ${
                               editPages.includes(page.id)
                                 ? 'bg-blue-500/20 border-blue-500/40 text-blue-400'
-                                : 'bg-gray-800 border-gray-700 text-gray-500'
+                                : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400 dark:text-gray-500'
                             }`}
                           >
                             {page.label}
@@ -331,7 +333,7 @@ export default function UsersPage() {
                         </button>
                         <button
                           onClick={() => setEditingId(null)}
-                          className="px-2 py-0.5 rounded text-[11px] font-medium bg-gray-700 text-gray-300"
+                          className="px-2 py-0.5 rounded text-[11px] font-medium bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
                         >
                           Cancel
                         </button>
@@ -342,7 +344,7 @@ export default function UsersPage() {
                           <span className="text-[11px] text-purple-400">All pages</span>
                         ) : (u.allowed_pages && u.allowed_pages.length > 0) ? (
                           u.allowed_pages.map((p) => (
-                            <span key={p} className="px-1.5 py-0.5 rounded bg-gray-800 text-[11px] text-gray-400">{p}</span>
+                            <span key={p} className="px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-[11px] text-gray-500 dark:text-gray-400">{p}</span>
                           ))
                         ) : (
                           <span className="text-[11px] text-red-400">No access</span>
@@ -350,7 +352,7 @@ export default function UsersPage() {
                         {!u.is_admin && (
                           <button
                             onClick={() => startEditPages(u)}
-                            className="p-0.5 rounded hover:bg-gray-700 text-gray-500 hover:text-blue-400 ml-1"
+                            className="p-0.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 dark:text-gray-500 hover:text-blue-400 ml-1"
                             title="Edit page access"
                           >
                             <Edit size={12} />
@@ -375,7 +377,7 @@ export default function UsersPage() {
                         {currentUser?.username === PROTECTED_USERNAME && (
                           <button
                             onClick={() => setShowPasswordChange(true)}
-                            className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-blue-400"
+                            className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-blue-400"
                             title="Change password (requires secret code)"
                           >
                             <Key size={16} />
@@ -394,7 +396,7 @@ export default function UsersPage() {
                             confirmText: u.is_admin ? 'Remove Admin' : 'Make Admin',
                             onConfirm: () => { closeConfirm(); handleToggleAdmin(u.id, u.is_admin); },
                           })}
-                          className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-purple-400"
+                          className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-purple-400"
                           title={u.is_admin ? 'Remove admin' : 'Make admin'}
                         >
                           {u.is_admin ? <ShieldOff size={16} /> : <Shield size={16} />}
@@ -409,7 +411,7 @@ export default function UsersPage() {
                             confirmText: u.is_active ? 'Deactivate' : 'Activate',
                             onConfirm: () => { closeConfirm(); handleToggleActive(u.id, u.is_active); },
                           })}
-                          className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-yellow-400"
+                          className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-yellow-400"
                           title={u.is_active ? 'Deactivate' : 'Activate'}
                         >
                           {u.is_active ? <UserX size={16} /> : <UserCheck size={16} />}
@@ -423,7 +425,7 @@ export default function UsersPage() {
                               confirmText: 'Delete User',
                               onConfirm: () => { closeConfirm(); handleDelete(u.id, u.username); },
                             })}
-                            className="p-1.5 rounded hover:bg-gray-700 text-gray-400 hover:text-red-400"
+                            className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-400 hover:text-red-400"
                             title="Delete user"
                           >
                             <Trash2 size={16} />
@@ -446,10 +448,10 @@ export default function UsersPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-            className="bg-gray-900 border border-gray-800 rounded-xl p-6 w-full max-w-sm"
+            className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6 w-full max-w-sm"
           >
-            <h3 className="text-lg font-bold text-white mb-1">Change Password</h3>
-            <p className="text-xs text-gray-500 mb-4">Protected account -- secret code required</p>
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Change Password</h3>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">Protected account -- secret code required</p>
             {pwError && (
               <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-lg p-2 mb-3">
                 <AlertCircle size={12} className="text-red-400" />
@@ -463,23 +465,23 @@ export default function UsersPage() {
             )}
             <form onSubmit={handleProtectedPasswordChange} className="space-y-3">
               <div>
-                <label className="block text-sm text-gray-400 mb-1">Secret Code</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">Secret Code</label>
                 <input
                   type="password"
                   value={secretCode}
                   onChange={(e) => setSecretCode(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                   required
                   autoFocus
                 />
               </div>
               <div>
-                <label className="block text-sm text-gray-400 mb-1">New Password</label>
+                <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">New Password</label>
                 <input
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white text-sm"
+                  className="w-full px-3 py-2 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg text-gray-900 dark:text-white text-sm"
                   required
                   minLength={6}
                 />
@@ -494,7 +496,7 @@ export default function UsersPage() {
                 <button
                   type="button"
                   onClick={() => { setShowPasswordChange(false); setPwError(''); setPwSuccess(''); setSecretCode(''); setNewPassword(''); }}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg text-sm"
+                  className="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm"
                 >
                   Cancel
                 </button>

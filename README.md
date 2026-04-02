@@ -34,8 +34,8 @@ Single-port monorepo: Express (API + static) + Vite (React HMR) + Python subproc
 │          │                                                   │
 │  ┌───────▼──────┐  ┌─────────────────────────────────────┐  │
 │  │  PostgreSQL   │  │  environment_files/                 │  │
-│  │  6 tables     │  │  <game_code>/<version>/game.py      │  │
-│  │              │  │  <game_code>/<version>/metadata.json │  │
+│  │  6 tables     │  │  <game_code>/game.py      │  │
+│  │              │  │  <game_code>/metadata.json │  │
 │  └──────────────┘  └─────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -59,13 +59,13 @@ Python runs only as a child process (`child_process.spawn`) managed by `GamePyth
 ### Prerequisites
 
 - **Node.js 20+** (ESM support required; `type: "module"` in package.json)
-- **PostgreSQL 14+** running locally or remotely
-- **Python 3.10+** with the `arc-agi` package (provides `arcengine`)
+- **PostgreSQL 14+** running remotely
+- **Python 3.12+** with the `arc-agi` package (provides `arcengine`)
 
 ### Setup
 
 ```bash
-git clone <repo-url> arc-agi-internal
+git clone https://github.com/sarbeshtiwari/arc-agi-internal.git
 cd arc-agi-internal
 npm install        # also runs postinstall → auto-detects Python, installs arc-agi
 npm run dev        # starts Express + Vite on http://localhost:5000
@@ -89,12 +89,8 @@ Create a `.env` file in the project root:
 | `DB_NAME` | No | `arc_agi_db` | PostgreSQL database name |
 | `DB_USER` | No | `arcadmin` | PostgreSQL username |
 | `DB_PASSWORD` | No | `arcadmin` | PostgreSQL password |
-| `SECRET_KEY` | **Yes** | `change-me` | JWT signing secret (change in production) |
+| `SECRET_KEY` | **Yes** | `-` | JWT signing secret (change in production) |
 | `JWT_EXPIRES_IN` | No | `1440m` | JWT token expiry (24 hours) |
-| `DEFAULT_ADMIN_USERNAME` | No | `admin` | Default admin account username |
-| `DEFAULT_ADMIN_PASSWORD` | No | `admin123` | Default admin account password |
-| `PROTECTED_USERNAME` | No | *(none)* | Username for protected super admin account |
-| `PROTECTED_SECRET_CODE` | No | `superadmin123` | Secret code to change protected admin password |
 | `PYTHON_BIN` | No | *(auto-detected)* | Explicit path to Python binary |
 | `ENVIRONMENT_FILES_DIR` | No | `./environment_files` | Root directory for game files on disk |
 
@@ -212,7 +208,7 @@ arc-agi-internal/
 3. Submits via `POST /api/requests/submit` (multipart). Server validates metadata JSON, checks `game_id` uniqueness against both `games` and pending `game_requests`, validates URLs (SSRF protection: blocks localhost, private IPs, verifies with HEAD request). Files are saved to `environment_files/_requests/<game_id>/` and binary content is also stored as BYTEA in the `game_requests` table.
 4. Admin navigates to `/admin/requests`, sees the pending request with all metadata.
 5. Admin can view the submitted source code (`GET /api/requests/:id/source`) and download files (`GET /api/requests/:id/files/game` or `/metadata`).
-6. Admin clicks Approve → `POST /api/requests/:id/review` with `{action: "approve"}`. Server copies files from `_requests/` to `environment_files/<game_code>/<version>/`, creates a `games` row with `is_active = false`, and deletes the request.
+6. Admin clicks Approve → `POST /api/requests/:id/review` with `{action: "approve"}`. Server copies files from `_requests/` to `environment_files/<game_code>/`, creates a `games` row with `is_active = false`, and deletes the request.
 7. Admin navigates to `/admin/games`, finds the new game (inactive), and toggles it active via `PATCH /api/games/:gameId/toggle`.
 8. Game now appears on the public homepage.
 

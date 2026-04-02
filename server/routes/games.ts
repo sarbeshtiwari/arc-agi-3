@@ -1,5 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
+import AdmZip from "adm-zip";
 import fs from "fs";
 import path from "path";
 import { asyncHandler } from "../middleware/asyncHandler.js";
@@ -796,6 +797,177 @@ router.post(
 
     const created = await queryOne("SELECT * FROM games WHERE id = $1", [id]);
     res.json(formatGame(created));
+  }),
+);
+
+// ──── 10b. POST /bulk-upload — Bulk upload games from ZIP (multipart) ────
+router.post(
+  "/bulk-upload",
+  authenticateToken,
+  requireAdmin,
+  upload.single("zip_file"),
+  asyncHandler(async (req, res) => {
+    const zipFile = req.file;
+    if (!zipFile) {
+      throw new AppError("zip_file is required", 400);
+    }
+
+    if (!zipFile.originalname.endsWith(".zip")) {
+      throw new AppError("File must be a .zip archive", 400);
+    }
+
+    if (zipFile.size > 100 * 1024 * 1024) {
+      throw new AppError("ZIP file must be under 100MB", 400);
+    }
+
+    let zip: AdmZip;
+    try {
+      zip = new AdmZip(zipFile.buffer);
+    } catch (e: any) {
+      throw new AppError(`Invalid ZIP file: ${e.message}`, 400);
+    }
+
+    const entries = zip.getEntries();
+
+    const gameFolders = new Map<string, { pyEntry: any; metaEntry: any }>();
+
+    for (const entry of entries) {
+      if (entry.isDirectory) continue;
+
+      const entryPath = entry.entryName;
+      if (entryPath.startsWith("__MACOSX") || entryPath.includes("/.__") || entryPath.startsWith(".")) continue;
+
+      const parts = entryPath.split("/").filter(Boolean);
+      if (parts.length < 2) continue;
+
+      // ZIP layout: folder/game.py + folder/metadata.json (1 or 2 levels deep)
+      const fileName = parts[parts.length - 1];
+      let folderKey: string;
+
+      if (parts.length === 2) {
+        folderKey = parts[0];
+      } else if (parts.length === 3) {
+        folderKey = parts[1];
+      } else {
+        continue;
+      }
+
+      if (!gameFolders.has(folderKey)) {
+        gameFolders.set(folderKey, { pyEntry: null, metaEntry: null });
+      }
+
+      const folder = gameFolders.get(folderKey)!;
+      if (fileName.endsWith(".py")) {
+        folder.pyEntry = entry;
+      } else if (fileName === "metadata.json") {
+        folder.metaEntry = entry;
+      }
+    }
+
+    if (gameFolders.size === 0) {
+      throw new AppError(
+        "No valid game folders found. ZIP must contain folders, each with a .py file and metadata.json",
+        400,
+      );
+    }
+
+    const results: { game_id: string; status: "success" | "skipped" | "error"; message: string }[] = [];
+
+    for (const [folderName, { pyEntry, metaEntry }] of gameFolders) {
+      if (!pyEntry) {
+        results.push({ game_id: folderName, status: "error", message: "Missing .py game file" });
+        continue;
+      }
+      if (!metaEntry) {
+        results.push({ game_id: folderName, status: "error", message: "Missing metadata.json" });
+        continue;
+      }
+
+      try {
+        const gamePyBytes = pyEntry.getData();
+        const metadataBytes = metaEntry.getData();
+
+        const uploadResult = uploadGameFiles(gamePyBytes, metadataBytes);
+
+        const existing = await queryOne(
+          "SELECT id FROM games WHERE game_id = $1",
+          [uploadResult.game_id],
+        );
+
+        if (existing) {
+          results.push({
+            game_id: uploadResult.game_id,
+            status: "skipped",
+            message: "Game already exists",
+          });
+          continue;
+        }
+
+        const id = genId();
+        const metadata = uploadResult.metadata;
+
+        await pool.query(
+          `INSERT INTO games (
+            id, game_id, name, description, game_rules,
+            game_owner_name, game_drive_link, game_video_link,
+            version, game_code, is_active, default_fps,
+            baseline_actions, tags,
+            game_file_path, metadata_file_path, local_dir,
+            uploaded_by, total_plays, total_wins
+          ) VALUES (
+            $1, $2, $3, $4, $5,
+            $6, $7, $8,
+            $9, $10, false, $11,
+            $12, $13,
+            $14, $15, $16,
+            $17, 0, 0
+          )`,
+          [
+            id,
+            uploadResult.game_id,
+            uploadResult.game_id, // name defaults to game_id for bulk
+            null,
+            null,
+            null,
+            null,
+            null,
+            uploadResult.version,
+            uploadResult.game_code,
+            metadata.default_fps ?? 5,
+            toJsonb(metadata.baseline_actions ?? null),
+            toJsonb(metadata.tags ?? null),
+            uploadResult.game_file_path,
+            uploadResult.metadata_file_path,
+            uploadResult.local_dir,
+            req.user.id,
+          ],
+        );
+
+        results.push({
+          game_id: uploadResult.game_id,
+          status: "success",
+          message: "Uploaded successfully",
+        });
+      } catch (e: any) {
+        results.push({
+          game_id: folderName,
+          status: "error",
+          message: e.message || "Unknown error",
+        });
+      }
+    }
+
+    const successCount = results.filter((r) => r.status === "success").length;
+    const skippedCount = results.filter((r) => r.status === "skipped").length;
+    const errorCount = results.filter((r) => r.status === "error").length;
+
+    res.json({
+      total: results.length,
+      success: successCount,
+      skipped: skippedCount,
+      errors: errorCount,
+      results,
+    });
   }),
 );
 
