@@ -110,6 +110,7 @@ export default function SystemStatusPage() {
   const [cleaning, setCleaning] = useState(false);
   const [killingBridges, setKillingBridges] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+  const [countdown, setCountdown] = useState(30);
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -117,6 +118,7 @@ export default function SystemStatusPage() {
       const res = await systemAPI.status();
       setData(res.data);
       setLastRefresh(new Date());
+      setCountdown(30);
     } catch (err: any) {
       setError(err.response?.data?.detail || err.message);
     } finally {
@@ -127,7 +129,8 @@ export default function SystemStatusPage() {
   useEffect(() => {
     fetchStatus();
     const interval = setInterval(fetchStatus, 30000);
-    return () => clearInterval(interval);
+    const tick = setInterval(() => setCountdown(c => Math.max(c - 1, 0)), 1000);
+    return () => { clearInterval(interval); clearInterval(tick); };
   }, [fetchStatus]);
 
   const handleCleanup = async () => {
@@ -193,7 +196,7 @@ export default function SystemStatusPage() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900 dark:text-white">System Status</h1>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Auto-refresh every 30s · Last: {lastRefresh.toLocaleTimeString()}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Next refresh in {countdown}s · Last: {lastRefresh.toLocaleTimeString()}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
