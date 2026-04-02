@@ -73,7 +73,7 @@ export default function Layout() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
       {/* Sidebar */}
       <motion.aside
-        className={`bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800/60 flex flex-col shrink-0 relative`}
+        className={`bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800/60 flex flex-col shrink-0 relative h-screen sticky top-0`}
         animate={{ width: collapsed ? 68 : 240 }}
         transition={{ duration: 0.2, ease: 'easeInOut' }}
       >
