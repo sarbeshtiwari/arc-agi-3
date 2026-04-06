@@ -1,0 +1,158 @@
+{
+  "game_id": "hm01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    80,
+    100,
+    130,
+    160
+  ],
+  "tags": [
+    "maze",
+    "pathfinding",
+    "enemy-avoidance",
+    "pattern-discovery",
+    "hidden-rules"
+  ],
+  "local_dir": "environment_files/hm01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Interact with adjacent switch to open a linked door"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous game state; still costs one step"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        60,
+        63
+      ],
+      "camera_size": [
+        60,
+        63
+      ],
+      "display_size": [
+        60,
+        63
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "patrol_enemy",
+        "goal"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        60,
+        63
+      ],
+      "camera_size": [
+        60,
+        63
+      ],
+      "display_size": [
+        60,
+        63
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "bfs_enemy",
+        "switch",
+        "door",
+        "goal"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        60,
+        63
+      ],
+      "camera_size": [
+        60,
+        63
+      ],
+      "display_size": [
+        60,
+        63
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "ambush",
+        "trap",
+        "fake_goal",
+        "goal"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        60,
+        63
+      ],
+      "camera_size": [
+        60,
+        63
+      ],
+      "display_size": [
+        60,
+        63
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "astar_enemy",
+        "switch",
+        "door",
+        "trap",
+        "key",
+        "fake_goal",
+        "goal"
+      ]
+    }
+  ]
+}

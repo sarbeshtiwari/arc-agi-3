@@ -1,0 +1,147 @@
+{
+  "game_id": "cx01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    240,
+    160,
+    320,
+    400
+  ],
+  "tags": [
+    "puzzle",
+    "movement",
+    "grid",
+    "cursor",
+    "collection"
+  ],
+  "local_dir": "environment_files/cx01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level and if action_count == 0 then the full game is reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor one cell up on the grid"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor one cell down on the grid"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor one cell left on the grid"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor one cell right on the grid"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring cursor position and game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "cursor",
+        "target",
+        "trail",
+        "collection"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "cursor",
+        "target",
+        "ice",
+        "stopper",
+        "sliding"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "cursor",
+        "target",
+        "portal",
+        "teleport"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "cursor",
+        "target",
+        "mirror",
+        "chase",
+        "wall",
+        "portal",
+        "teleport"
+      ]
+    }
+  ]
+}

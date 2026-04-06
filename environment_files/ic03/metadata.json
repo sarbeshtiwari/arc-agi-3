@@ -1,0 +1,146 @@
+{
+  "game_id": "ic03",
+  "total_levels": 4,
+  "default_fps": 6,
+  "baseline_actions": [
+    10,
+    15,
+    20,
+    30
+  ],
+  "tags": [
+    "logic-circuit",
+    "partial-observability",
+    "planning",
+    "backtracking"
+  ],
+  "local_dir": "environment_files/ic03",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart from level 1 on consecutive reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle or interact with the selected element"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action, restoring previous game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        60,
+        64
+      ],
+      "camera_size": [
+        60,
+        64
+      ],
+      "display_size": [
+        60,
+        64
+      ],
+      "mechanics": [
+        "logic-gates",
+        "toggle-inputs"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        60,
+        64
+      ],
+      "camera_size": [
+        60,
+        64
+      ],
+      "display_size": [
+        60,
+        64
+      ],
+      "mechanics": [
+        "logic-gates",
+        "toggle-inputs",
+        "memory"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        60,
+        64
+      ],
+      "camera_size": [
+        60,
+        64
+      ],
+      "display_size": [
+        60,
+        64
+      ],
+      "mechanics": [
+        "logic-gates",
+        "toggle-inputs",
+        "memory",
+        "hidden-outputs"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        60,
+        64
+      ],
+      "camera_size": [
+        60,
+        64
+      ],
+      "display_size": [
+        60,
+        64
+      ],
+      "mechanics": [
+        "logic-gates",
+        "toggle-inputs",
+        "memory",
+        "hidden-outputs",
+        "rules"
+      ]
+    }
+  ]
+}

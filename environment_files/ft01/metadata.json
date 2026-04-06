@@ -1,0 +1,149 @@
+{
+  "game_id": "ft01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    20,
+    35,
+    40,
+    50
+  ],
+  "tags": [
+    "logic",
+    "deduction",
+    "constraint",
+    "linked-systems"
+  ],
+  "local_dir": "environment_files/ft01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle emitter frequency at cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous position and move count"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "emitter",
+        "signal",
+        "link"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "emitter",
+        "signal",
+        "link",
+        "wall"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "emitter",
+        "signal",
+        "link",
+        "locked-emitter",
+        "wall"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        14,
+        13
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "emitter",
+        "signal",
+        "link",
+        "locked-emitter",
+        "wall"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "game_id": "ev01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    13,
+    52,
+    95,
+    126
+  ],
+  "tags": [
+    "elevator",
+    "scheduling",
+    "planning",
+    "optimization",
+    "starvation"
+  ],
+  "local_dir": "environment_files/ev01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or full game on consecutive reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move elevator up one floor"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move elevator down one floor"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Open elevator doors at current floor"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "elevator",
+        "pickup",
+        "delivery"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "elevator",
+        "pickup",
+        "delivery",
+        "door_cost"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "elevator",
+        "pickup",
+        "delivery",
+        "door_cost",
+        "starvation"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "elevator",
+        "pickup",
+        "delivery",
+        "door_cost",
+        "starvation",
+        "no_stop_floors"
+      ]
+    }
+  ]
+}

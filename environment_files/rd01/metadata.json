@@ -1,0 +1,164 @@
+{
+  "game_id": "rd01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    936,
+    2340,
+    3420,
+    4860
+  ],
+  "tags": [
+    "railway",
+    "dispatch",
+    "signals",
+    "routing",
+    "puzzle",
+    "hidden-rules",
+    "linked-switches",
+    "decay",
+    "inversion",
+    "bombs",
+    "defuse",
+    "collision"
+  ],
+  "local_dir": "environment_files/rd01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle switch/signal or advance trains at cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last move"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        11,
+        11
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        11,
+        11
+      ],
+      "mechanics": [
+        "switches",
+        "linked-switches"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        13,
+        13
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        13,
+        13
+      ],
+      "mechanics": [
+        "switches",
+        "linked-switches",
+        "signals",
+        "signal-decay",
+        "bombs"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        15,
+        15
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        15,
+        15
+      ],
+      "mechanics": [
+        "switches",
+        "linked-switches",
+        "signals",
+        "signal-decay",
+        "inversion",
+        "tunnels",
+        "bombs",
+        "defuse",
+        "crossings"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        17,
+        17
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        17,
+        17
+      ],
+      "mechanics": [
+        "switches",
+        "linked-switches",
+        "signals",
+        "signal-decay",
+        "inversion",
+        "bombs",
+        "defuse",
+        "crossings"
+      ]
+    }
+  ]
+}

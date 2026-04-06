@@ -1,0 +1,154 @@
+{
+  "game_id": "hx01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    30,
+    50,
+    90,
+    60
+  ],
+  "tags": [
+    "spatial",
+    "puzzle",
+    "grid",
+    "adversarial",
+    "trapping"
+  ],
+  "local_dir": "environment_files/hx01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart from level 1 on consecutive reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left one cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right one cell"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Place a wall at the cursor position to block runner paths"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action and restore previous game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        6,
+        6
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "cursor",
+        "wall_placement",
+        "runner",
+        "trapping",
+        "edge_escape"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "cursor",
+        "wall_placement",
+        "runner",
+        "trapping",
+        "edge_escape"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        60,
+        60
+      ],
+      "mechanics": [
+        "cursor",
+        "wall_placement",
+        "runner",
+        "trapping",
+        "edge_escape",
+        "wraparound"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        56,
+        56
+      ],
+      "mechanics": [
+        "cursor",
+        "wall_placement",
+        "runner",
+        "trapping",
+        "edge_escape"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "game_id": "dq01",
+  "total_levels": 4,
+  "default_fps": 10,
+  "tags": [
+    "deque",
+    "queue",
+    "stack",
+    "color-sorting",
+    "alphabet"
+  ],
+  "baseline_actions": [
+    220,
+    400,
+    1840,
+    2640
+  ],
+  "local_dir": "environment_files/dq01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Click bin or stack zone at cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action, restoring previous queue, stack, and cursor state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        12,
+        12
+      ],
+      "mechanics": [
+        "queue",
+        "stack",
+        "color-sorting"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "queue",
+        "stack",
+        "color-sorting",
+        "recycle"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        24,
+        24
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        24,
+        24
+      ],
+      "mechanics": [
+        "queue",
+        "stack",
+        "target-order"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "queue",
+        "stack",
+        "block-target",
+        "full-restore"
+      ]
+    }
+  ]
+}

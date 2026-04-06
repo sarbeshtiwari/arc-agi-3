@@ -1,0 +1,166 @@
+{
+  "game_id": "dr01",
+  "total_levels": 4,
+  "default_fps": 1,
+  "baseline_actions": [
+    19,
+    25,
+    31,
+    36
+  ],
+  "tags": [
+    "puzzle",
+    "crate-push",
+    "gravity",
+    "fragile-floor",
+    "poison-trigger",
+    "ice",
+    "exit-gate",
+    "moving-poison",
+    "lives-squares",
+    "progress-bar",
+    "4-levels",
+    "exit-guards",
+    "teleport-decoy"
+  ],
+  "local_dir": "environment_files/dr01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level (costs a life); second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell right"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous game state (costs a move)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        9,
+        10
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "crate-push",
+        "gravity",
+        "fragile-floor",
+        "poison-trigger",
+        "teleport-decoy",
+        "exit-gate",
+        "moving-poison"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        11,
+        12
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "crate-push",
+        "gravity",
+        "fragile-floor",
+        "poison-trigger",
+        "ice",
+        "teleport-decoy",
+        "exit-gate",
+        "moving-poison"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        15,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "crate-push",
+        "gravity",
+        "fragile-floor",
+        "poison-trigger",
+        "ice",
+        "teleport-decoy",
+        "exit-gate",
+        "moving-poison"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        15,
+        18
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "crate-push",
+        "gravity",
+        "fragile-floor",
+        "poison-trigger",
+        "ice",
+        "teleport-decoy",
+        "exit-gate",
+        "moving-poison"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "game_id": "ab12",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    32,
+    48,
+    80,
+    100
+  ],
+  "tags": [
+    "puzzle",
+    "color",
+    "mixing",
+    "collecting",
+    "logic",
+    "pattern"
+  ],
+  "local_dir": "environment_files/ab12",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one position in the source list"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one position in the source list"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Right / Deselect the currently selected source color"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Select source color at cursor or mix two selected colors"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last collect or mix action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "collect"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "mix"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "mix"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "mix"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+{
+  "game_id": "eg08",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    35,
+    42,
+    58,
+    65
+  ],
+  "tags": [
+    "runner",
+    "side-scroll",
+    "resource-dual",
+    "control-reverse",
+    "coins"
+  ],
+  "local_dir": "environment_files/eg08",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level (double-reset returns to level 1)"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Jump over low bombs and walls"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Duck under high bombs"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move forward one tile on the path"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "No-op action (placeholder)"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action (costs a move)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "path_length": 15,
+      "coins": 2,
+      "move_cap": 35,
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "jump",
+        "duck",
+        "block_collect",
+        "gap_fill",
+        "coin_collect"
+      ]
+    },
+    {
+      "level": 2,
+      "path_length": 19,
+      "coins": 3,
+      "move_cap": 42,
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "jump",
+        "duck",
+        "block_collect",
+        "gap_fill",
+        "coin_collect",
+        "control_reverse"
+      ]
+    },
+    {
+      "level": 3,
+      "path_length": 25,
+      "coins": 3,
+      "move_cap": 58,
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "jump",
+        "duck",
+        "block_collect",
+        "gap_fill",
+        "coin_collect",
+        "control_reverse"
+      ]
+    },
+    {
+      "level": 4,
+      "path_length": 29,
+      "coins": 4,
+      "move_cap": 65,
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "jump",
+        "duck",
+        "block_collect",
+        "gap_fill",
+        "coin_collect",
+        "control_reverse"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "game_id": "nm03",
+  "total_levels": 4,
+  "default_fps": 5,
+  "tags": [
+    "puzzle",
+    "sorting",
+    "gravity",
+    "color-matching",
+    "swap",
+    "weight-ordering"
+  ],
+  "baseline_actions": [
+    40,
+    80,
+    150,
+    300
+  ],
+  "local_dir": "environment_files/nm03",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Swap selected block with neighbor in gravity direction"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous position"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "gravity",
+        "wall-separator",
+        "color-sorting"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "gravity",
+        "mirror-column",
+        "multi-direction",
+        "color-sorting"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "gravity",
+        "mirror-row",
+        "multi-direction",
+        "color-sorting"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "gravity",
+        "ripple",
+        "multi-direction",
+        "color-sorting"
+      ]
+    }
+  ]
+}

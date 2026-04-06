@@ -1,0 +1,145 @@
+{
+  "game_id": "rg01",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    10,
+    15,
+    40,
+    50
+  ],
+  "tags": [
+    "puzzle",
+    "terrain",
+    "water-flow"
+  ],
+  "local_dir": "environment_files/rg01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Raise terrain elevation or confirm solution"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        11,
+        11
+      ],
+      "camera_size": [
+        11,
+        11
+      ],
+      "display_size": [
+        11,
+        11
+      ],
+      "mechanics": [
+        "terrain_raising",
+        "water_flow",
+        "single_source"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        11,
+        11
+      ],
+      "camera_size": [
+        11,
+        11
+      ],
+      "display_size": [
+        11,
+        11
+      ],
+      "mechanics": [
+        "terrain_raising",
+        "water_flow",
+        "flow_splitting"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        15,
+        15
+      ],
+      "camera_size": [
+        15,
+        15
+      ],
+      "display_size": [
+        15,
+        15
+      ],
+      "mechanics": [
+        "terrain_raising",
+        "water_flow",
+        "multiple_sources",
+        "drains"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        17,
+        17
+      ],
+      "camera_size": [
+        17,
+        17
+      ],
+      "display_size": [
+        17,
+        17
+      ],
+      "mechanics": [
+        "terrain_raising",
+        "water_flow",
+        "multiple_sources",
+        "complex_routing"
+      ]
+    }
+  ]
+}

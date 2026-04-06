@@ -1,0 +1,149 @@
+{
+  "game_id": "cm10",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    108,
+    132,
+    204,
+    168
+  ],
+  "tags": [
+    "puzzle",
+    "graph",
+    "bridges",
+    "kruskal",
+    "connectivity"
+  ],
+  "local_dir": "environment_files/cm10",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level; if action_count == 0 then the full game is reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up on the board"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down on the board"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left on the board"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right on the board"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Toggle bridge or false activator at the cursor"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move or toggle"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "continents",
+        "edges",
+        "bridge_paths",
+        "anchors"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "continents",
+        "edges",
+        "bridge_paths",
+        "anchors"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "continents",
+        "edges",
+        "false_anchors",
+        "obstacles"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        32,
+        32
+      ],
+      "camera_size": [
+        32,
+        32
+      ],
+      "display_size": [
+        32,
+        32
+      ],
+      "mechanics": [
+        "continents",
+        "edges",
+        "false_anchors",
+        "obstacles"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "game_id": "eg06",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    17,
+    10,
+    9,
+    12
+  ],
+  "tags": [
+    "puzzle",
+    "rule-inference",
+    "shape-logic",
+    "pattern-matching",
+    "visual-reasoning"
+  ],
+  "local_dir": "environment_files/eg06",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left one cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right one cell"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Apply the shape transformation rule at the current cursor position"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        3,
+        3
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "simple_cycle"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        3,
+        3
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "right_cycle"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "cross_cycle"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        4,
+        4
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "cross_conditional_cycle"
+      ]
+    }
+  ]
+}

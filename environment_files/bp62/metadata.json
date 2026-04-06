@@ -1,0 +1,132 @@
+{
+  "game_id": "bp62",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    2,
+    4,
+    3,
+    5
+  ],
+  "tags": [
+    "puzzle",
+    "binary",
+    "bit-manipulation",
+    "hidden-rules",
+    "inference",
+    "xor",
+    "rotation",
+    "conditional"
+  ],
+  "local_dir": "environment_files/bp62",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level or restart the game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "No operation"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "No operation"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left to previous switch"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right to next switch"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Activate the selected switch"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": "XOR transform, single flip, range flip"
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": "Bit rotation left/right, XOR transform, single flip"
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": "Conditional flip, XOR transform, single flip"
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": "Full combo: XOR, rotation, range flip, conditional, decoy"
+    }
+  ]
+}

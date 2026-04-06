@@ -1,0 +1,165 @@
+{
+  "game_id": "vx01",
+  "total_levels": 4,
+  "default_fps": 1,
+  "baseline_actions": [
+    13,
+    31,
+    39,
+    53
+  ],
+  "tags": [
+    "puzzle",
+    "stealth",
+    "sokoban",
+    "keycard",
+    "ice",
+    "heist",
+    "hard"
+  ],
+  "local_dir": "environment_files/vx01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player right"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "keycard",
+        "zone",
+        "decoy",
+        "extraction",
+        "undo"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "ice",
+        "keycard",
+        "zone",
+        "terminal",
+        "port",
+        "panel",
+        "decoy",
+        "extraction",
+        "undo"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "ice",
+        "keycard",
+        "zone",
+        "terminal",
+        "port",
+        "panel",
+        "decoy",
+        "extraction",
+        "undo"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "ice",
+        "keycard",
+        "zone",
+        "terminal",
+        "port",
+        "panel",
+        "decoy",
+        "extraction",
+        "undo"
+      ]
+    }
+  ]
+}

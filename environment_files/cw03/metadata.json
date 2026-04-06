@@ -1,0 +1,168 @@
+{
+  "game_id": "cw03",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    250,
+    260,
+    342,
+    486
+  ],
+  "tags": [
+    "circuit",
+    "wire",
+    "routing",
+    "puzzle"
+  ],
+  "local_dir": "environment_files/cw03",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or full game on consecutive reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Place or remove wire at cursor position, or toggle switch"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last move, restoring previous game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        11,
+        11
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wire",
+        "source",
+        "receiver",
+        "trap",
+        "switch",
+        "conduit",
+        "insulator"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        12,
+        12
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wire",
+        "source",
+        "receiver",
+        "trap",
+        "switch",
+        "conduit",
+        "gate",
+        "drain",
+        "insulator"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        13,
+        13
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wire",
+        "source",
+        "receiver",
+        "trap",
+        "switch",
+        "conduit",
+        "gate",
+        "drain",
+        "capacitor",
+        "insulator"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        14,
+        14
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wire",
+        "source",
+        "receiver",
+        "trap",
+        "switch",
+        "conduit",
+        "gate",
+        "drain",
+        "capacitor",
+        "insulator"
+      ]
+    }
+  ]
+}

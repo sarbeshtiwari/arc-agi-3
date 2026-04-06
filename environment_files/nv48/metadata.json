@@ -1,0 +1,164 @@
+{
+  "game_id": "nv48",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    38,
+    41,
+    40,
+    50
+  ],
+  "tags": [
+    "puzzle",
+    "pipes",
+    "rotation",
+    "corrosion",
+    "color-bleed"
+  ],
+  "local_dir": "environment_files/nv48",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Rotate pipe at cursor 90 degrees clockwise"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Click a pipe to rotate it",
+      "data_schema": {
+        "x": "number",
+        "y": "number"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, reverting to the previous state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe-rotation",
+        "two-color",
+        "blue-pipes",
+        "rust",
+        "leak"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe-rotation",
+        "two-color",
+        "blue-pipes",
+        "rust",
+        "leak"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe-rotation",
+        "two-color",
+        "blue-pipes",
+        "rust",
+        "leak"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        64,
+        64
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe-rotation",
+        "two-color",
+        "blue-pipes",
+        "rust",
+        "leak",
+        "three-drains"
+      ]
+    }
+  ]
+}

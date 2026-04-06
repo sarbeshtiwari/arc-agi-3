@@ -1,0 +1,169 @@
+{
+  "game_id": "cr11",
+  "total_levels": 4,
+  "default_fps": 1,
+  "baseline_actions": [
+    10,
+    20,
+    20,
+    35
+  ],
+  "tags": [
+    "puzzle",
+    "rotation",
+    "alignment",
+    "constrained",
+    "spatial",
+    "logic"
+  ],
+  "local_dir": "environment_files/cr11",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First reset restores current level; second consecutive reset performs full game reset to level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move the selector cursor one cell upward (wraps around)"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move the selector cursor one cell downward (wraps around)"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move the selector cursor one cell to the left (wraps around)"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move the selector cursor one cell to the right (wraps around)"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Activate the cell under the selector; row-activators rotate their row right, col-activators rotate their column down"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo last move; reverts grid state and selector position"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        8,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "row-activator",
+        "col-activator",
+        "target",
+        "locked",
+        "selector",
+        "rotation",
+        "move-limit",
+        "lives"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "row-activator",
+        "col-activator",
+        "target",
+        "locked",
+        "selector",
+        "rotation",
+        "move-limit",
+        "lives"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "row-activator",
+        "col-activator",
+        "target",
+        "row-only-target",
+        "locked",
+        "selector",
+        "rotation",
+        "move-limit",
+        "lives"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "row-activator",
+        "col-activator",
+        "target",
+        "row-only-target",
+        "col-only-target",
+        "locked",
+        "selector",
+        "rotation",
+        "move-limit",
+        "lives"
+      ]
+    }
+  ]
+}

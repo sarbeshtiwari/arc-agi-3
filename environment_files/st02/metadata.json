@@ -1,0 +1,154 @@
+{
+  "game_id": "st02",
+  "total_levels": 4,
+  "default_fps": 10,
+  "baseline_actions": [
+    350,
+    600,
+    800,
+    1000
+  ],
+  "tags": [
+    "puzzle",
+    "spatial-reasoning",
+    "sequencing",
+    "signal-towers",
+    "decoys",
+    "chain-reaction",
+    "one-way-gates",
+    "jammers",
+    "patrol-avoidance",
+    "rule-layering"
+  ],
+  "local_dir": "environment_files/st02",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell north"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell south"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell west"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell east"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous position and game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        25,
+        25
+      ],
+      "camera_size": [
+        52,
+        52
+      ],
+      "display_size": [
+        52,
+        52
+      ],
+      "mechanics": [
+        "sequencing",
+        "decoys"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        25,
+        25
+      ],
+      "camera_size": [
+        52,
+        52
+      ],
+      "display_size": [
+        52,
+        52
+      ],
+      "mechanics": [
+        "sequencing",
+        "decoys",
+        "chain-reaction",
+        "one-way-gates",
+        "plates"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        25,
+        25
+      ],
+      "camera_size": [
+        52,
+        52
+      ],
+      "display_size": [
+        52,
+        52
+      ],
+      "mechanics": [
+        "sequencing",
+        "decoys",
+        "chain-reaction",
+        "one-way-gates",
+        "plates",
+        "keys",
+        "doors"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        25,
+        25
+      ],
+      "camera_size": [
+        52,
+        52
+      ],
+      "display_size": [
+        52,
+        52
+      ],
+      "mechanics": [
+        "sequencing",
+        "decoys",
+        "chain-reaction",
+        "one-way-gates",
+        "jammers",
+        "moving-jammers",
+        "plates",
+        "doors"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,151 @@
+{
+  "game_id": "ft02",
+  "total_levels": 4,
+  "default_fps": 10,
+  "baseline_actions": [
+    11,
+    19,
+    22,
+    26
+  ],
+  "tags": [
+    "puzzle",
+    "factory",
+    "routing",
+    "transformation",
+    "simulation"
+  ],
+  "local_dir": "environment_files/ft02",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset the current level (double-reset returns to level 1)"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor up one cell"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor down one cell"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor left one cell"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor right one cell"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Cycle machine rule at cursor or launch simulation from launch pad"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action (costs one move)"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        5,
+        5
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe_routing",
+        "machine_transform",
+        "simulation"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        6,
+        6
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe_routing",
+        "machine_transform",
+        "chain_machines",
+        "simulation"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        6,
+        6
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe_routing",
+        "machine_transform",
+        "splitter",
+        "multi_goal",
+        "simulation"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        7,
+        7
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "pipe_routing",
+        "machine_transform",
+        "selector",
+        "multi_source",
+        "multi_goal",
+        "simulation"
+      ]
+    }
+  ]
+}

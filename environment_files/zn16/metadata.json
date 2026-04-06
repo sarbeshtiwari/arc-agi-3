@@ -1,0 +1,157 @@
+{
+  "game_id": "zn16",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    18,
+    27,
+    20,
+    65
+  ],
+  "tags": [
+    "puzzle",
+    "territory",
+    "strategy",
+    "real-time",
+    "spatial"
+  ],
+  "local_dir": "environment_files/zn16",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level and if action_count == 0 then the full game is reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Fortify player position and adjacent claimed cells for 5 turns, also claims current cell"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action, reverting game state; costs one turn tick"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        11,
+        9
+      ],
+      "camera_size": [
+        11,
+        9
+      ],
+      "display_size": [
+        11,
+        9
+      ],
+      "mechanics": [
+        "territory",
+        "enemies",
+        "targets",
+        "fortify"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        11,
+        9
+      ],
+      "camera_size": [
+        11,
+        9
+      ],
+      "display_size": [
+        11,
+        9
+      ],
+      "mechanics": [
+        "territory",
+        "enemies",
+        "targets",
+        "fortify",
+        "beacons"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        11,
+        10
+      ],
+      "camera_size": [
+        11,
+        10
+      ],
+      "display_size": [
+        11,
+        10
+      ],
+      "mechanics": [
+        "territory",
+        "enemies",
+        "targets",
+        "fortify",
+        "bombs",
+        "scouts",
+        "power_cells"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        13,
+        12
+      ],
+      "camera_size": [
+        13,
+        12
+      ],
+      "display_size": [
+        13,
+        12
+      ],
+      "mechanics": [
+        "territory",
+        "enemies",
+        "targets",
+        "fortify",
+        "bombs",
+        "scouts",
+        "beacons",
+        "power_cells"
+      ]
+    }
+  ]
+}

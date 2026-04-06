@@ -1,0 +1,144 @@
+{
+  "game_id": "if04",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    15,
+    25,
+    35,
+    50
+  ],
+  "tags": [
+    "puzzle",
+    "strategy",
+    "containment",
+    "spatial_reasoning"
+  ],
+  "local_dir": "environment_files/if04",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move cursor one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move cursor one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move cursor one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move cursor one cell right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Place a barrier at the cursor position or toggle barrier mode"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action, restoring the previous game state"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        10,
+        10
+      ],
+      "camera_size": [
+        10,
+        10
+      ],
+      "display_size": [
+        10,
+        10
+      ],
+      "mechanics": [
+        "infection_containment",
+        "barrier_placement"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        14,
+        14
+      ],
+      "camera_size": [
+        14,
+        14
+      ],
+      "display_size": [
+        14,
+        14
+      ],
+      "mechanics": [
+        "infection_containment",
+        "barrier_placement",
+        "multi_source"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        16,
+        16
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "infection_containment",
+        "barrier_placement",
+        "speed_differential"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        20,
+        20
+      ],
+      "camera_size": [
+        20,
+        20
+      ],
+      "display_size": [
+        20,
+        20
+      ],
+      "mechanics": [
+        "infection_containment",
+        "barrier_placement",
+        "diagonal_infection",
+        "selective_barriers"
+      ]
+    }
+  ]
+}

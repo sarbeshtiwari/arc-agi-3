@@ -1,0 +1,147 @@
+{
+  "game_id": "bx01",
+  "total_levels": 4,
+  "default_fps": 10,
+  "baseline_actions": [
+    8,
+    16,
+    18,
+    20
+  ],
+  "tags": [
+    "puzzle",
+    "spatial-reasoning",
+    "block-rolling",
+    "orientation",
+    "planning",
+    "switches",
+    "bridges"
+  ],
+  "local_dir": "environment_files/bx01",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or restart game"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Roll block up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Roll block down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Roll block left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Roll block right"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous block position, orientation, and bridge states"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        12,
+        8
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        12,
+        8
+      ],
+      "mechanics": [
+        "floor",
+        "goal",
+        "press-switch",
+        "bridge"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        14,
+        10
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        14,
+        10
+      ],
+      "mechanics": [
+        "floor",
+        "goal",
+        "precision-switch",
+        "bridge"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        13,
+        12
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        13,
+        12
+      ],
+      "mechanics": [
+        "floor",
+        "goal",
+        "press-switch",
+        "precision-switch",
+        "bridge"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        14,
+        14
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        14,
+        14
+      ],
+      "mechanics": [
+        "floor",
+        "goal",
+        "press-switch",
+        "precision-switch",
+        "bridge"
+      ]
+    }
+  ]
+}

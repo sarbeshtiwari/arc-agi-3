@@ -1,0 +1,161 @@
+{
+  "game_id": "ew53",
+  "total_levels": 4,
+  "default_fps": 5,
+  "tags": [
+    "puzzle",
+    "recording",
+    "ghost",
+    "coordination",
+    "timing"
+  ],
+  "local_dir": "environment_files/ew53",
+  "baseline_actions": [
+    24,
+    28,
+    34,
+    40
+  ],
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "Reset current level or full game on consecutive reset"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player or ghost up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player or ghost down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player or ghost left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player or ghost right"
+    },
+    {
+      "id": 5,
+      "name": "select",
+      "type": "simple",
+      "description": "Start or stop ghost recording"
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last action"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        7,
+        7
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "pressure_plate",
+        "gate",
+        "ghost_recording"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        9,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "pressure_plate",
+        "gate",
+        "ghost_recording",
+        "ghost_player_collision"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        11,
+        8
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "pressure_plate",
+        "gate",
+        "ghost_recording",
+        "ghost_player_collision",
+        "ghost_ghost_collision",
+        "toggle_plate"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        11,
+        9
+      ],
+      "camera_size": [
+        64,
+        64
+      ],
+      "display_size": [
+        64,
+        64
+      ],
+      "mechanics": [
+        "wall",
+        "movement",
+        "pressure_plate",
+        "gate",
+        "ghost_recording",
+        "ghost_player_collision",
+        "ghost_ghost_collision",
+        "toggle_plate",
+        "inverse_controls"
+      ]
+    }
+  ]
+}

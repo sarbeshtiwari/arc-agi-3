@@ -1,0 +1,152 @@
+{
+  "game_id": "td59",
+  "total_levels": 4,
+  "default_fps": 5,
+  "baseline_actions": [
+    10,
+    16,
+    22,
+    30
+  ],
+  "tags": [
+    "dodge",
+    "turn-based",
+    "grid",
+    "obstacle"
+  ],
+  "local_dir": "environment_files/td59",
+  "available_actions": [
+    {
+      "id": 0,
+      "name": "reset",
+      "type": "system",
+      "description": "First press restarts the current level; second consecutive press restarts the full game from level 1"
+    },
+    {
+      "id": 1,
+      "name": "up",
+      "type": "simple",
+      "description": "Move player one cell up"
+    },
+    {
+      "id": 2,
+      "name": "down",
+      "type": "simple",
+      "description": "Move player one cell down"
+    },
+    {
+      "id": 3,
+      "name": "left",
+      "type": "simple",
+      "description": "Move player one cell left"
+    },
+    {
+      "id": 4,
+      "name": "right",
+      "type": "simple",
+      "description": "Move player one cell right"
+    },
+    {
+      "id": 6,
+      "name": "click",
+      "type": "complex",
+      "description": "Move player toward clicked cell",
+      "data_schema": {
+        "x": "int (0-63)",
+        "y": "int (0-63)"
+      }
+    },
+    {
+      "id": 7,
+      "name": "undo",
+      "type": "simple",
+      "description": "Undo the last move, restoring previous position"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "grid_size": [
+        18,
+        18
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "obstacle_rows",
+        "wall",
+        "wrap",
+        "move_limit"
+      ]
+    },
+    {
+      "level": 2,
+      "grid_size": [
+        22,
+        22
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "obstacle_rows",
+        "wall",
+        "wrap",
+        "move_limit"
+      ]
+    },
+    {
+      "level": 3,
+      "grid_size": [
+        26,
+        26
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "obstacle_rows",
+        "wall",
+        "wrap",
+        "move_limit"
+      ]
+    },
+    {
+      "level": 4,
+      "grid_size": [
+        30,
+        30
+      ],
+      "camera_size": [
+        16,
+        16
+      ],
+      "display_size": [
+        16,
+        16
+      ],
+      "mechanics": [
+        "obstacle_rows",
+        "wall",
+        "wrap",
+        "move_limit"
+      ]
+    }
+  ]
+}
