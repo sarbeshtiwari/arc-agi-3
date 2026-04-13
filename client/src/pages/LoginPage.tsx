@@ -20,7 +20,9 @@ export default function LoginPage() {
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
-    if (user) navigate('/admin', { replace: true });
+    if (user) {
+      navigate('/dashboard', { replace: true });
+    }
   }, [user, navigate]);
 
   const handleSubmit = async (e) => {
@@ -28,9 +30,9 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await login(username, password);
+      const userData = await login(username, password);
       setSuccess(true);
-      setTimeout(() => navigate('/admin', { replace: true }), 500);
+      setTimeout(() => navigate('/dashboard', { replace: true }), 500);
     } catch (err) {
       setError(err.response?.data?.detail || 'Invalid username or password');
       setShake(true);

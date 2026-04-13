@@ -309,7 +309,7 @@ export default function DashboardPage() {
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Recent Games</h3>
-            <Link to="/admin/games" className="text-[11px] text-blue-400 hover:text-blue-300 flex items-center gap-0.5">
+            <Link to="/dashboard/games" className="text-[11px] text-blue-400 hover:text-blue-300 flex items-center gap-0.5">
               View all <ChevronRight size={12} />
             </Link>
           </div>
@@ -317,7 +317,7 @@ export default function DashboardPage() {
             {(s.recent_games || []).length > 0 ? s.recent_games.map((game) => (
               <Link
                 key={game.id || game.game_id}
-                to={`/admin/games/${game.game_id}`}
+                to={`/dashboard/games/${game.game_id}`}
                 className="flex items-center justify-between p-2.5 rounded-lg bg-gray-50 dark:bg-gray-800/40 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 <div className="min-w-0">

@@ -387,7 +387,7 @@ export default function GamesPage() {
             </button>
           ) : (
             <Link
-              to="/admin/games/upload"
+              to="/dashboard/games/upload"
               className="text-blue-400 hover:text-blue-300 text-sm"
             >
               Upload your first game
@@ -437,7 +437,7 @@ export default function GamesPage() {
                   </td>
                   <td className="px-4 py-3">
                     <Link
-                      to={`/admin/games/${game.game_id}`}
+                      to={`/dashboard/games/${game.game_id}`}
                       className="text-blue-400 hover:text-blue-300 font-mono text-xs transition-colors"
                       title={game.name || game.game_id}
                     >
@@ -520,14 +520,14 @@ export default function GamesPage() {
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1">
                       <Link
-                        to={`/admin/games/${game.game_id}/play`}
+                        to={`/play/${game.game_id}`}
                         className="p-1.5 rounded-md text-green-400 hover:bg-green-500/10 transition-colors"
                         title="Play"
                       >
                         <Play size={15} />
                       </Link>
                       <Link
-                        to={`/admin/games/${game.game_id}`}
+                        to={`/dashboard/games/${game.game_id}`}
                         className="p-1.5 rounded-md text-blue-400 hover:bg-blue-500/10 transition-colors"
                         title="Details"
                       >

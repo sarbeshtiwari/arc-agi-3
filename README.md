@@ -1,6 +1,6 @@
 # ARC-AGI-3 Internal Platform
 
-Internal full-stack platform for managing, playtesting, and analyzing ARC-AGI-3 grid-based puzzle games. Provides a public homepage where players can browse and play active games, an ephemeral "Play Your Own" mode for testing uploaded game files, a game request submission workflow with admin approval, an admin panel with analytics dashboards and Excel exports, per-level session tracking, and optional screen recording with server upload. Built as a single-port Node.js/Express + React + Vite monorepo, with Python running only as a subprocess for the game engine.
+Internal full-stack platform for managing, playtesting, and analyzing ARC-AGI-3 grid-based puzzle games. Features a retro arcade-themed public homepage where players can browse and play active games, an ephemeral "Play Your Own" mode for testing uploaded game files, a role-based dashboard with 4 user roles (Tasker, QL, PL, Super Admin), a multi-stage game approval workflow, team management with many-to-many lead assignments, real-time SSE notifications with sound, bulk file downloads, per-level session tracking, gameplay stats, audit trails, and optional screen recording with server upload. Built as a single-port Node.js/Express + React + Vite monorepo, with Python running only as a subprocess for the game engine.
 
 ---
 
@@ -11,7 +11,8 @@ Single-port monorepo: Express (API + static) + Vite (React HMR) + Python subproc
 
 ┌──────────────────────────────────────────────────────────────┐
 │                         Browser                              │
-│  React SPA (Vite + React Router + Tailwind)                  │
+│  React SPA (Vite + React Router + Tailwind + Framer Motion)  │
+│  Arcade-themed public pages + Role-based dashboard           │
 └──────────────────────────┬───────────────────────────────────┘
                            │
                    HTTP :5000 (single port)
@@ -22,7 +23,7 @@ Single-port monorepo: Express (API + static) + Vite (React HMR) + Python subproc
 │  ┌────────────────┐  ┌───────────────┐  ┌────────────────┐  │
 │  │  /api/*        │  │  Vite Dev     │  │  Static Files  │  │
 │  │  REST routes   │  │  Middleware   │  │  (prod only)   │  │
-│  │  (6 routers)   │  │  + HMR (dev) │  │  dist/public/  │  │
+│  │  (9 routers)   │  │  + HMR (dev) │  │  dist/public/  │  │
 │  └───────┬────────┘  └───────────────┘  └────────────────┘  │
 │          │                                                   │
 │  ┌───────▼────────────────────────────────────────────────┐  │
@@ -34,8 +35,8 @@ Single-port monorepo: Express (API + static) + Vite (React HMR) + Python subproc
 │          │                                                   │
 │  ┌───────▼──────┐  ┌─────────────────────────────────────┐  │
 │  │  PostgreSQL   │  │  environment_files/                 │  │
-│  │  6 tables     │  │  <game_code>/game.py      │  │
-│  │              │  │  <game_code>/metadata.json │  │
+│  │  10 tables    │  │  <game_code>/game.py                │  │
+│  │              │  │  <game_code>/metadata.json           │  │
 │  └──────────────┘  └─────────────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -72,9 +73,10 @@ npm run dev        # starts Express + Vite on http://localhost:5000
 ```
 
 On first start:
-1. All 6 database tables are created automatically via `initDB()`.
-2. A default admin user is created from `DEFAULT_ADMIN_USERNAME` / `DEFAULT_ADMIN_PASSWORD` env vars (defaults: `admin` / `admin123`).
+1. All 10 database tables are created automatically via `initDB()`.
+2. A default admin user is created from `DEFAULT_ADMIN_USERNAME` / `DEFAULT_ADMIN_PASSWORD` env vars (defaults: `admin` / `admin123`) with role `super_admin`.
 3. If `PROTECTED_USERNAME` is set, a protected super admin is also created.
+4. Existing users/games are migrated (adds `role`, `display_name`, `approval_status` columns if missing, creates `user_team_leads` junction table).
 
 ### Environment Variables
 
@@ -103,69 +105,88 @@ arc-agi-internal/
 ├── package.json                  # Monorepo root — all deps (client + server)
 ├── tsconfig.json                 # Shared TypeScript config
 ├── vite.config.ts                # Vite config (root: client/, build → dist/public/)
-├── tailwind.config.ts            # Tailwind CSS config
+├── tailwind.config.ts            # Tailwind CSS config (pixel font, neon/cabinet colors, arcade animations)
 ├── postcss.config.js             # PostCSS (autoprefixer + tailwind)
 ├── .env                          # Environment variables (gitignored)
 ├── .python-bin                   # Auto-written by postinstall: path to Python binary
 ├── .gitignore
 │
 ├── client/                       # React SPA
-│   ├── index.html                # Vite entry HTML
+│   ├── index.html                # Vite entry HTML (loads Press Start 2P pixel font)
 │   └── src/
 │       ├── main.tsx              # React root mount
-│       ├── App.tsx               # Router: public routes + admin routes + guards
+│       ├── App.tsx               # Router: public routes + /dashboard/* (role-based) + guards
+│       ├── index.css             # Tailwind imports + arcade.css
+│       ├── arcade.css            # CRT screen, scanlines, cabinet, neon utilities, starfield
 │       ├── api/
-│       │   └── client.ts         # Axios client, all API functions (auth/games/player/analytics/users/requests)
+│       │   └── client.ts         # Axios client, all API modules (auth/games/player/analytics/users/requests/approval/teams/notifications)
 │       ├── hooks/
-│       │   ├── useAuth.tsx       # Auth context provider + useAuth hook
+│       │   ├── useAuth.tsx       # Auth context: login/logout, role helpers (isSuperAdmin/isQL/isPL/isTasker)
 │       │   ├── useGameEngine.tsx # Game session state + action dispatcher
 │       │   └── useVideoRecorder.ts  # Server-streaming screen capture (zero client RAM)
 │       ├── components/
-│       │   ├── Layout.tsx        # Admin shell (sidebar + outlet)
+│       │   ├── Layout.tsx        # Legacy admin shell (unused, redirects to /dashboard)
+│       │   ├── DashboardLayout.tsx   # Role-aware dashboard sidebar + NotificationBell
+│       │   ├── NotificationBell.tsx  # Real-time SSE notifications + Web Audio sound
 │       │   ├── GameCanvas.tsx    # Canvas renderer for ARC grids (click + keyboard)
 │       │   ├── GamePreviewCanvas.tsx  # Thumbnail canvas for homepage cards
 │       │   ├── GameUploadForm.tsx     # Upload form (game.py + metadata.json + metadata fields)
 │       │   ├── VideoRecorder.tsx      # Record prompt, controls, preview modal, upload
-│       │   └── ConfirmModal.tsx       # Reusable confirm/cancel dialog
+│       │   ├── ConfirmModal.tsx       # Reusable confirm/cancel dialog
+│       │   └── arcade/
+│       │       └── ArcadeComponents.tsx  # Shared arcade components (StatPill, DPadButton, ArcadeCabinet, etc.)
 │       ├── pages/
-│       │   ├── HomePage.tsx           # Public: game grid, stats, tabs (Games | Play Your Own | Request Upload)
-│       │   ├── PublicPlayPage.tsx      # Public: /play/:gameId — full game player
-│       │   ├── DirectPlayPage.tsx     # Public: /play-direct — ephemeral upload-and-play
-│       │   ├── LoginPage.tsx          # Admin: /admin/login
-│       │   ├── DashboardPage.tsx      # Admin: /admin — stats cards, charts, recent games
-│       │   ├── GamesPage.tsx          # Admin: /admin/games — game table, toggle, delete, sync
-│       │   ├── GameDetailPage.tsx     # Admin: /admin/games/:gameId — tabs: overview, analytics, source, sessions, videos
-│       │   ├── GameUploadPage.tsx     # Admin: /admin/games/upload — upload new game
-│       │   ├── GamePlayPage.tsx       # Admin: /admin/games/:gameId/play — play game (authenticated)
-│       │   ├── RequestedGamesPage.tsx # Admin: /admin/requests — pending/approved/rejected requests
-│       │   ├── TempGamesPage.tsx      # Admin: /admin/temp-games — ephemeral session log
-│       │   └── UsersPage.tsx          # Admin: /admin/users — create/edit/delete users
+│       │   ├── HomePage.tsx           # Public: arcade-themed game catalog + "Play Your Own" tab
+│       │   ├── PublicPlayPage.tsx      # Public: /play/:gameId — arcade cabinet game player
+│       │   ├── DirectPlayPage.tsx     # Public: /play-direct — ephemeral upload-and-play (arcade themed)
+│       │   ├── LoginPage.tsx          # Shared login for all roles → redirects to /dashboard
+│       │   ├── RoleDashboardPage.tsx  # Role-specific dashboard home (Tasker/QL/PL/SuperAdmin views)
+│       │   ├── MyGamesPage.tsx        # Tasker: game list, submit for review, update files, bulk download
+│       │   ├── ReviewQueuePage.tsx    # QL/PL: review queue, approve/reject (2-step confirm), bulk download
+│       │   ├── TeamManagementPage.tsx # Team management: create users, assign leads, multi-lead picker
+│       │   ├── TeamMemberDetailPage.tsx  # QL/PL detail: games, gameplay stats, tasker list
+│       │   ├── TaskerDetailPage.tsx   # Tasker detail: game history timeline, gameplay stats, files
+│       │   ├── ProfilePage.tsx        # User profile + password change
+│       │   ├── SettingsPage.tsx       # Super admin: recording toggle, theme
+│       │   ├── DashboardPage.tsx      # Super admin: analytics stats, charts, recent games
+│       │   ├── GamesPage.tsx          # Super admin: all games table, toggle, delete, sync
+│       │   ├── GameDetailPage.tsx     # Super admin: game detail — overview, analytics, source, sessions, videos
+│       │   ├── GameUploadPage.tsx     # Upload new game
+│       │   ├── GamePlayPage.tsx       # Play game (authenticated)
+│       │   ├── RequestedGamesPage.tsx # Super admin: game request management
+│       │   ├── TempGamesPage.tsx      # Super admin: ephemeral session log
+│       │   └── UsersPage.tsx          # Super admin: user management — create, edit, delete
 │       └── types/
 │           └── index.ts               # Client-side type re-exports
 │
 ├── server/                       # Express backend
 │   ├── index.ts                  # Entry point: middleware, routes, Vite/static setup, listen
-│   ├── db.ts                     # PostgreSQL pool + initDB (table creation) + helpers
-│   ├── routes.ts                 # Route registration: health check + 6 routers
+│   ├── db.ts                     # PostgreSQL pool + initDB (10 tables) + migration + helpers
+│   ├── routes.ts                 # Route registration: health check + 9 routers
 │   ├── vite.ts                   # Vite dev middleware integration + SPA fallback
 │   ├── middleware/
-│   │   ├── auth.ts               # JWT creation/verification, bcrypt, ensureDefaultAdmin, requireAdmin, requirePage
+│   │   ├── auth.ts               # JWT, bcrypt, requireRole(), requireAdmin, ensureDefaultAdmin
 │   │   ├── asyncHandler.ts       # Wraps async route handlers for error propagation
 │   │   └── errorHandler.ts       # AppError class + Express error handler
 │   ├── routes/
-│   │   ├── auth.ts               # POST /login, GET /me, POST /register
-│   │   ├── games.ts              # 7 public + 13 admin endpoints (CRUD, files, toggle, source, sync, videos)
+│   │   ├── auth.ts               # POST /login, GET /me, POST /register (role-aware)
+│   │   ├── games.ts              # 7 public + 13 admin endpoints (CRUD, files, toggle, source, sync, videos, bulk-download)
 │   │   ├── player.ts             # 3 public + 3 ephemeral + 4 admin + 1 palette endpoint
 │   │   ├── analytics.ts          # 4 auth + 5 admin endpoints (dashboard, game stats, sessions, export)
-│   │   ├── users.ts              # 4 admin endpoints + 1 protected password change
-│   │   └── requests.ts           # 1 public + 5 admin endpoints (submit, list, review, source, files, delete)
+│   │   ├── users.ts              # 4 admin + 1 self-password-change endpoint
+│   │   ├── requests.ts           # 1 public + 5 admin endpoints (submit, list, review, source, files, delete)
+│   │   ├── approval.ts           # Approval workflow: submit, ql-review, pl-review, admin-approve, audit log
+│   │   ├── teams.ts              # Team management: my-team, assign, unassigned, member detail, tasker detail
+│   │   └── notifications.ts      # Notification CRUD + SSE stream endpoint
 │   ├── services/
-│   │   └── GamePythonBridge.ts   # Python subprocess manager (spawn, NDJSON, timeout, kill)
+│   │   ├── GamePythonBridge.ts   # Python subprocess manager (spawn, NDJSON, timeout, kill)
+│   │   ├── NotificationService.ts # Create/query notifications + audit log entries + SSE emit
+│   │   └── teamHelpers.ts        # Junction table helpers: getUserLeadIds, getUserLeadUsernames
 │   └── python/
 │       └── game_runner.py        # Python NDJSON bridge: init, action, reset, quit
 │
 ├── shared/
-│   └── types.ts                  # Shared TypeScript types (User, Game, PlaySession, GameFrame, LevelStat, etc.)
+│   └── types.ts                  # Shared TypeScript types (User, Game, UserRole, ApprovalStatus, Notification, AuditLogEntry, etc.)
 │
 ├── scripts/
 │   └── setup-python.cjs          # Postinstall: detect Python binary, install arc-agi, write .python-bin
@@ -184,35 +205,69 @@ arc-agi-internal/
 
 ---
 
+## User Roles & Team Hierarchy
+
+The platform supports 4 user roles with a hierarchical team structure:
+
+| Role | Description | Can Create |
+|------|-------------|------------|
+| **Super Admin** | Full platform access. Manages all users, games, settings. | Any role |
+| **PL** (Project Lead) | Final approval authority. Manages QLs and their taskers. | Tasker, QL |
+| **QL** (Quality Lead) | First-level reviewer. Manages a team of taskers. | Tasker |
+| **Tasker** | Uploads and submits games for review. | — |
+
+### Team Assignment
+
+- Taskers report to one or more QLs
+- QLs report to one or more PLs
+- Assignments are many-to-many via the `user_team_leads` junction table
+- Super Admin can assign anyone; PLs can assign taskers to their QLs and QLs to themselves; QLs can add unassigned taskers to their team
+- Username format: `prefix@ethara.ai`
+
+---
+
 ## System Flows
 
 ### Flow 1: Public User Plays a Game
 
-1. User opens the homepage (`/`), which fetches `GET /api/games/public` to display active games as a grid of preview cards.
+1. User opens the homepage (`/`), which fetches `GET /api/games/public` to display active games as an arcade-themed grid of preview cards.
 2. User clicks a game card. A name modal appears prompting for an optional player name.
 3. User enters name and clicks Play. Browser navigates to `/play/:gameId?name=<name>`.
-4. `PublicPlayPage` mounts and calls `POST /api/player/public/start` with `{game_id, player_name}`.
+4. `PublicPlayPage` mounts inside an arcade cabinet UI and calls `POST /api/player/public/start` with `{game_id, player_name}`.
 5. Server looks up the game in the DB, spawns a `GamePythonBridge` subprocess, calls `bridge.init()` which loads the game `.py` file via `importlib`, instantiates the game class, and performs an initial `RESET` action.
 6. A `play_sessions` row is inserted. The initial frame (grid, width, height, state, level, available_actions) is returned to the client.
 7. A `SessionTracker` is initialized server-side to track per-level timing, actions, game_overs, and resets.
-8. The `GameCanvas` component renders the grid. The player uses keyboard (WASD/Arrow keys/Space) or clicks grid cells to send actions.
+8. The `GameCanvas` component renders the grid inside the arcade cabinet screen area. The player uses keyboard (WASD/Arrow keys/Space) or clicks grid cells to send actions.
 9. Each action calls `POST /api/player/public/action/:sessionGuid` with `{action, x?, y?}`. The server forwards the action to the Python bridge, receives the updated frame, detects level transitions and game_over events, updates `SessionTracker` counters, persists to `play_sessions`, and returns the frame.
 10. On level clear (level number increases), the completed level's stats (actions, time, game_overs, resets) are recorded in `completedLevels`. The client shows a glitch-effect level clear animation.
 11. On WIN or GAME_OVER terminal state, the session's `ended_at` is set, `games.total_plays` is incremented (and `total_wins` on WIN). The client shows a game over/win overlay with final stats.
 12. When the user leaves the page, `POST /api/player/public/end/:sessionGuid` is called, which kills the Python bridge, cleans up in-memory state, and marks unfinished sessions as GAME_OVER.
 
-### Flow 2: Game Request Submission & Approval
+### Flow 2: Game Upload & Approval Workflow
 
-1. Public user opens the homepage and clicks the "Request Upload" tab.
-2. Fills out the form: requester name, email, description, game rules, owner name, drive link, video link, and uploads `game.py` + `metadata.json`.
-3. Submits via `POST /api/requests/submit` (multipart). Server validates metadata JSON, checks `game_id` uniqueness against both `games` and pending `game_requests`, validates URLs (SSRF protection: blocks localhost, private IPs, verifies with HEAD request). Files are saved to `environment_files/_requests/<game_id>/` and binary content is also stored as BYTEA in the `game_requests` table.
-4. Admin navigates to `/admin/requests`, sees the pending request with all metadata.
-5. Admin can view the submitted source code (`GET /api/requests/:id/source`) and download files (`GET /api/requests/:id/files/game` or `/metadata`).
-6. Admin clicks Approve → `POST /api/requests/:id/review` with `{action: "approve"}`. Server copies files from `_requests/` to `environment_files/<game_code>/`, creates a `games` row with `is_active = false`, and deletes the request.
-7. Admin navigates to `/admin/games`, finds the new game (inactive), and toggles it active via `PATCH /api/games/:gameId/toggle`.
-8. Game now appears on the public homepage.
+1. Tasker logs in at `/login`, redirected to `/dashboard`.
+2. Navigates to Upload, submits `game.py` + `metadata.json`. Server creates game with `approval_status = 'draft'`, `is_active = false`.
+3. Tasker goes to My Games, sees the draft game, clicks "Submit for Review". Optionally adds a note for the reviewer.
+4. Server sets `approval_status = 'pending_ql'`, auto-assigns the tasker's QL(s), creates an audit entry, and sends real-time notification to the assigned QL.
+5. QL sees the game in their Review Queue with "ACTION NEEDED" badge. Can view description, game rules, test play the game, and download files.
+6. QL clicks Approve (2-step confirmation modal with optional remarks) → `approval_status = 'pending_pl'`, PL assigned from QL's lead chain. Or Reject with required reason → `approval_status = 'rejected'`, tasker notified.
+7. PL sees QL-approved games in their Review Queue. Can test play, download, review.
+8. PL clicks Approve → `approval_status = 'approved'`, `is_active = true`. Game now appears on public homepage. Or Reject → tasker and QL both notified.
+9. Super Admin can bypass the workflow via "Admin Approve" at any stage.
+10. Rejected games can be resubmitted by the tasker after fixing issues.
 
-### Flow 3: Direct Play (Ephemeral)
+### Flow 3: File Update with Approval Reset
+
+When files are updated on an already-submitted game, the approval resets based on who updates:
+
+| Updater | New Status | Game Active | Notified |
+|---------|-----------|-------------|----------|
+| Tasker | `pending_ql` | No | QL |
+| QL | `pending_pl` | No | PL + Tasker |
+| PL | stays `approved` | Yes | Tasker + QL |
+| Super Admin | no change | no change | — |
+
+### Flow 4: Direct Play (Ephemeral)
 
 1. User opens the homepage and clicks the "Play Your Own" tab, or navigates to `/play-direct`.
 2. Uploads `game.py` + `metadata.json` and optionally enters a player name.
@@ -222,7 +277,16 @@ arc-agi-internal/
 6. On end (`POST /api/player/ephemeral/end/:sessionGuid`), the Python bridge is killed, the temp directory is deleted, and the session is marked as GAME_OVER.
 7. No permanent `games` row is created. Sessions remain in `temp_game_sessions` until an admin deletes them.
 
-### Flow 4: Video Recording
+### Flow 5: Real-Time Notifications
+
+1. On login, `NotificationBell` component opens an SSE connection to `GET /api/notifications/stream?token=<jwt>`.
+2. Server holds the connection open with 30-second heartbeats.
+3. When any approval action, team assignment, or game update occurs, `NotificationService.createNotification()` inserts a DB record and calls `emitToUser()` which pushes to the SSE stream.
+4. Client receives the event, increments the unread badge count, and plays a Web Audio API chime (dual-oscillator 880→1046Hz + 660→784Hz, 300ms).
+5. Sound can be toggled on/off (persisted to localStorage).
+6. Falls back to 15-second polling if SSE connection fails.
+
+### Flow 6: Video Recording
 
 Video recording streams directly to the server in real-time. **Zero client RAM/storage is used** — each 2-second chunk is uploaded and discarded immediately. This ensures recording works on low-end devices without crashes.
 
@@ -269,30 +333,20 @@ Browser                              Server
 
 **Recording is only available for live games** (not ephemeral "Play Your Own"). The prompt shows "Not available" for ephemeral games since there's no server-side game directory.
 
-**Server endpoints for streaming:**
+### Flow 7: Admin Game Management
 
-| Endpoint | Purpose |
-|----------|---------|
-| `POST /api/games/public/:gameId/video/start` | Create recording session, returns `recording_id` |
-| `POST /api/games/public/:gameId/video/chunk` | Append a 2-second chunk (multipart) |
-| `POST /api/games/public/:gameId/video/end` | Finalize recording file |
-| `POST /api/games/public/:gameId/video` | Legacy single-file upload (still supported) |
-
-**Admin access:** Admins can view, stream, download, and delete recordings from the Game Detail → Videos tab.
-
-### Flow 5: Admin Game Management
-
-1. **Upload**: `/admin/games/upload` — upload `game.py` + `metadata.json` with optional metadata fields. Server validates, writes to `environment_files/`, creates DB record with `is_active = false`.
+1. **Upload**: `/dashboard/upload` — upload `game.py` + `metadata.json` with optional metadata fields. Server validates, writes to `environment_files/`, creates DB record. Super admin uploads are auto-approved and active; other roles start as `draft`.
 2. **Edit metadata**: `PUT /api/games/:gameId` — update name, description, rules, owner, links, fps, tags, active status.
-3. **Replace files**: `PUT /api/games/:gameId/files` — upload new `game.py` and/or `metadata.json` to replace existing files on disk.
+3. **Replace files**: `PUT /api/games/:gameId/files` — upload new `game.py` and/or `metadata.json`. Triggers role-based approval reset (see Flow 3).
 4. **Toggle active**: `PATCH /api/games/:gameId/toggle` — show/hide from public homepage.
 5. **View source**: `GET /api/games/:gameId/source` — returns game Python source and parsed metadata JSON.
 6. **Sync from filesystem**: `POST /api/games/sync-local` — scans `environment_files/` for directories with `metadata.json` not yet in the DB and creates game records.
 7. **View sessions**: Analytics tab shows per-game stats; Sessions tab shows per-player cards with level-by-level breakdown.
 8. **Export**: `GET /api/analytics/export/:gameId` — downloads `.xlsx` with session data + summary sheet. Supports date filters.
 9. **Manage recordings**: List, stream, and delete `.webm` recordings.
+10. **Bulk download**: `POST /api/games/bulk-download` — download multiple games as a combined ZIP with per-game folders.
 
-### Flow 6: Reset Behavior
+### Flow 8: Reset Behavior
 
 The RESET action (keyboard `R`) has context-dependent behavior tracked by `SessionTracker.actionsSinceReset`:
 
@@ -301,6 +355,19 @@ The RESET action (keyboard `R`) has context-dependent behavior tracked by `Sessi
 | Player has made moves on current level (`actionsSinceReset > 0`) | 1st R | Reset same level. Level timer restarts. `levelResets++`. `actionsSinceReset` resets to 0. |
 | Player has NOT moved since last reset (`actionsSinceReset === 0`) | 2nd R (double reset) | Full restart to Level 1. `completedLevels` cleared. Session `startTime` resets. All per-level counters reset. |
 | After GAME_OVER | RESET | Continues same level. `levelGameOvers` was already incremented on the GAME_OVER transition. |
+
+---
+
+## Arcade UI Theme
+
+Public-facing pages use a retro CRT arcade cabinet visual theme:
+
+- **Pixel font**: "Press Start 2P" (Google Fonts) for branding, headers, and labels. Readable sans-serif for body text.
+- **Color palette**: Neon colors (cyan, magenta, green, yellow, orange, pink, blue) for accents. Cabinet colors (body, panel, bezel, trim, screen) for structural elements.
+- **CRT effects**: Scanline overlay, vignette, screen bezel, and subtle flicker animations via `arcade.css`.
+- **Game player**: Canvas framed inside an arcade cabinet shape with marquee header, side art panels on large screens, control panel with D-pad and action buttons, coin slot decorations.
+- **Homepage**: Dark background with starfield, neon-accented game cards, pixel font for section headers, clean readable text for game names and descriptions.
+- **Dashboard pages**: Clean modern dark theme (not arcade-styled) for usability.
 
 ---
 
@@ -357,21 +424,37 @@ The ARCEngine returns `frame_data.frame` as a list of animation frames. On level
 
 ## Database Schema
 
-All tables are created automatically on server start via `initDB()` in `server/db.ts`.
+All tables are created automatically on server start via `initDB()` in `server/db.ts`. Existing databases are migrated with `migrateExistingData()`.
 
 ### `users`
 
 | Column | Type | Constraints | Description |
 |--------|------|-------------|-------------|
 | `id` | `TEXT` | PK | UUID |
-| `username` | `VARCHAR(50)` | UNIQUE NOT NULL | Login name |
+| `username` | `VARCHAR(50)` | UNIQUE NOT NULL | Login name (format: `prefix@ethara.ai`) |
 | `hashed_password` | `VARCHAR(255)` | NOT NULL | bcrypt hash |
 | `email` | `VARCHAR(255)` | UNIQUE | Optional email |
-| `is_admin` | `BOOLEAN` | DEFAULT FALSE | Admin flag |
+| `display_name` | `VARCHAR(100)` | | Human-readable name |
+| `role` | `VARCHAR(20)` | DEFAULT 'tasker' | `tasker`, `ql`, `pl`, or `super_admin` |
+| `is_admin` | `BOOLEAN` | DEFAULT FALSE | Legacy admin flag (super_admin = true) |
 | `is_active` | `BOOLEAN` | DEFAULT TRUE | Account active flag |
-| `allowed_pages` | `JSONB` | DEFAULT '[]' | Page-level access control list |
+| `team_lead_id` | `TEXT` | FK → users(id) | Primary lead (legacy, see `user_team_leads` for many-to-many) |
+| `allowed_pages` | `JSONB` | DEFAULT '[]' | Legacy page-level access control list |
 | `created_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
 | `updated_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
+
+### `user_team_leads`
+
+Many-to-many junction table for team assignments.
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | `TEXT` | PK | UUID |
+| `user_id` | `TEXT` | FK → users(id) ON DELETE CASCADE | The team member |
+| `lead_id` | `TEXT` | FK → users(id) ON DELETE CASCADE | The lead they report to |
+| `created_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
+
+UNIQUE constraint on `(user_id, lead_id)`. Indexes on `user_id` and `lead_id`.
 
 ### `games`
 
@@ -388,6 +471,11 @@ All tables are created automatically on server start via `initDB()` in `server/d
 | `version` | `VARCHAR(20)` | NOT NULL DEFAULT 'v1' | Version string |
 | `game_code` | `VARCHAR(10)` | NOT NULL | Base code (game_id without version suffix) |
 | `is_active` | `BOOLEAN` | DEFAULT TRUE | Visible on public homepage |
+| `approval_status` | `VARCHAR(20)` | DEFAULT 'draft' | `draft`, `pending_ql`, `ql_approved`, `pending_pl`, `approved`, `rejected` |
+| `assigned_ql_id` | `TEXT` | FK → users(id) | Assigned Quality Lead |
+| `assigned_pl_id` | `TEXT` | FK → users(id) | Assigned Project Lead |
+| `rejection_reason` | `TEXT` | | Reason for rejection |
+| `rejection_by` | `TEXT` | FK → users(id) | Who rejected |
 | `default_fps` | `INTEGER` | DEFAULT 5 | Animation FPS |
 | `baseline_actions` | `JSONB` | | Array of baseline action counts per level |
 | `tags` | `JSONB` | | String array of tags |
@@ -400,7 +488,7 @@ All tables are created automatically on server start via `initDB()` in `server/d
 | `avg_score` | `REAL` | DEFAULT 0.0 | Average score |
 | `created_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
 | `updated_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
-| `uploaded_by` | `TEXT` | FK → users(id) | Admin who uploaded |
+| `uploaded_by` | `TEXT` | FK → users(id) | User who uploaded |
 
 ### `play_sessions`
 
@@ -422,6 +510,34 @@ All tables are created automatically on server start via `initDB()` in `server/d
 | `action_log` | `JSONB` | DEFAULT '[]' | Full action history |
 | `started_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
 | `ended_at` | `TIMESTAMPTZ` | | Set on terminal state |
+
+### `notifications`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | `TEXT` | PK | UUID |
+| `user_id` | `TEXT` | FK → users(id) ON DELETE CASCADE | Recipient |
+| `type` | `VARCHAR(50)` | NOT NULL | `game_submitted`, `game_approved_ql`, `game_approved_pl`, `game_rejected`, `game_resubmitted`, `team_assigned`, `game_updated` |
+| `title` | `VARCHAR(200)` | NOT NULL | Notification title |
+| `message` | `TEXT` | | Notification body |
+| `game_id` | `TEXT` | FK → games(id) ON DELETE SET NULL | Related game (optional) |
+| `is_read` | `BOOLEAN` | DEFAULT FALSE | Read status |
+| `created_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
+
+Indexes on `(user_id, is_read)` and `(created_at DESC)`.
+
+### `audit_log`
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | `TEXT` | PK | UUID |
+| `game_id` | `TEXT` | FK → games(id) ON DELETE CASCADE | Related game |
+| `user_id` | `TEXT` | FK → users(id) ON DELETE SET NULL | Actor |
+| `action` | `VARCHAR(50)` | NOT NULL | `game_uploaded`, `game_updated`, `game_submitted_for_review`, `game_approved_by_ql`, `game_rejected_by_ql`, `game_approved_by_pl`, `game_rejected_by_pl`, `game_approved_by_admin`, `game_resubmitted`, `game_version_updated` |
+| `details` | `JSONB` | | Additional context (reason, message, previous_status, etc.) |
+| `created_at` | `TIMESTAMPTZ` | DEFAULT NOW() | |
+
+Indexes on `(game_id, created_at DESC)` and `(user_id)`.
 
 ### `game_analytics`
 
@@ -494,6 +610,12 @@ CREATE INDEX idx_sessions_game    ON play_sessions(game_id);
 CREATE INDEX idx_sessions_guid    ON play_sessions(session_guid);
 CREATE INDEX idx_requests_status  ON game_requests(status);
 CREATE INDEX idx_temp_guid        ON temp_game_sessions(session_guid);
+CREATE INDEX idx_notifications_user ON notifications(user_id, is_read);
+CREATE INDEX idx_notifications_date ON notifications(created_at DESC);
+CREATE INDEX idx_audit_game       ON audit_log(game_id, created_at DESC);
+CREATE INDEX idx_audit_user       ON audit_log(user_id);
+CREATE INDEX idx_team_leads_user  ON user_team_leads(user_id);
+CREATE INDEX idx_team_leads_lead  ON user_team_leads(lead_id);
 ```
 
 ---
@@ -512,9 +634,44 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `POST` | `/auth/login` | None | Login with `{username, password}`, returns JWT |
-| `GET` | `/auth/me` | JWT | Get current user profile |
-| `POST` | `/auth/register` | Admin | Create new user account |
+| `POST` | `/auth/login` | None | Login with `{username, password}`, returns JWT + user with role |
+| `GET` | `/auth/me` | JWT | Get current user profile (includes `role`, `display_name`, `team_lead_ids`) |
+| `POST` | `/auth/register` | JWT (Super Admin / PL / QL) | Create new user. Accepts `username`, `password`, `email`, `display_name`, `role`, `team_lead_ids[]`. QLs can only create taskers; PLs can create taskers and QLs. |
+
+### Approval — `/api/approval`
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/approval/my-games` | JWT (Tasker) | List own games with approval details |
+| `GET` | `/approval/ql-queue` | JWT (QL) | Games assigned to this QL for review |
+| `GET` | `/approval/pl-queue` | JWT (PL) | Games assigned to this PL for final review |
+| `GET` | `/approval/all` | JWT (Super Admin) | All games with approval details |
+| `POST` | `/approval/:gameId/submit-for-review` | JWT (Tasker) | Submit draft/rejected game for QL review. Optional `{message}` body. |
+| `POST` | `/approval/:gameId/ql-review` | JWT (QL) | `{action: "approve"\|"reject", reason?}` |
+| `POST` | `/approval/:gameId/pl-review` | JWT (PL) | `{action: "approve"\|"reject", reason?}` |
+| `POST` | `/approval/:gameId/admin-approve` | JWT (Super Admin) | Bypass approval. Optional `{message}`. |
+| `GET` | `/approval/:gameId/audit` | JWT | Audit log for game (tasker: own only, QL: assigned, PL/admin: all) |
+
+### Teams — `/api/teams`
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/teams/my-team` | JWT (QL/PL) | QL: their taskers. PL: their QLs + nested taskers. |
+| `GET` | `/teams/all-users` | JWT (Super Admin) | All users with team lead info |
+| `PUT` | `/teams/assign` | JWT (Super Admin/PL/QL) | `{user_id, lead_id, action?}`. `action='remove'` to unassign. |
+| `GET` | `/teams/unassigned` | JWT (Super Admin/PL/QL) | Unassigned users eligible for team assignment |
+| `GET` | `/teams/:userId/detail` | JWT (PL/Super Admin) | QL/PL detail with games, gameplay stats, tasker list. Supports `?from=&to=` date filters. |
+| `GET` | `/teams/:userId/tasker-detail` | JWT (QL/PL/Super Admin) | Tasker detail with games, audit timeline, gameplay stats, file availability. Supports `?from=&to=`. |
+
+### Notifications — `/api/notifications`
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/notifications/stream` | JWT (query param `token`) | SSE stream for real-time notifications |
+| `GET` | `/notifications/` | JWT | List notifications. Optional `?unread=true&limit=N`. Returns `{notifications, unread_count}`. |
+| `GET` | `/notifications/unread-count` | JWT | Just the unread count |
+| `PUT` | `/notifications/:id/read` | JWT | Mark single notification as read |
+| `PUT` | `/notifications/read-all` | JWT | Mark all as read |
 
 ### Games — `/api/games`
 
@@ -533,23 +690,25 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 | `POST` | `/games/public/:gameId/video/end` | None | Finalize recording on server |
 | `POST` | `/games/public/:gameId/video` | None | Legacy single-file upload (multipart, `video` field) |
 
-**Admin (JWT + admin):**
+**Authenticated (role-based):**
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `GET` | `/games/` | Admin | List all games (optional `?active_only=true`) |
-| `GET` | `/games/:gameId` | Admin | Get game details (including inactive) |
-| `POST` | `/games/upload` | Admin | Upload new game (multipart: `game_file` + `metadata_file` + form fields) |
-| `PUT` | `/games/:gameId` | Admin | Update game metadata |
-| `PUT` | `/games/:gameId/files` | Admin | Replace game files on disk |
-| `PATCH` | `/games/:gameId/toggle` | Admin | Toggle `is_active` |
-| `DELETE` | `/games/:gameId` | Admin | Delete game + sessions + files |
-| `DELETE` | `/games/:gameId/sessions` | Admin | Clear sessions + reset counters |
-| `GET` | `/games/:gameId/source` | Admin | View `.py` source + parsed metadata |
-| `POST` | `/games/sync-local` | Admin | Scan filesystem, create DB records for new games |
-| `GET` | `/games/:gameId/videos` | Admin | List recordings |
-| `GET` | `/games/:gameId/videos/:filename` | Admin | Stream recording file |
-| `DELETE` | `/games/:gameId/videos/:filename` | Admin | Delete recording |
+| `GET` | `/games/` | JWT (Super Admin) | List all games (optional `?active_only=true`) |
+| `GET` | `/games/:gameId` | JWT (all roles) | Get game details. Taskers: own games only. |
+| `POST` | `/games/upload` | JWT (all roles) | Upload new game. Super admin: auto-approved. Others: draft. |
+| `PUT` | `/games/:gameId` | JWT (Super Admin) | Update game metadata |
+| `PUT` | `/games/:gameId/files` | JWT (all roles) | Replace game files. Triggers role-based approval reset. |
+| `PATCH` | `/games/:gameId/toggle` | JWT (Super Admin) | Toggle `is_active` |
+| `DELETE` | `/games/:gameId` | JWT (Super Admin) | Delete game + sessions + files |
+| `DELETE` | `/games/:gameId/sessions` | JWT (Super Admin) | Clear sessions + reset counters |
+| `GET` | `/games/:gameId/source` | JWT (all roles) | View `.py` source + parsed metadata |
+| `GET` | `/games/:gameId/download` | JWT (all roles) | Download game files as ZIP |
+| `POST` | `/games/bulk-download` | JWT (all roles) | Download multiple games as ZIP. Body: `{game_ids: string[]}` (max 100). |
+| `POST` | `/games/sync-local` | JWT (Super Admin) | Scan filesystem, create DB records for new games |
+| `GET` | `/games/:gameId/videos` | JWT (Super Admin) | List recordings |
+| `GET` | `/games/:gameId/videos/:filename` | JWT (Super Admin) | Stream recording file |
+| `DELETE` | `/games/:gameId/videos/:filename` | JWT (Super Admin) | Delete recording |
 
 ### Player — `/api/player`
 
@@ -573,7 +732,7 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `POST` | `/player/start` | JWT | Start authenticated session |
+| `POST` | `/player/start` | JWT | Start authenticated session (allows playing inactive games for testing/review) |
 | `POST` | `/player/action/:sessionGuid` | JWT | Send action (authenticated) |
 | `GET` | `/player/frame/:sessionGuid` | JWT | Get current frame without action |
 | `POST` | `/player/end/:sessionGuid` | JWT | End authenticated session |
@@ -595,24 +754,25 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 | `GET` | `/analytics/sessions` | JWT | Recent sessions (optional `?game_id=&limit=20`) |
 | `GET` | `/analytics/replay/:sessionId` | JWT | Full session replay data with action_log |
 
-**Admin:**
+**Super Admin:**
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `GET` | `/analytics/temp-sessions` | Admin | List all ephemeral sessions |
-| `DELETE` | `/analytics/temp-sessions` | Admin | Delete all ephemeral sessions |
-| `GET` | `/analytics/export/:gameId` | Admin | Export sessions as .xlsx (filters: `?filter=all\|today\|date\|range`) |
-| `GET` | `/analytics/export-all` | Admin | Export all games' sessions as .xlsx |
-| `GET` | `/analytics/export-games` | Admin | Export games list as .xlsx |
+| `GET` | `/analytics/temp-sessions` | Super Admin | List all ephemeral sessions |
+| `DELETE` | `/analytics/temp-sessions` | Super Admin | Delete all ephemeral sessions |
+| `GET` | `/analytics/export/:gameId` | Super Admin | Export sessions as .xlsx (filters: `?filter=all\|today\|date\|range`) |
+| `GET` | `/analytics/export-all` | Super Admin | Export all games' sessions as .xlsx |
+| `GET` | `/analytics/export-games` | Super Admin | Export games list as .xlsx |
 
 ### Users — `/api/users`
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `GET` | `/users/` | Admin | List all users |
-| `GET` | `/users/:userId` | Admin | Get single user |
-| `PUT` | `/users/:userId` | Admin | Update user (email, is_admin, is_active, password, allowed_pages) |
-| `DELETE` | `/users/:userId` | Admin | Delete user (cannot delete self or protected user) |
+| `GET` | `/users/` | Super Admin | List all users (with role, display_name, team_lead_ids) |
+| `GET` | `/users/:userId` | Super Admin | Get single user |
+| `PUT` | `/users/:userId` | Super Admin | Update user (email, role, display_name, is_active, password, team_lead_ids) |
+| `DELETE` | `/users/:userId` | Super Admin | Delete user (cannot delete self or protected user) |
+| `PUT` | `/users/me/change-password` | JWT | Change own password: `{current_password, new_password}` |
 | `POST` | `/users/protected/change-password` | JWT | Protected admin password change (requires `secret_code`) |
 
 ### Requests — `/api/requests`
@@ -620,12 +780,12 @@ All routes are prefixed with `/api`. Authentication is via `Authorization: Beare
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
 | `POST` | `/requests/submit` | None | Submit game for review (multipart + form fields) |
-| `GET` | `/requests/` | Admin | List requests by status (`?status=pending\|approved\|rejected\|all`) |
-| `GET` | `/requests/:requestId` | Admin | Get request details |
-| `GET` | `/requests/:requestId/source` | Admin | View submitted source code + metadata |
-| `GET` | `/requests/:requestId/files/:fileType` | Admin | Download submitted file (`game` or `metadata`) |
-| `POST` | `/requests/:requestId/review` | Admin | Approve or reject: `{action: "approve"\|"reject", admin_note?}` |
-| `DELETE` | `/requests/:requestId` | Admin | Delete request + cleanup files |
+| `GET` | `/requests/` | Super Admin | List requests by status (`?status=pending\|approved\|rejected\|all`) |
+| `GET` | `/requests/:requestId` | Super Admin | Get request details |
+| `GET` | `/requests/:requestId/source` | Super Admin | View submitted source code + metadata |
+| `GET` | `/requests/:requestId/files/:fileType` | Super Admin | Download submitted file (`game` or `metadata`) |
+| `POST` | `/requests/:requestId/review` | Super Admin | Approve or reject: `{action: "approve"\|"reject", admin_note?}` |
+| `DELETE` | `/requests/:requestId` | Super Admin | Delete request + cleanup files |
 
 ### Per-Level Stats JSON Structure
 
@@ -651,6 +811,70 @@ Stored in `play_sessions.level_stats` and `temp_game_sessions.level_stats`:
   }
 ]
 ```
+
+---
+
+## Frontend Pages
+
+| Route | Component | Auth | Description |
+|-------|-----------|------|-------------|
+| `/` | `HomePage` | None | Arcade-themed game catalog + "Play Your Own" tab |
+| `/play/:gameId` | `PublicPlayPage` | None | Arcade cabinet game player with canvas, controls, timer, recorder |
+| `/play-direct` | `DirectPlayPage` | None | Ephemeral upload-and-play (arcade themed) |
+| `/login` | `LoginPage` | None | Shared login for all roles → redirects to `/dashboard` |
+| `/dashboard` | `RoleDashboardPage` | JWT | Role-specific home (Tasker/QL/PL/SuperAdmin views with stats) |
+| `/dashboard/my-games` | `MyGamesPage` | JWT | Tasker: game list, submit for review, update files, bulk download |
+| `/dashboard/upload` | `GameUploadPage` | JWT | Upload new game (all roles) |
+| `/dashboard/review` | `ReviewQueuePage` | JWT (QL/PL/SA) | Review queue: approve/reject (2-step confirm), game rules, bulk download |
+| `/dashboard/team` | `TeamManagementPage` | JWT (QL/PL/SA) | Team management: create users, assign leads, multi-lead picker |
+| `/dashboard/team/:userId` | `TeamMemberDetailPage` | JWT (PL/SA) | QL/PL detail: games by status, gameplay stats, tasker list |
+| `/dashboard/team/tasker/:userId` | `TaskerDetailPage` | JWT (QL/PL/SA) | Tasker detail: game history timeline, gameplay stats, file download |
+| `/dashboard/profile` | `ProfilePage` | JWT | User profile + change password |
+| `/dashboard/games/:gameId/play` | `GamePlayPage` | JWT | Play game (authenticated, allows inactive games) |
+| `/dashboard/settings` | `SettingsPage` | JWT (SA) | Recording toggle, theme |
+| `/dashboard/games` | `GamesPage` | JWT (SA) | All games table: search, filter, toggle, delete, sync |
+| `/dashboard/games/:gameId` | `GameDetailPage` | JWT (SA) | Game detail: overview, analytics, source, sessions, videos |
+| `/dashboard/users` | `UsersPage` | JWT (SA) | User management: create, edit, delete |
+| `/dashboard/requests` | `RequestedGamesPage` | JWT (SA) | Game request management |
+| `/dashboard/temp-games` | `TempGamesPage` | JWT (SA) | Ephemeral session log |
+| `/dashboard/admin-stats` | `DashboardPage` | JWT (SA) | Analytics dashboard with charts |
+| `/dashboard/eval` | `EvalPage` | JWT (SA) | Eval runner |
+| `/dashboard/logs` | `LogsPage` | JWT (SA) | System logs |
+| `/dashboard/system` | `SystemPage` | JWT (SA) | System status |
+| `/admin/*` | — | — | Redirects to `/dashboard` |
+
+---
+
+## Authentication & Authorization
+
+### JWT Flow
+
+1. Client sends `POST /api/auth/login` with `{username, password}`.
+2. Server verifies bcrypt hash, returns `{access_token, token_type: "bearer"}` plus user object with `role`.
+3. Client stores token in `localStorage` as `arc_token`.
+4. All subsequent requests include `Authorization: Bearer <token>` via Axios interceptor.
+5. On 401 response while on `/dashboard/*` or `/admin/*`, client clears token and redirects to `/login`.
+
+### Role-Based Access
+
+| Role | Dashboard | Upload | My Games | Review Queue | Team | Admin Pages | Settings |
+|------|-----------|--------|----------|-------------|------|-------------|----------|
+| **Super Admin** | Full analytics | Yes (auto-approved) | — | All games | All users | Full access | Yes |
+| **PL** | PL overview | Yes | — | PL queue | QLs + taskers | — | — |
+| **QL** | QL overview | Yes | — | QL queue | Own taskers | — | — |
+| **Tasker** | Tasker overview | Yes | Yes | — | — | — | — |
+
+### Middleware
+
+- `authenticateToken` — Validates JWT, attaches `req.user`
+- `requireAdmin` — Checks `is_admin` or `role === 'super_admin'`
+- `requireRole(...roles: UserRole[])` — Factory that checks user's role against allowed list. `super_admin` always passes.
+
+### Protected Super Admin
+
+If `PROTECTED_USERNAME` is set in `.env`, a super admin account is created on first start. This account:
+- Cannot be modified or deleted by other admins via the Users API.
+- Password can only be changed via `POST /api/users/protected/change-password` with the correct `PROTECTED_SECRET_CODE`.
 
 ---
 
@@ -730,56 +954,6 @@ The ARC-AGI-3 palette uses 16 indexed colors (defined in `shared/types.ts` and `
 | 13 | Maroon | `#921231` |
 | 14 | Green | `#4FCC30` |
 | 15 | Purple | `#A356D6` |
-
----
-
-## Frontend Pages
-
-| Route | Component | Auth | Description |
-|-------|-----------|------|-------------|
-| `/` | `HomePage` | None | Public homepage — game grid, "Play Your Own" tab, "Request Upload" tab, aggregate stats |
-| `/play/:gameId` | `PublicPlayPage` | None | Full game player with canvas, keyboard controls, timer, level stats, video recorder |
-| `/play-direct` | `DirectPlayPage` | None | Ephemeral upload-and-play |
-| `/admin/login` | `LoginPage` | None | Admin login form |
-| `/admin` | `DashboardPage` | JWT | Dashboard — stat cards, 7-day charts (recharts), game distribution, recent games, top played |
-| `/admin/games` | `GamesPage` | JWT + `games` | Game management table — search, filter, toggle active, delete, sync from filesystem |
-| `/admin/games/upload` | `GameUploadPage` | JWT + `upload` | Upload new game form |
-| `/admin/games/:gameId` | `GameDetailPage` | JWT + `games` | Game detail — tabs: Overview, Analytics, Source Code, Sessions (with level breakdown), Videos |
-| `/admin/games/:gameId/play` | `GamePlayPage` | JWT + `games` | Play game as authenticated admin |
-| `/admin/requests` | `RequestedGamesPage` | JWT + `requests` | Game request management — view, approve/reject, view source |
-| `/admin/temp-games` | `TempGamesPage` | JWT + `games` | Ephemeral session log — view and bulk delete |
-| `/admin/users` | `UsersPage` | JWT + `users` | User management — create, edit roles/pages, delete |
-
----
-
-## Authentication & Authorization
-
-### JWT Flow
-
-1. Client sends `POST /api/auth/login` with `{username, password}`.
-2. Server verifies bcrypt hash, returns `{access_token, token_type: "bearer"}`.
-3. Client stores token in `localStorage` as `arc_token`.
-4. All subsequent requests include `Authorization: Bearer <token>` via Axios interceptor.
-5. On 401 response while on `/admin/*`, client clears token and redirects to login.
-
-### Role-Based Access
-
-- **Admin** (`is_admin: true`): Full access to all admin routes and pages.
-- **Regular user** (`is_admin: false`): Access controlled by `allowed_pages` array. Pages: `dashboard`, `games`, `upload`, `requests`, `users`.
-- **Public**: No auth required for homepage, play pages, game request submission, and ephemeral play.
-
-### Page-Level Access Control
-
-- `allowed_pages` is a JSONB array on the `users` table.
-- `PageGuard` component in `App.tsx` checks `user.allowed_pages.includes(page)` before rendering.
-- Admins bypass all page guards.
-- Server-side: `requireAdmin` middleware enforces admin-only endpoints. `requirePage(page)` middleware is available but admin routes currently use `requireAdmin`.
-
-### Protected Super Admin
-
-If `PROTECTED_USERNAME` is set in `.env`, a super admin account is created on first start. This account:
-- Cannot be modified or deleted by other admins via the Users API.
-- Password can only be changed via `POST /api/users/protected/change-password` with the correct `PROTECTED_SECRET_CODE`.
 
 ---
 

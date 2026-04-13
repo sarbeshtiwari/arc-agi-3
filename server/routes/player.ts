@@ -948,7 +948,15 @@ router.post(
       throw new AppError("Game not found", 404);
     }
     if (!game.is_active) {
-      throw new AppError("Game is deactivated", 400);
+      const userRole = req.user.role;
+      const canPlayInactive =
+        userRole === "super_admin" ||
+        game.uploaded_by === userId ||
+        game.assigned_ql_id === userId ||
+        game.assigned_pl_id === userId;
+      if (!canPlayInactive) {
+        throw new AppError("Game is deactivated", 400);
+      }
     }
 
     const sessionGuid = crypto.randomUUID();

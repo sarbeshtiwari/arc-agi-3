@@ -1,11 +1,43 @@
+// ──── Role & Approval Types ────
+
+export type UserRole = 'tasker' | 'ql' | 'pl' | 'super_admin';
+
+export type ApprovalStatus =
+  | 'draft'
+  | 'pending_ql'
+  | 'ql_approved'
+  | 'pending_pl'
+  | 'approved'
+  | 'rejected';
+
+export const ROLE_LABELS: Record<UserRole, string> = {
+  tasker: 'Tasker',
+  ql: 'Quality Lead',
+  pl: 'Project Lead',
+  super_admin: 'Super Admin',
+};
+
+export const APPROVAL_STATUS_LABELS: Record<ApprovalStatus, string> = {
+  draft: 'Draft',
+  pending_ql: 'Pending QL Review',
+  ql_approved: 'QL Approved',
+  pending_pl: 'Pending PL Review',
+  approved: 'Approved',
+  rejected: 'Rejected',
+};
+
 // ──── API Response Types ────
 
 export interface User {
   id: string;
   username: string;
+  display_name: string | null;
   email: string | null;
   is_admin: boolean;
   is_active: boolean;
+  role: UserRole;
+  team_lead_id: string | null;
+  team_lead_ids: string[];
   allowed_pages: string[];
   created_at: string;
 }
@@ -28,6 +60,11 @@ export interface Game {
   grid_max_size: number;
   total_plays: number;
   total_wins: number;
+  approval_status: ApprovalStatus;
+  assigned_ql_id: string | null;
+  assigned_pl_id: string | null;
+  rejection_reason: string | null;
+  rejection_by: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -246,16 +283,22 @@ export interface LevelClearAnim {
 export interface CreateUserRequest {
   username: string;
   password: string;
+  display_name?: string;
   email?: string;
   is_admin?: boolean;
+  role?: UserRole;
+  team_lead_ids?: string[];
   allowed_pages?: string[];
 }
 
 export interface UpdateUserRequest {
   email?: string;
+  display_name?: string;
   is_admin?: boolean;
   is_active?: boolean;
   password?: string;
+  role?: UserRole;
+  team_lead_ids?: string[];
   allowed_pages?: string[];
 }
 
@@ -313,3 +356,80 @@ export const ARC_COLORS: Record<number, string> = {
   14: '#4FCC30',  // Green
   15: '#A356D6',  // Purple
 };
+
+// ──── Notification Types ────
+
+export type NotificationType =
+  | 'game_submitted'
+  | 'game_approved_ql'
+  | 'game_approved_pl'
+  | 'game_rejected'
+  | 'game_resubmitted'
+  | 'team_assigned'
+  | 'game_updated';
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  game_id: string | null;
+  is_read: boolean;
+  created_at: string;
+}
+
+// ──── Audit Log Types ────
+
+export type AuditAction =
+  | 'game_uploaded'
+  | 'game_updated'
+  | 'game_submitted_for_review'
+  | 'game_approved_by_ql'
+  | 'game_rejected_by_ql'
+  | 'game_approved_by_pl'
+  | 'game_rejected_by_pl'
+  | 'game_approved_by_admin'
+  | 'game_version_updated'
+  | 'game_resubmitted';
+
+export interface AuditLogEntry {
+  id: string;
+  game_id: string;
+  user_id: string;
+  username?: string;
+  action: AuditAction;
+  details: Record<string, any> | null;
+  created_at: string;
+}
+
+// ──── Approval Workflow Request Types ────
+
+export interface SubmitForReviewRequest {
+  message?: string;
+}
+
+export interface ApprovalActionRequest {
+  action: 'approve' | 'reject';
+  reason?: string;
+}
+
+// ──── Team Types ────
+
+export interface TeamMember {
+  id: string;
+  username: string;
+  display_name: string | null;
+  email: string | null;
+  role: UserRole;
+  is_active: boolean;
+  team_lead_id: string | null;
+  team_lead_ids: string[];
+  team_lead_usernames: string[];
+  created_at: string;
+}
+
+export interface TeamAssignment {
+  user_id: string;
+  lead_ids: string[];
+}

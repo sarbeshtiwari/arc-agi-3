@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { gamesAPI, requestsAPI } from '../api/client';
+import { gamesAPI } from '../api/client';
 import GamePreviewCanvas from '../components/GamePreviewCanvas';
-import GameUploadForm from '../components/GameUploadForm';
+
 import {
   Search, Gamepad2, BarChart3, Clock, X, User, ArrowRight,
-  Upload, FileCode, FileJson, Zap, ChevronRight, ChevronDown, Send, Layers,
+  Upload, FileCode, FileJson, Zap, ChevronRight, ChevronDown, Layers,
   Play, Trophy, Flame, ArrowUpDown, Grid3X3, List, Tag
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
@@ -33,11 +33,6 @@ export default function HomePage() {
   const [metadataFile, setMetadataFile] = useState(null);
   const gameFileRef = useRef(null);
   const metadataFileRef = useRef(null);
-
-  // Request upload state
-  const [requestSubmitting, setRequestSubmitting] = useState(false);
-  const [requestSuccess, setRequestSuccess] = useState('');
-  const [requestError, setRequestError] = useState('');
 
   useEffect(() => {
     const saved = localStorage.getItem('arc_player_name');
@@ -157,7 +152,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <a href="/admin" className="text-xs text-gray-500 hover:text-gray-300 transition-colors">Admin</a>
+            <a href="/login" className="flex items-center gap-1.5 px-3 py-1.5 bg-cyan-500/15 text-cyan-400 hover:bg-cyan-500/25 rounded-lg text-xs font-medium transition-colors">Login</a>
           </div>
         </div>
       </header>
@@ -186,16 +181,6 @@ export default function HomePage() {
               }`}
             >
               <Upload size={16} /> Play Your Own
-            </button>
-            <button
-              onClick={() => setActiveTab('request')}
-              className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors ${
-                activeTab === 'request'
-                  ? 'bg-emerald-500/15 text-emerald-400 border-b-2 border-emerald-400'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/60'
-              }`}
-            >
-              <Send size={16} /> Request
             </button>
           </div>
 
@@ -427,12 +412,6 @@ export default function HomePage() {
                         className="flex items-center gap-2 px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-gray-950 font-semibold text-sm rounded-lg transition-colors shadow-lg shadow-cyan-500/20"
                       >
                         <Upload size={16} /> Play Your Own
-                      </button>
-                      <button
-                        onClick={() => setActiveTab('request')}
-                        className="flex items-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm font-medium rounded-lg transition-colors"
-                      >
-                        <Send size={16} /> Submit a Game
                       </button>
                     </div>
                   </div>
@@ -668,31 +647,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        )}
-
-        {/* ── Request Upload Tab ── */}
-        {activeTab === 'request' && (
-          <GameUploadForm
-            mode="request"
-            onSubmit={async (formData) => {
-              setRequestSubmitting(true);
-              setRequestSuccess('');
-              setRequestError('');
-              try {
-                await requestsAPI.submit(formData);
-                setRequestSuccess('Game submitted for review! You will be notified once approved.');
-                return true;
-              } catch (err) {
-                setRequestError(err.response?.data?.detail || 'Submission failed');
-                return false;
-              } finally {
-                setRequestSubmitting(false);
-              }
-            }}
-            submitting={requestSubmitting}
-            successMessage={requestSuccess}
-            errorMessage={requestError}
-          />
         )}
       </main>
 

@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import pool, { genId, queryOne } from "../db.js";
+import type { UserRole } from "../../shared/types.js";
 
 // ──── Augment Express Request with user ────
 declare global {
@@ -90,11 +91,26 @@ export function requireAdmin(
   res: Response,
   next: NextFunction,
 ): void {
-  if (!req.user?.is_admin) {
+  if (!req.user?.is_admin && req.user?.role !== 'super_admin') {
     res.status(403).json({ detail: "Admin access required" });
     return;
   }
   next();
+}
+
+export function requireRole(...roles: UserRole[]) {
+  return (req: Request, res: Response, next: NextFunction): void => {
+    const userRole: UserRole | undefined = req.user?.role;
+    if (userRole === 'super_admin') {
+      next();
+      return;
+    }
+    if (!userRole || !roles.includes(userRole)) {
+      res.status(403).json({ detail: `Requires one of: ${roles.join(', ')}` });
+      return;
+    }
+    next();
+  };
 }
 
 // ──── Middleware factory: require page access ────
@@ -128,13 +144,17 @@ export async function ensureDefaultAdmin() {
     const hashed = bcrypt.hashSync(password, 10);
     const allPages = ["dashboard", "games", "upload", "requests", "users"];
     await pool.query(
-      `INSERT INTO users (id, username, hashed_password, is_admin, is_active, allowed_pages) VALUES ($1, $2, $3, TRUE, TRUE, $4)`,
+      `INSERT INTO users (id, username, hashed_password, is_admin, is_active, role, allowed_pages) VALUES ($1, $2, $3, TRUE, TRUE, 'super_admin', $4)`,
       [genId(), username, hashed, JSON.stringify(allPages)]
     );
     console.log(`[AUTH] Default admin created: ${username}`);
+  } else {
+    await pool.query(
+      `UPDATE users SET role = 'super_admin' WHERE username = $1 AND (role IS NULL OR role = 'tasker')`,
+      [username]
+    );
   }
 
-  // Protected super admin
   const protectedUsername = process.env.PROTECTED_USERNAME;
   if (protectedUsername) {
     const protectedUser = await queryOne("SELECT id FROM users WHERE username = $1", [protectedUsername]);
@@ -143,10 +163,15 @@ export async function ensureDefaultAdmin() {
       const hashed = bcrypt.hashSync(protectedPassword, 10);
       const allPages = ["dashboard", "games", "upload", "requests", "users"];
       await pool.query(
-        `INSERT INTO users (id, username, hashed_password, is_admin, is_active, allowed_pages) VALUES ($1, $2, $3, TRUE, TRUE, $4)`,
+        `INSERT INTO users (id, username, hashed_password, is_admin, is_active, role, allowed_pages) VALUES ($1, $2, $3, TRUE, TRUE, 'super_admin', $4)`,
         [genId(), protectedUsername, hashed, JSON.stringify(allPages)]
       );
       console.log(`[AUTH] Protected super admin created: ${protectedUsername}`);
+    } else {
+      await pool.query(
+        `UPDATE users SET role = 'super_admin' WHERE username = $1 AND (role IS NULL OR role = 'tasker')`,
+        [protectedUsername]
+      );
     }
   }
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { gamesAPI, playerAPI } from '../api/client';
+import { useAuth } from '../hooks/useAuth';
 import GameCanvas from '../components/GameCanvas';
 import VideoRecorder from '../components/VideoRecorder';
 import {
@@ -27,6 +28,8 @@ function formatTime(seconds) {
 export default function GamePlayPage() {
   const { gameId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const backLink = user?.role === 'super_admin' ? `/dashboard/games/${gameId}` : '/dashboard/my-games';
   const [game, setGame] = useState(null);
   const [gameLoading, setGameLoading] = useState(true);
 
@@ -98,7 +101,7 @@ export default function GamePlayPage() {
   useEffect(() => {
     gamesAPI.get(gameId)
       .then((res) => setGame(res.data))
-      .catch(() => navigate('/admin/games'))
+      .catch(() => navigate(backLink))
       .finally(() => setGameLoading(false));
   }, [gameId, navigate]);
 
@@ -191,7 +194,7 @@ export default function GamePlayPage() {
     <div className="min-h-[calc(100vh-48px)]">
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
-        <Link to={`/admin/games/${gameId}`} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
+        <Link to={backLink} className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors">
           <ChevronLeft size={18} />
         </Link>
         <div className="flex-1 min-w-0">
@@ -212,7 +215,7 @@ export default function GamePlayPage() {
               onPromptDismissed={startTimer}
             />
             <button
-              onClick={async () => { await endGame(); navigate(`/admin/games/${gameId}`); }}
+              onClick={async () => { await endGame(); navigate(backLink); }}
               className="flex items-center gap-1 px-2.5 py-1 text-[11px] text-red-400 hover:bg-red-500/10 border border-red-500/20 rounded-md transition-colors"
             >
               <Square size={10} /> End
@@ -298,7 +301,7 @@ export default function GamePlayPage() {
                             <div className="win-stat"><div className="bg-gray-900/80 backdrop-blur-sm border border-emerald-500/20 rounded-xl px-5 py-3 text-center"><p className="text-2xl font-bold text-white font-mono">{formatTime(serverTotalTime)}</p><p className="text-[10px] text-emerald-400/70 uppercase tracking-widest mt-0.5">Time</p></div></div>
                             <div className="win-stat" style={{animationDelay:'0.1s'}}><div className="bg-gray-900/80 backdrop-blur-sm border border-emerald-500/20 rounded-xl px-5 py-3 text-center"><p className="text-2xl font-bold text-white font-mono">{frame?.total_actions}</p><p className="text-[10px] text-emerald-400/70 uppercase tracking-widest mt-0.5">Actions</p></div></div>
                           </div>
-                          <Link to={`/admin/games/${gameId}`} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-emerald-500/20 win-btn">
+                          <Link to={backLink} className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-emerald-500/20 win-btn">
                             <ChevronLeft size={15} /> Back to Game
                           </Link>
                         </>
@@ -311,7 +314,7 @@ export default function GamePlayPage() {
                             <div className="bg-gray-900/80 backdrop-blur-sm border border-red-500/15 rounded-xl px-5 py-3 text-center"><p className="text-xl font-bold text-white font-mono">{formatTime(serverTotalTime)}</p><p className="text-[10px] text-red-400/60 uppercase tracking-widest mt-0.5">Time</p></div>
                             <div className="bg-gray-900/80 backdrop-blur-sm border border-red-500/15 rounded-xl px-5 py-3 text-center"><p className="text-xl font-bold text-white font-mono">{frame?.total_actions}</p><p className="text-[10px] text-red-400/60 uppercase tracking-widest mt-0.5">Actions</p></div>
                           </div>
-                          <Link to={`/admin/games/${gameId}`} className="inline-flex items-center gap-1.5 px-5 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg transition-colors"><ChevronLeft size={14} /> Back to Game</Link>
+                          <Link to={backLink} className="inline-flex items-center gap-1.5 px-5 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-lg transition-colors"><ChevronLeft size={14} /> Back to Game</Link>
                         </>
                       )}
                     </div>

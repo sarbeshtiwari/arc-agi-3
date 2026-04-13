@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { authAPI } from '../api/client';
 
 const AuthContext = createContext(null);
@@ -35,8 +35,26 @@ export function AuthProvider({ children }) {
     setUser(null);
   };
 
+  const refreshUser = useCallback(async () => {
+    try {
+      const res = await authAPI.me();
+      setUser(res.data);
+    } catch {
+      localStorage.removeItem('arc_token');
+      setUser(null);
+    }
+  }, []);
+
+  const isSuperAdmin = user?.role === 'super_admin' || user?.is_admin;
+  const isQL = user?.role === 'ql';
+  const isPL = user?.role === 'pl';
+  const isTasker = user?.role === 'tasker';
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{
+      user, loading, login, logout, refreshUser,
+      isSuperAdmin, isQL, isPL, isTasker,
+    }}>
       {children}
     </AuthContext.Provider>
   );

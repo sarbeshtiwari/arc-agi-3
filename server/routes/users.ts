@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { asyncHandler } from "../middleware/asyncHandler.js";
-import { authenticateToken, requireAdmin, hashPassword } from "../middleware/auth.js";
+import { authenticateToken, requireAdmin, hashPassword, verifyPassword } from "../middleware/auth.js";
 import pool, { genId, queryOne, queryAll, toJsonb } from "../db.js";
 import { AppError } from "../middleware/errorHandler.js";
+import { getUserLeadIds } from "../services/teamHelpers.js";
 
 const router = Router();
 
@@ -14,13 +15,18 @@ function isProtected(user: any): boolean {
 }
 
 /** Format a user row from PostgreSQL for JSON response. */
-function formatUser(user: any) {
+async function formatUser(user: any) {
+  const leadIds = await getUserLeadIds(user.id);
   return {
     id: user.id,
     username: user.username,
+    display_name: user.display_name || null,
     email: user.email || null,
     is_admin: user.is_admin,
     is_active: user.is_active,
+    role: user.role || 'tasker',
+    team_lead_id: user.team_lead_id || null,
+    team_lead_ids: leadIds,
     allowed_pages: user.allowed_pages ?? [],
     created_at: user.created_at,
   };
@@ -36,7 +42,8 @@ router.get(
       "SELECT * FROM users ORDER BY created_at DESC",
     );
 
-    res.json(users.map(formatUser));
+    const result = await Promise.all(users.map(formatUser));
+    res.json(result);
   }),
 );
 
@@ -53,7 +60,7 @@ router.get(
       throw new AppError("User not found", 404);
     }
 
-    res.json(formatUser(user));
+    res.json(await formatUser(user));
   }),
 );
 
@@ -74,7 +81,7 @@ router.put(
       throw new AppError("This user is protected and cannot be modified", 403);
     }
 
-    const { email, is_admin, is_active, allowed_pages, password } = req.body;
+    const { email, display_name, is_admin, is_active, allowed_pages, password, role, team_lead_ids } = req.body;
 
     const updates: string[] = [];
     const values: any[] = [];
@@ -83,6 +90,10 @@ router.put(
     if (email !== undefined && email !== null) {
       updates.push(`email = $${paramIndex++}`);
       values.push(email);
+    }
+    if (display_name !== undefined) {
+      updates.push(`display_name = $${paramIndex++}`);
+      values.push(display_name);
     }
     if (is_admin !== undefined && is_admin !== null) {
       updates.push(`is_admin = $${paramIndex++}`);
@@ -101,6 +112,23 @@ router.put(
       updates.push(`hashed_password = $${paramIndex++}`);
       values.push(hashed);
     }
+    if (role !== undefined && role !== null) {
+      updates.push(`role = $${paramIndex++}`);
+      values.push(role);
+    }
+
+    if (Array.isArray(team_lead_ids)) {
+      await pool.query(`DELETE FROM user_team_leads WHERE user_id = $1`, [userId]);
+      for (const leadId of team_lead_ids) {
+        await pool.query(
+          `INSERT INTO user_team_leads (id, user_id, lead_id) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING`,
+          [genId(), userId, leadId]
+        );
+      }
+      const primaryLead = team_lead_ids[0] || null;
+      updates.push(`team_lead_id = $${paramIndex++}`);
+      values.push(primaryLead);
+    }
 
     if (updates.length > 0) {
       updates.push("updated_at = NOW()");
@@ -112,7 +140,7 @@ router.put(
     }
 
     const updated = await queryOne("SELECT * FROM users WHERE id = $1", [userId]);
-    res.json(formatUser(updated));
+    res.json(await formatUser(updated));
   }),
 );
 
@@ -171,7 +199,39 @@ router.post(
     );
 
     const updated = await queryOne("SELECT * FROM users WHERE id = $1", [currentUser.id]);
-    res.json(formatUser(updated));
+    res.json(await formatUser(updated));
+  }),
+);
+
+router.put(
+  "/me/change-password",
+  authenticateToken,
+  asyncHandler(async (req, res) => {
+    const { current_password, new_password } = req.body;
+
+    if (!current_password || !new_password) {
+      throw new AppError("current_password and new_password are required", 400);
+    }
+
+    if (new_password.length < 6) {
+      throw new AppError("Password must be at least 6 characters", 400);
+    }
+
+    const user = await queryOne("SELECT * FROM users WHERE id = $1", [req.user.id]);
+    if (!user) throw new AppError("User not found", 404);
+
+    const valid = await verifyPassword(current_password, user.hashed_password);
+    if (!valid) {
+      throw new AppError("Current password is incorrect", 403);
+    }
+
+    const hashed = await hashPassword(new_password);
+    await pool.query(
+      "UPDATE users SET hashed_password = $1, updated_at = NOW() WHERE id = $2",
+      [hashed, req.user.id],
+    );
+
+    res.json({ ok: true });
   }),
 );
 

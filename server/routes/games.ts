@@ -4,9 +4,10 @@ import AdmZip from "adm-zip";
 import fs from "fs";
 import path from "path";
 import { asyncHandler } from "../middleware/asyncHandler.js";
-import { authenticateToken, requireAdmin } from "../middleware/auth.js";
+import { authenticateToken, requireAdmin, requireRole } from "../middleware/auth.js";
 import { AppError } from "../middleware/errorHandler.js";
 import pool, { genId, queryOne, queryAll, toJsonb } from "../db.js";
+import { createAuditEntry, createNotification, notifyMany } from "../services/NotificationService.js";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -273,6 +274,11 @@ function formatGame(row: any): any {
     created_at: row.created_at,
     updated_at: row.updated_at,
     uploaded_by: row.uploaded_by || null,
+    approval_status: row.approval_status || "draft",
+    assigned_ql_id: row.assigned_ql_id || null,
+    assigned_pl_id: row.assigned_pl_id || null,
+    rejection_reason: row.rejection_reason || null,
+    rejection_by: row.rejection_by || null,
   };
 }
 
@@ -682,13 +688,17 @@ router.get(
   }),
 );
 
-// ──── 9. GET /:gameId — Get game details ────
+// ──── 9. GET /:gameId — Get game details (all authenticated users) ────
 router.get(
   "/:gameId",
   authenticateToken,
-  requireAdmin,
+  requireRole("tasker", "ql", "pl", "super_admin"),
   asyncHandler(async (req, res) => {
     const { gameId } = req.params;
+
+    const callerRole = req.user?.role;
+    const callerId = req.user?.id;
+
     const row = await queryOne(
       "SELECT * FROM games WHERE game_id = $1",
       [gameId],
@@ -696,6 +706,10 @@ router.get(
 
     if (!row) {
       throw new AppError("Game not found", 404);
+    }
+
+    if (callerRole === "tasker" && row.uploaded_by !== callerId) {
+      throw new AppError("You can only view your own games", 403);
     }
 
     res.json(formatGame(row));
@@ -706,7 +720,7 @@ router.get(
 router.post(
   "/upload",
   authenticateToken,
-  requireAdmin,
+  requireRole("tasker", "ql", "pl", "super_admin"),
   upload.fields([
     { name: "game_file", maxCount: 1 },
     { name: "metadata_file", maxCount: 1 },
@@ -758,6 +772,8 @@ router.post(
     const metadata = result.metadata;
     const id = genId();
 
+    const isSuperAdmin = req.user.role === "super_admin";
+
     await pool.query(
       `INSERT INTO games (
         id, game_id, name, description, game_rules,
@@ -765,14 +781,14 @@ router.post(
         version, game_code, is_active, default_fps,
         baseline_actions, tags,
         game_file_path, metadata_file_path, local_dir,
-        uploaded_by, total_plays, total_wins
+        uploaded_by, total_plays, total_wins, approval_status
       ) VALUES (
         $1, $2, $3, $4, $5,
         $6, $7, $8,
-        $9, $10, false, $11,
-        $12, $13,
-        $14, $15, $16,
-        $17, 0, 0
+        $9, $10, $11, $12,
+        $13, $14,
+        $15, $16, $17,
+        $18, 0, 0, $19
       )`,
       [
         id,
@@ -785,6 +801,7 @@ router.post(
         gameVideoLink,
         result.version,
         result.game_code,
+        isSuperAdmin,
         metadata.default_fps ?? 5,
         toJsonb(metadata.baseline_actions ?? null),
         toJsonb(metadata.tags ?? null),
@@ -792,8 +809,14 @@ router.post(
         result.metadata_file_path,
         result.local_dir,
         req.user.id,
+        isSuperAdmin ? "approved" : "draft",
       ],
     );
+
+    await createAuditEntry(id, req.user.id, "game_uploaded", {
+      game_id: result.game_id,
+      game_code: result.game_code,
+    });
 
     const created = await queryOne("SELECT * FROM games WHERE id = $1", [id]);
     res.json(formatGame(created));
@@ -1037,7 +1060,7 @@ router.put(
 router.put(
   "/:gameId/files",
   authenticateToken,
-  requireAdmin,
+  requireRole("tasker", "ql", "pl", "super_admin"),
   upload.fields([
     { name: "game_file", maxCount: 1 },
     { name: "metadata_file", maxCount: 1 },
@@ -1045,9 +1068,21 @@ router.put(
   asyncHandler(async (req, res) => {
     const { gameId } = req.params;
 
-    const game = await queryOne("SELECT * FROM games WHERE game_id = $1", [gameId]);
+    const game = await queryOne("SELECT * FROM games WHERE game_id = $1 OR id = $1", [gameId]);
     if (!game) {
       throw new AppError("Game not found", 404);
+    }
+
+    if (req.user.role === "tasker" && game.uploaded_by !== req.user.id) {
+      throw new AppError("You can only update files for your own games", 403);
+    }
+
+    if (req.user.role === "ql" && game.assigned_ql_id !== req.user.id) {
+      throw new AppError("You can only update files for games assigned to you", 403);
+    }
+
+    if (req.user.role === "pl" && game.assigned_pl_id !== req.user.id) {
+      throw new AppError("You can only update files for games assigned to you", 403);
     }
 
     const gameFile = (req.files as any)?.game_file?.[0];
@@ -1107,11 +1142,59 @@ router.put(
 
     if (setClauses.length > 0) {
       setClauses.push(`updated_at = NOW()`);
+
+      const updaterRole = req.user.role;
+      let newApprovalStatus: string | null = null;
+      const notifyUserIds: string[] = [];
+      const gameName = game.name || game.game_id;
+
+      if (updaterRole === "tasker") {
+        newApprovalStatus = "pending_ql";
+        setClauses.push(`is_active = $${paramIdx++}`);
+        values.push(false);
+        if (game.assigned_ql_id) notifyUserIds.push(game.assigned_ql_id);
+      } else if (updaterRole === "ql") {
+        newApprovalStatus = "pending_pl";
+        setClauses.push(`is_active = $${paramIdx++}`);
+        values.push(false);
+        if (game.assigned_pl_id) notifyUserIds.push(game.assigned_pl_id);
+        if (game.uploaded_by) notifyUserIds.push(game.uploaded_by);
+      } else if (updaterRole === "pl") {
+        newApprovalStatus = "approved";
+        setClauses.push(`is_active = $${paramIdx++}`);
+        values.push(true);
+        if (game.uploaded_by) notifyUserIds.push(game.uploaded_by);
+        if (game.assigned_ql_id) notifyUserIds.push(game.assigned_ql_id);
+      }
+
+      if (newApprovalStatus) {
+        setClauses.push(`approval_status = $${paramIdx++}`);
+        values.push(newApprovalStatus);
+      }
+
       values.push(game.id);
       await pool.query(
         `UPDATE games SET ${setClauses.join(", ")} WHERE id = $${paramIdx}`,
         values,
       );
+
+      await createAuditEntry(game.id, req.user.id, "game_version_updated", {
+        game_file_updated: !!gameFile,
+        metadata_file_updated: !!metadataFile,
+        previous_status: game.approval_status,
+        new_status: newApprovalStatus || game.approval_status,
+      });
+
+      const uniqueNotifyIds = [...new Set(notifyUserIds)].filter(id => id !== req.user.id);
+      if (uniqueNotifyIds.length > 0) {
+        await notifyMany(
+          uniqueNotifyIds,
+          "game_updated",
+          `Game files updated: ${gameName}`,
+          `${req.user.username} updated files for "${gameName}". New status: ${newApprovalStatus || game.approval_status}.`,
+          game.id,
+        );
+      }
     }
 
     const updated = await queryOne("SELECT * FROM games WHERE id = $1", [game.id]);
@@ -1218,7 +1301,7 @@ router.delete(
 router.get(
   "/:gameId/source",
   authenticateToken,
-  requireAdmin,
+  requireRole("tasker", "ql", "pl", "super_admin"),
   asyncHandler(async (req, res) => {
     const { gameId } = req.params;
 
@@ -1235,6 +1318,94 @@ router.get(
       source_code: sourceCode,
       metadata,
     });
+  }),
+);
+
+// ──── 16b. GET /:gameId/download — Download game files ────
+router.get(
+  "/:gameId/download",
+  authenticateToken,
+  requireRole("tasker", "ql", "pl", "super_admin"),
+  asyncHandler(async (req, res) => {
+    const { gameId } = req.params;
+    const game = await queryOne("SELECT * FROM games WHERE game_id = $1", [gameId]);
+    if (!game) throw new AppError("Game not found", 404);
+
+    const gameDir = game.local_dir;
+    if (!gameDir || !fs.existsSync(gameDir)) {
+      throw new AppError("Game files not found on disk", 404);
+    }
+
+    const zip = new AdmZip();
+    const gamePyPath = path.join(gameDir, `${game.game_code}.py`);
+    const metadataPath = path.join(gameDir, "metadata.json");
+
+    if (fs.existsSync(gamePyPath)) zip.addLocalFile(gamePyPath);
+    if (fs.existsSync(metadataPath)) zip.addLocalFile(metadataPath);
+
+    const buffer = zip.toBuffer();
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader("Content-Disposition", `attachment; filename="${game.game_code}.zip"`);
+    res.send(buffer);
+  }),
+);
+
+// ──── 16c. POST /bulk-download — Download multiple games as ZIP ────
+router.post(
+  "/bulk-download",
+  authenticateToken,
+  requireRole("tasker", "ql", "pl", "super_admin"),
+  asyncHandler(async (req, res) => {
+    const { game_ids } = req.body;
+    if (!Array.isArray(game_ids) || game_ids.length === 0) {
+      throw new AppError("game_ids array is required", 400);
+    }
+    if (game_ids.length > 100) {
+      throw new AppError("Maximum 100 games per download", 400);
+    }
+
+    const placeholders = game_ids.map((_, i) => `$${i + 1}`).join(", ");
+    const games = await queryAll(
+      `SELECT * FROM games WHERE game_id IN (${placeholders}) OR id IN (${placeholders})`,
+      [...game_ids, ...game_ids],
+    );
+
+    if (games.length === 0) {
+      throw new AppError("No games found", 404);
+    }
+
+    const zip = new AdmZip();
+    let filesAdded = 0;
+
+    for (const game of games) {
+      const gameDir = game.local_dir;
+      if (!gameDir || !fs.existsSync(gameDir)) continue;
+
+      const folderName = game.game_code || game.game_id;
+      const gamePyPath = path.join(gameDir, `${game.game_code}.py`);
+      const metadataPath = path.join(gameDir, "metadata.json");
+
+      if (fs.existsSync(gamePyPath)) {
+        zip.addLocalFile(gamePyPath, folderName);
+        filesAdded++;
+      }
+      if (fs.existsSync(metadataPath)) {
+        zip.addLocalFile(metadataPath, folderName);
+        filesAdded++;
+      }
+    }
+
+    if (filesAdded === 0) {
+      throw new AppError("No game files found on disk", 404);
+    }
+
+    const buffer = zip.toBuffer();
+    res.setHeader("Content-Type", "application/zip");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="games-${games.length}-${Date.now()}.zip"`,
+    );
+    res.send(buffer);
   }),
 );
 

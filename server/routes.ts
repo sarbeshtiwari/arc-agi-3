@@ -14,6 +14,9 @@ import requestsRouter from "./routes/requests.js";
 import evalRouter from "./routes/eval.js";
 import settingsRouter from "./routes/settings.js";
 import logsRouter from "./routes/logs.js";
+import approvalRouter from "./routes/approval.js";
+import teamsRouter from "./routes/teams.js";
+import notificationsRouter from "./routes/notifications.js";
 
 // Import startup helpers
 import { ensureDefaultAdmin, authenticateToken, requireAdmin } from "./middleware/auth.js";
@@ -152,6 +155,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.use("/api/eval", evalRouter);
   app.use("/api/settings", settingsRouter);
   app.use("/api/admin/logs", logsRouter);
+  app.use("/api/approval", approvalRouter);
+  app.use("/api/teams", teamsRouter);
+  app.use("/api/notifications", notificationsRouter);
 
   // ──── Error handler (must be last) ────
   app.use(errorHandler);

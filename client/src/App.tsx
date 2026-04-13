@@ -2,13 +2,10 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 
-// Public pages
 import HomePage from './pages/HomePage';
 import PublicPlayPage from './pages/PublicPlayPage';
 import DirectPlayPage from './pages/DirectPlayPage';
 
-// Admin pages
-import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import GamesPage from './pages/GamesPage';
@@ -22,6 +19,16 @@ import EvalPage from './pages/EvalPage';
 import LogsPage from './pages/LogsPage';
 import SystemStatusPage from './pages/SystemStatusPage';
 
+import DashboardLayout from './components/DashboardLayout';
+import RoleDashboardPage from './pages/RoleDashboardPage';
+import MyGamesPage from './pages/MyGamesPage';
+import ReviewQueuePage from './pages/ReviewQueuePage';
+import TeamManagementPage from './pages/TeamManagementPage';
+import TeamMemberDetailPage from './pages/TeamMemberDetailPage';
+import TaskerDetailPage from './pages/TaskerDetailPage';
+import ProfilePage from './pages/ProfilePage';
+import SettingsPage from './pages/SettingsPage';
+
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
 
@@ -33,26 +40,22 @@ function ProtectedRoute({ children }) {
     );
   }
 
-  if (!user) return <Navigate to="/admin/login" replace />;
+  if (!user) return <Navigate to="/login" replace />;
   return children;
 }
 
-function PageGuard({ page, children }) {
+function RoleGuard({ roles, children }) {
   const { user } = useAuth();
+  const userRole = user?.role || (user?.is_admin ? 'super_admin' : 'tasker');
 
-  // Admins always have full access
-  if (user?.is_admin) return children;
-
-  const allowed = user?.allowed_pages || [];
-  if (!allowed.includes(page)) {
+  if (!roles.includes(userRole)) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <div className="w-16 h-16 rounded-full bg-red-500/10 border-2 border-red-500/30 flex items-center justify-center mb-4">
           <span className="text-2xl">🚫</span>
         </div>
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Access Denied</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-sm">You don't have permission to access this page.</p>
-        <p className="text-gray-400 dark:text-gray-500 text-xs mt-1">Contact an admin to request access.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm">This page is not available for your role.</p>
       </div>
     );
   }
@@ -68,25 +71,41 @@ function AppRoutes() {
       <Route path="/play/:gameId" element={<PublicPlayPage />} />
       <Route path="/play-direct" element={<DirectPlayPage />} />
 
-      {/* ── Admin routes (auth required) ── */}
-      <Route path="/admin/login" element={<LoginPage />} />
-      <Route path="/admin" element={
+      {/* ── Shared login ── */}
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* ── Unified dashboard (all authenticated users) ── */}
+      <Route path="/dashboard" element={
         <ProtectedRoute>
-          <Layout />
+          <DashboardLayout />
         </ProtectedRoute>
       }>
-        <Route index element={<PageGuard page="dashboard"><DashboardPage /></PageGuard>} />
-        <Route path="games" element={<PageGuard page="games"><GamesPage /></PageGuard>} />
-        <Route path="games/upload" element={<PageGuard page="upload"><GameUploadPage /></PageGuard>} />
-        <Route path="games/:gameId" element={<PageGuard page="games"><GameDetailPage /></PageGuard>} />
-        <Route path="games/:gameId/play" element={<PageGuard page="games"><GamePlayPage /></PageGuard>} />
-        <Route path="requests" element={<PageGuard page="requests"><RequestedGamesPage /></PageGuard>} />
-        <Route path="temp-games" element={<PageGuard page="games"><TempGamesPage /></PageGuard>} />
-        <Route path="users" element={<PageGuard page="users"><UsersPage /></PageGuard>} />
-        <Route path="eval" element={<PageGuard page="eval"><EvalPage /></PageGuard>} />
-        <Route path="logs" element={<PageGuard page="logs"><LogsPage /></PageGuard>} />
-        <Route path="system" element={<PageGuard page="logs"><SystemStatusPage /></PageGuard>} />
+        <Route index element={<RoleDashboardPage />} />
+        <Route path="my-games" element={<RoleGuard roles={['tasker', 'super_admin']}><MyGamesPage /></RoleGuard>} />
+        <Route path="upload" element={<RoleGuard roles={['tasker', 'ql', 'pl', 'super_admin']}><GameUploadPage /></RoleGuard>} />
+        <Route path="review" element={<RoleGuard roles={['ql', 'pl', 'super_admin']}><ReviewQueuePage /></RoleGuard>} />
+        <Route path="team" element={<RoleGuard roles={['ql', 'pl', 'super_admin']}><TeamManagementPage /></RoleGuard>} />
+        <Route path="team/:userId" element={<RoleGuard roles={['pl', 'super_admin']}><TeamMemberDetailPage /></RoleGuard>} />
+        <Route path="team/tasker/:userId" element={<RoleGuard roles={['ql', 'pl', 'super_admin']}><TaskerDetailPage /></RoleGuard>} />
+        <Route path="games/:gameId/play" element={<GamePlayPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+
+        {/* ── Admin-only pages (super_admin) ── */}
+        <Route path="games" element={<RoleGuard roles={['super_admin']}><GamesPage /></RoleGuard>} />
+        <Route path="games/:gameId" element={<RoleGuard roles={['super_admin']}><GameDetailPage /></RoleGuard>} />
+        <Route path="temp-games" element={<RoleGuard roles={['super_admin']}><TempGamesPage /></RoleGuard>} />
+        <Route path="requests" element={<RoleGuard roles={['super_admin']}><RequestedGamesPage /></RoleGuard>} />
+        <Route path="users" element={<RoleGuard roles={['super_admin']}><UsersPage /></RoleGuard>} />
+        <Route path="settings" element={<RoleGuard roles={['super_admin']}><SettingsPage /></RoleGuard>} />
+        <Route path="eval" element={<RoleGuard roles={['super_admin']}><EvalPage /></RoleGuard>} />
+        <Route path="logs" element={<RoleGuard roles={['super_admin']}><LogsPage /></RoleGuard>} />
+        <Route path="system" element={<RoleGuard roles={['super_admin']}><SystemStatusPage /></RoleGuard>} />
+        <Route path="admin-stats" element={<RoleGuard roles={['super_admin']}><DashboardPage /></RoleGuard>} />
       </Route>
+
+      {/* ── Backward compat: /admin/* → /dashboard ── */}
+      <Route path="/admin/login" element={<Navigate to="/login" replace />} />
+      <Route path="/admin/*" element={<Navigate to="/dashboard" replace />} />
 
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />

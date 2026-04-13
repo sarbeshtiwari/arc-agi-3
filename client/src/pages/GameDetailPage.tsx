@@ -52,7 +52,7 @@ export default function GameDetailPage() {
         default_fps: gameData.default_fps || 5,
         tags: (gameData.tags || []).join(', '),
       });
-    }).catch(() => navigate('/admin/games'))
+    }).catch(() => navigate('/dashboard/games'))
     .finally(() => setLoading(false));
   }, [gameId, navigate]);
 
@@ -77,7 +77,7 @@ export default function GameDetailPage() {
   const handleDelete = async () => {
     try {
       await gamesAPI.delete(gameId);
-      navigate('/admin/games');
+      navigate('/dashboard/games');
     } catch (err) {
       setToggleError(err.response?.data?.detail || 'Failed to delete game');
       setTimeout(() => setToggleError(''), 5000);
@@ -177,7 +177,7 @@ export default function GameDetailPage() {
     <div>
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
-        <Link to="/admin/games" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
+        <Link to="/dashboard/games" className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400">
           <ChevronLeft size={20} />
         </Link>
         <div className="flex-1">
@@ -193,7 +193,7 @@ export default function GameDetailPage() {
         </div>
         <div className="flex gap-2">
           <Link
-            to={`/admin/games/${gameId}/play`}
+            to={`/play/${gameId}`}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm transition-colors"
           >
             <Play size={14} /> Play

@@ -22,8 +22,9 @@ client.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('arc_token');
-      if (window.location.pathname.startsWith('/admin')) {
-        window.location.href = '/admin/login';
+      const path = window.location.pathname;
+      if (path.startsWith('/admin') || path.startsWith('/dashboard')) {
+        window.location.href = '/login';
       }
     }
     return Promise.reject(error);
@@ -70,6 +71,10 @@ export const gamesAPI = {
   clearSessions: (gameId) => client.delete(`/games/${gameId}/sessions`),
   getSource: (gameId) => client.get(`/games/${gameId}/source`),
   syncLocal: () => client.post('/games/sync-local'),
+  download: (gameId) => client.get(`/games/${gameId}/download`, { responseType: 'blob' }),
+  bulkDownload: (gameIds: string[]) => client.post('/games/bulk-download', { game_ids: gameIds }, { responseType: 'blob' }),
+  updateFiles: (gameId: string, formData: FormData) =>
+    client.put(`/games/${gameId}/files`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }),
   bulkUpload: (formData) =>
     client.post('/games/bulk-upload', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -157,6 +162,50 @@ export const usersAPI = {
   delete: (userId) => client.delete(`/users/${userId}`),
   changeProtectedPassword: (secretCode, newPassword) =>
     client.post('/users/protected/change-password', { secret_code: secretCode, new_password: newPassword }),
+  changeMyPassword: (currentPassword, newPassword) =>
+    client.put('/users/me/change-password', { current_password: currentPassword, new_password: newPassword }),
+};
+
+// ──── Approval Workflow ────
+export const approvalAPI = {
+  myGames: () => client.get('/approval/my-games'),
+  qlQueue: () => client.get('/approval/ql-queue'),
+  plQueue: () => client.get('/approval/pl-queue'),
+  allGames: () => client.get('/approval/all'),
+  submitForReview: (gameId, message = '') =>
+    client.post(`/approval/${gameId}/submit-for-review`, { message: message || null }),
+  qlReview: (gameId, action, reason = null) =>
+    client.post(`/approval/${gameId}/ql-review`, { action, reason }),
+  plReview: (gameId, action, reason = null) =>
+    client.post(`/approval/${gameId}/pl-review`, { action, reason }),
+  adminApprove: (gameId, message = null) =>
+    client.post(`/approval/${gameId}/admin-approve`, { message }),
+  getAuditLog: (gameId) =>
+    client.get(`/approval/${gameId}/audit`),
+};
+
+// ──── Teams ────
+export const teamsAPI = {
+  myTeam: () => client.get('/teams/my-team'),
+  allUsers: () => client.get('/teams/all-users'),
+  assign: (userId, leadId, action = 'add') =>
+    client.put('/teams/assign', { user_id: userId, lead_id: leadId, action }),
+  unassign: (userId, leadId) =>
+    client.put('/teams/assign', { user_id: userId, lead_id: leadId, action: 'remove' }),
+  unassigned: () => client.get('/teams/unassigned'),
+  memberDetail: (userId, from = '', to = '') =>
+    client.get(`/teams/${userId}/detail`, { params: { from: from || undefined, to: to || undefined } }),
+  taskerDetail: (userId, from = '', to = '') =>
+    client.get(`/teams/${userId}/tasker-detail`, { params: { from: from || undefined, to: to || undefined } }),
+};
+
+// ──── Notifications ────
+export const notificationsAPI = {
+  list: (unread = false, limit = 50) =>
+    client.get('/notifications/', { params: { unread: unread || undefined, limit } }),
+  unreadCount: () => client.get('/notifications/unread-count'),
+  markRead: (id) => client.put(`/notifications/${id}/read`),
+  markAllRead: () => client.put('/notifications/read-all'),
 };
 
 // ──── Game Requests ────
