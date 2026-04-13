@@ -135,9 +135,6 @@ export default function VideoRecorder({
               </div>
               <div>
                 <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Record this session?</h3>
-                <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
-                  720p video streamed to server. No RAM/storage used on your device.
-                </p>
               </div>
             </div>
             <div className="flex items-center gap-2">

@@ -1,0 +1,252 @@
+/* ============================================
+   ARCADE THEME — CRT / Cabinet / Retro Styles
+   ============================================ */
+
+/* --- CRT Screen Effect --- */
+.crt-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.crt-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+.crt-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 11;
+}
+
+/* --- Scanline Sweep --- */
+.scanline-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline-sweep::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 255, 255, 0.03) 50%,
+    transparent 100%
+  );
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 12;
+}
+
+/* --- Cabinet Body --- */
+.arcade-cabinet {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 40%, #0f0f23 100%);
+  border: 2px solid #2a2a4a;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* --- Screen Bezel --- */
+.screen-bezel {
+  background: #0a0a1a;
+  border: 3px solid #2a2a4a;
+  border-radius: 12px;
+  box-shadow: inset 0 0 30px rgba(0, 255, 255, 0.08), 0 0 15px rgba(0, 0, 0, 0.8);
+  padding: 8px;
+}
+
+/* --- Marquee Header (glowing title) --- */
+.arcade-marquee {
+  background: linear-gradient(135deg, #16213e 0%, #1a1a2e 50%, #16213e 100%);
+  border: 2px solid #2a2a4a;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+/* --- Neon Text Glow Utilities --- */
+.neon-text-cyan {
+  color: #00FFFF;
+  text-shadow: 0 0 7px #00FFFF, 0 0 20px #00FFFF80, 0 0 40px #00FFFF40;
+}
+
+.neon-text-magenta {
+  color: #FF00FF;
+  text-shadow: 0 0 7px #FF00FF, 0 0 20px #FF00FF80, 0 0 40px #FF00FF40;
+}
+
+.neon-text-green {
+  color: #39FF14;
+  text-shadow: 0 0 7px #39FF14, 0 0 20px #39FF1480, 0 0 40px #39FF1440;
+}
+
+.neon-text-yellow {
+  color: #FFE600;
+  text-shadow: 0 0 7px #FFE600, 0 0 20px #FFE60080, 0 0 40px #FFE60040;
+}
+
+.neon-text-orange {
+  color: #FF6600;
+  text-shadow: 0 0 7px #FF6600, 0 0 20px #FF660080, 0 0 40px #FF660040;
+}
+
+.neon-text-blue {
+  color: #4D4DFF;
+  text-shadow: 0 0 7px #4D4DFF, 0 0 20px #4D4DFF80, 0 0 40px #4D4DFF40;
+}
+
+/* --- Neon Border Glow --- */
+.neon-border-cyan {
+  border-color: #00FFFF;
+  box-shadow: 0 0 5px #00FFFF60, inset 0 0 5px #00FFFF20;
+}
+
+.neon-border-magenta {
+  border-color: #FF00FF;
+  box-shadow: 0 0 5px #FF00FF60, inset 0 0 5px #FF00FF20;
+}
+
+.neon-border-green {
+  border-color: #39FF14;
+  box-shadow: 0 0 5px #39FF1460, inset 0 0 5px #39FF1420;
+}
+
+/* --- Control Panel --- */
+.control-panel {
+  background: linear-gradient(180deg, #1e1e3a 0%, #16213e 100%);
+  border: 2px solid #2a2a4a;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+}
+
+/* --- Arcade Button --- */
+.arcade-btn {
+  position: relative;
+  background: radial-gradient(circle at 30% 30%, #3a3a6a, #1a1a3e);
+  border: 2px solid #4a4a7a;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.1s ease;
+}
+
+.arcade-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.arcade-btn-red {
+  background: radial-gradient(circle at 30% 30%, #ff4444, #cc0000);
+  border-color: #ff6666;
+}
+
+.arcade-btn-blue {
+  background: radial-gradient(circle at 30% 30%, #4488ff, #0044cc);
+  border-color: #66aaff;
+}
+
+.arcade-btn-green {
+  background: radial-gradient(circle at 30% 30%, #44ff44, #00cc00);
+  border-color: #66ff66;
+}
+
+.arcade-btn-yellow {
+  background: radial-gradient(circle at 30% 30%, #ffee44, #ccaa00);
+  border-color: #ffff66;
+}
+
+/* --- Coin Slot --- */
+.coin-slot {
+  width: 60px;
+  height: 8px;
+  background: #0a0a1a;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* --- Side Art Panels (decorative stripes) --- */
+.side-art {
+  background: repeating-linear-gradient(
+    -45deg,
+    #1a1a2e,
+    #1a1a2e 10px,
+    #16213e 10px,
+    #16213e 20px
+  );
+  border: 1px solid #2a2a4a;
+}
+
+/* --- Pixel Card (game cards on home page) --- */
+.pixel-card {
+  background: linear-gradient(180deg, #16213e 0%, #0f0f23 100%);
+  border: 2px solid #2a2a4a;
+  transition: all 0.2s ease;
+}
+
+.pixel-card:hover {
+  border-color: #00FFFF80;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* --- Arcade scrollbar override --- */
+.arcade-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.arcade-scroll::-webkit-scrollbar-track {
+  background: #0a0a1a;
+}
+
+.arcade-scroll::-webkit-scrollbar-thumb {
+  background: #2a2a4a;
+  border-radius: 3px;
+}
+
+.arcade-scroll::-webkit-scrollbar-thumb:hover {
+  background: #3a3a5a;
+}
+
+/* --- Star Field Background (for home page) --- */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 15% 75%, rgba(0,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 85% 15%, rgba(255,0,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 45% 45%, rgba(255,255,255,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 65% 30%, rgba(255,255,255,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 90%, rgba(255,255,255,0.4) 0%, transparent 100%);
+}
+
+/* --- Retro Grid Floor (subtle) --- */
+.retro-grid {
+  background-image: linear-gradient(rgba(0,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
