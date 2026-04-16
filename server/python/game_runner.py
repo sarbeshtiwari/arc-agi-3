@@ -351,6 +351,11 @@ def main():
                 raw_action = cmd.get("action", "")
                 action_str = translate_action(raw_action)
 
+                x_val = cmd.get("x")
+                y_val = cmd.get("y")
+                if x_val is not None and y_val is not None:
+                    action_str = f"{action_str} {x_val} {y_val}"
+
                 total_actions += 1
                 _log("debug", f"Calling env.step('{action_str}')", action_num=total_actions, raw=raw_action, translated=action_str)
 
